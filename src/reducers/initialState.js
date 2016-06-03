@@ -37,6 +37,13 @@ export default {
     }
   },
 
+  diseases: {
+    red: 'active',
+    blue: 'active',
+    yellow: 'cured',
+    black: 'eradicated'
+  },
+
   currentMove: {
     availableCities: []
   },

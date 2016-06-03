@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import { partial, isEmpty } from 'lodash';
 
 import * as actions from '../actions/mapActions';
-import { getCurrentCityId, canBuildStation, canTreatColor } from '../selectors';
+import { getCurrentCityId, canBuildStation, canTreatColor, getDiseaseStatus } from '../selectors';
 
 import MoveCityPicker from '../components/MoveCityPicker';
 
@@ -29,7 +29,7 @@ class Actions extends React.Component {
         {['red', 'blue', 'yellow', 'black'].map((color) =>
           <button key={color} onClick={partial(this.props.actions.treatDisease, this.props.currentCityId, color)}
             disabled={!this.props.canTreatColor(color)}>
-            Treat {color}
+            Treat {this.props.getDiseaseStatus(color) !== 'active' ? 'all ' : ''}{color}
           </button>
         )}
       </div>
@@ -39,7 +39,7 @@ class Actions extends React.Component {
 
 const mapStateToProps = (state) => {
   return { currentMove: state.currentMove, currentCityId: getCurrentCityId(state), canBuildStation: canBuildStation(state),
-    canTreatColor: partial(canTreatColor, state) };
+    canTreatColor: partial(canTreatColor, state), getDiseaseStatus: partial(getDiseaseStatus, state) };
 };
 
 const mapDispatchToProps = (dispatch) => {

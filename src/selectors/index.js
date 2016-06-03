@@ -31,6 +31,10 @@ export function canTreatColor(state, color) {
   return loc[color] > 0;
 }
 
+export function getDiseaseStatus(state, color) {
+  return state.diseases[color];
+}
+
 function getCurrentMapLocation(state) {
   const cityId = getCurrentCityId(state);
   return state.map.locations[cityId];
