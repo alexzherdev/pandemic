@@ -12,3 +12,7 @@ export function moveShowCities(cities) {
 export function moveToCity(playerId, originId, destinationId, source) {
   return { type: types.PLAYER_MOVE_TO_CITY, playerId, originId, destinationId, source };
 }
+
+export function moveCancel() {
+  return { type: types.PLAYER_MOVE_CANCEL };
+}

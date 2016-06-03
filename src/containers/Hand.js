@@ -20,6 +20,6 @@ const mapStateToProps = (state) => {
     hand: state.players[0].hand,
     cities: state.cities
   };
-}
+};
 
 export default connect(mapStateToProps)(Hand);

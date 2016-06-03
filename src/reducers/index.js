@@ -9,5 +9,5 @@ export default combineReducers({
   map,
   players,
   currentMove,
-  cities: state => initialState.cities
+  cities: () => initialState.cities
 });

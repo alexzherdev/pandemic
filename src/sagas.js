@@ -1,6 +1,5 @@
 import { takeEvery } from 'redux-saga';
 import { select, put } from 'redux-saga/effects';
-import { map } from 'lodash';
 
 import * as actionTypes from './constants/actionTypes';
 import { moveShowCities } from './actions/mapActions';
