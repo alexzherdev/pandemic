@@ -35,6 +35,12 @@ export function getDiseaseStatus(state, color) {
   return state.diseases[color];
 }
 
+export function canCureDisease(state, color) {
+  const hand = getCurrentPlayer(state).hand;
+  return 2 <= _.filter(getCitiesInHand(state, hand), { color }).length
+    && getDiseaseStatus(state, color) === 'active';
+}
+
 function getCurrentMapLocation(state) {
   const cityId = getCurrentCityId(state);
   return state.map.locations[cityId];
@@ -72,7 +78,6 @@ function isCharterAvailable(state) {
 }
 
 function isShuttleAvailable(state) {
-  const cityId = getCurrentCityId(state);
   return getCurrentMapLocation(state).station;
 }
 

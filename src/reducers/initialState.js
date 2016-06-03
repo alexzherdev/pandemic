@@ -4,7 +4,8 @@ export default {
       id: '0',
       name: 'Name',
       hand: [
-        { cardType: 'city', id: '2' }, { cardType: 'city', id: '3' }
+        { cardType: 'city', id: '3' }, { cardType: 'city', id: '4' },
+        { cardType: 'city', id: '2' }
       ]
     }
   },
