@@ -59,19 +59,39 @@ export default {
     locations: {
       0: {
         coords: [200, 100],
-        station: true
+        station: true,
+        yellow: 1,
+        red: 3,
+        black: 0,
+        blue: 0
       },
       1: {
-        coords: [100, 100]
+        coords: [100, 100],
+        yellow: 1,
+        red: 0,
+        black: 0,
+        blue: 1
       },
       2: {
-        coords: [100, 200]
+        coords: [100, 200],
+        yellow: 1,
+        red: 0,
+        black: 0,
+        blue: 0
       },
       3: {
-        coords: [200, 200]
+        coords: [200, 200],
+        yellow: 1,
+        red: 1,
+        black: 1,
+        blue: 1
       },
       4: {
         coords: [150, 300],
+        yellow: 0,
+        red: 0,
+        black: 0,
+        blue: 0,
         station: true
       }
     }

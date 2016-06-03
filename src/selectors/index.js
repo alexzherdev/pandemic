@@ -26,6 +26,16 @@ export function canBuildStation(state) {
   return !isShuttleAvailable(state) && state.stationsLeft > 0;
 }
 
+export function canTreatColor(state, color) {
+  const loc = getCurrentMapLocation(state);
+  return loc[color] > 0;
+}
+
+function getCurrentMapLocation(state) {
+  const cityId = getCurrentCityId(state);
+  return state.map.locations[cityId];
+}
+
 function getNeighborCities(state, cityId) {
   const cities = [];
   state.map.matrix[cityId].forEach((item, i) => {
@@ -59,7 +69,7 @@ function isCharterAvailable(state) {
 
 function isShuttleAvailable(state) {
   const cityId = getCurrentCityId(state);
-  return state.map.locations[cityId].station;
+  return getCurrentMapLocation(state).station;
 }
 
 function reduceWithAttrs(array, attrs = {}) {

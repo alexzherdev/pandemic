@@ -20,3 +20,7 @@ export function moveCancel() {
 export function buildStation(cityId) {
   return { type: types.PLAYER_BUILD_STATION, cityId };
 }
+
+export function treatDisease(cityId, color) {
+  return { type: types.PLAYER_TREAT_DISEASE, cityId, color };
+}
