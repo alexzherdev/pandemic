@@ -1,4 +1,5 @@
 export default {
+  status: 'playing',
   players: {
     0: {
       id: '0',

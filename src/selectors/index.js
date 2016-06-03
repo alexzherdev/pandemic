@@ -35,6 +35,10 @@ export function getDiseaseStatus(state, color) {
   return state.diseases[color];
 }
 
+export function areAllDiseasesCured(state) {
+  return _.every(['blue', 'red', 'yellow', 'black'], (c) => getDiseaseStatus(state, c) !== 'active');
+}
+
 export function canCureDisease(state, color) {
   const hand = getCurrentPlayer(state).hand;
   return 2 <= _.filter(getCitiesInHand(state, hand), { color }).length
