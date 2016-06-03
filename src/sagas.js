@@ -1,10 +1,11 @@
 import { takeEvery } from 'redux-saga';
 import { select, put } from 'redux-saga/effects';
 
-import * as actionTypes from './constants/actionTypes';
+import * as types from './constants/actionTypes';
 import { moveShowCities } from './actions/mapActions';
 import { discardFromHand } from './actions/cardActions';
-import { getAvailableCities, getCurrentPlayer } from './selectors';
+import { eradicateDisease } from './actions/diseaseActions';
+import { getAvailableCities, getCurrentPlayer, treatedAllOfColor, getDiseaseStatus } from './selectors';
 
 
 function* showAvailableCities() {
@@ -24,17 +25,35 @@ function* processMoveToCity(action) {
   }
 }
 
+function* checkForEradication({ color }) {
+  const treatedAll = yield select(treatedAllOfColor, color);
+  const status = yield select(getDiseaseStatus, color);
+  if (treatedAll && status === 'cured') {
+    yield put(eradicateDisease(color));
+  }
+}
+
 function* watchMoveInit() {
-  yield* takeEvery(actionTypes.PLAYER_MOVE_INIT, showAvailableCities);
+  yield* takeEvery(types.PLAYER_MOVE_INIT, showAvailableCities);
 }
 
 function* watchMoveToCity() {
-  yield* takeEvery(actionTypes.PLAYER_MOVE_TO_CITY, processMoveToCity);
+  yield* takeEvery(types.PLAYER_MOVE_TO_CITY, processMoveToCity);
+}
+
+function* watchTreatDisease() {
+  yield* takeEvery(types.PLAYER_TREAT_DISEASE, checkForEradication);
+}
+
+function* watchCureDisease() {
+  yield* takeEvery(types.PLAYER_CURE_DISEASE, checkForEradication);
 }
 
 export default function* rootSaga() {
   yield [
     watchMoveInit(),
-    watchMoveToCity()
+    watchMoveToCity(),
+    watchTreatDisease(),
+    watchCureDisease()
   ];
 }

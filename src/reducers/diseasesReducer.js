@@ -9,6 +9,11 @@ export default function diseasesReducer(state = initialState.diseases, action) {
         ...state,
         [action.color]: 'cured'
       };
+    case types.ERADICATE_DISEASE:
+      return {
+        ...state,
+        [action.color]: 'eradicated'
+      };
     default:
       return state;
   }

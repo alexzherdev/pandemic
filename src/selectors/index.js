@@ -8,7 +8,7 @@ export function getAvailableCities(state) {
   const direct = reduceWithAttrs(getCitiesInHand(state, player.hand), { source: 'direct' });
   const neighbors = reduceWithAttrs(getNeighborCities(state, cityId), { source: 'drive' });
   const charters = isCharterAvailable(state) ? reduceWithAttrs(state.cities, { source: 'charter' }) : {};
-  const stations = isShuttleAvailable(state) ? reduceWithAttrs(getStationCities(state), { source: 'shuttle' }) : {};
+  const stations = isAtStation(state) ? reduceWithAttrs(getStationCities(state), { source: 'shuttle' }) : {};
   const cities = _.assign({}, charters, direct, neighbors, stations);
   delete cities[cityId];
   return cities;
@@ -23,7 +23,7 @@ export function getCurrentCityId(state) {
 }
 
 export function canBuildStation(state) {
-  return !isShuttleAvailable(state) && state.stationsLeft > 0;
+  return !isAtStation(state) && state.stationsLeft > 0;
 }
 
 export function canTreatColor(state, color) {
@@ -38,7 +38,12 @@ export function getDiseaseStatus(state, color) {
 export function canCureDisease(state, color) {
   const hand = getCurrentPlayer(state).hand;
   return 2 <= _.filter(getCitiesInHand(state, hand), { color }).length
-    && getDiseaseStatus(state, color) === 'active';
+    && getDiseaseStatus(state, color) === 'active'
+    && isAtStation(state);
+}
+
+export function treatedAllOfColor(state, color) {
+  return _.chain(state.map.locations).values().every({ [color]: 0 }).value();
 }
 
 function getCurrentMapLocation(state) {
@@ -77,7 +82,7 @@ function isCharterAvailable(state) {
   return !!_.find(hand, { cardType: 'city', id: getCurrentCityId(state) });
 }
 
-function isShuttleAvailable(state) {
+function isAtStation(state) {
   return getCurrentMapLocation(state).station;
 }
 
