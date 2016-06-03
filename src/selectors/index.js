@@ -54,6 +54,10 @@ export function getActionsLeft(state) {
   return state.currentMove.actionsLeft;
 }
 
+export function getPlayerCardsToDraw(state) {
+  return state.playerDeck.slice(0, 2);
+}
+
 function getCurrentMapLocation(state) {
   const cityId = getCurrentCityId(state);
   return state.map.locations[cityId];

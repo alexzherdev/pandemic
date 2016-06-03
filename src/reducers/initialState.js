@@ -1,5 +1,10 @@
 export default {
   status: 'playing',
+
+  playerDeck: [
+    { cardType: 'city', id: '1' }, { cardType: 'city', id: '0' }, { cardType: 'event', id: '0' }
+  ],
+
   players: {
     0: {
       id: '0',
@@ -48,7 +53,8 @@ export default {
 
   currentMove: {
     availableCities: [],
-    actionsLeft: 4
+    actionsLeft: 4,
+    cardsDrawn: []
   },
 
   stationsLeft: 5,

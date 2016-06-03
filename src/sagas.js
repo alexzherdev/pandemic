@@ -1,13 +1,13 @@
-import { takeEvery } from 'redux-saga';
+import { takeEvery, delay } from 'redux-saga';
 import { select, put } from 'redux-saga/effects';
 
 import * as types from './constants/actionTypes';
 import { moveShowCities } from './actions/mapActions';
-import { discardFromHand, drawCards } from './actions/cardActions';
+import { discardFromHand, drawCardsInit, drawCardsHandle } from './actions/cardActions';
 import { eradicateDisease } from './actions/diseaseActions';
-import { victory } from './actions/globalActions';
+import { victory, defeat } from './actions/globalActions';
 import { getAvailableCities, getCurrentPlayer, treatedAllOfColor, getDiseaseStatus,
-  areAllDiseasesCured, getActionsLeft } from './selectors';
+  areAllDiseasesCured, getActionsLeft, getPlayerCardsToDraw } from './selectors';
 
 
 function* showAvailableCities() {
@@ -46,9 +46,20 @@ function* checkForVictory() {
 function* checkActionsLeft() {
   const actionsLeft = yield select(getActionsLeft);
   if (actionsLeft === 0) {
-    yield put(drawCards());
+    const cards = yield select(getPlayerCardsToDraw);
+    if (cards.length < 2) {
+      yield put(defeat());
+    } else {
+      const currentPlayer = yield select(getCurrentPlayer);
+      yield put(drawCardsInit(cards));
+      yield delay(1000);
+      yield put(drawCardsHandle(cards[0], currentPlayer.id));
+      yield delay(1000);
+      yield put(drawCardsHandle(cards[1], currentPlayer.id));
+    }
   }
 }
+
 
 function* watchMoveInit() {
   yield* takeEvery(types.PLAYER_MOVE_INIT, showAvailableCities);
