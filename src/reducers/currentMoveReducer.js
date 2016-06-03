@@ -1,15 +1,18 @@
 import initialState from './initialState';
 import * as actionTypes from '../constants/actionTypes';
 
-export default function mapReducer(state = initialState.map, action) {
+
+export default function currentMoveReducer(state = initialState.currentMove, action) {
   switch (action.type) {
+    case actionTypes.PLAYER_MOVE_SHOW_CITIES:
+      return {
+        ...state,
+        availableCities: action.cities
+      };
     case actionTypes.PLAYER_MOVE_TO_CITY:
       return {
         ...state,
-        playersLocations: {
-          ...state.players,
-          [action.playerId]: action.destinationId
-        }
+        availableCities: []
       };
     default:
       return state;

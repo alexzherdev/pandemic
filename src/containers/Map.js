@@ -2,29 +2,24 @@ import React from 'react';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 
+import PlayersLayer from '../components/map/PlayersLayer';
+import LocationsLayer from '../components/map/LocationsLayer';
+
 class Map extends React.Component {
   render() {
-    const map = this.props.map;
-    const locations = [];
-    _.forOwn(this.props.cities, (c, id) => {
-      locations.push(<span className="city" key={id} style={{top: map.locations[id][0], left: map.locations[id][1]}}>{c.name}</span>);
-    });
-    const players = [];
-    _.forOwn(this.props.players, (p, id) => {
-      const loc = map.locations[map.players[id]];
-      players.push(<span className="player" key={id} style={{top: loc[0], left: loc[1]}}>{p.name}</span>);
-    });
+    const { map } = this.props;
+
     return (
       <div className="map">
-        {locations}
-        {players}
+        <LocationsLayer locations={map.locations} cities={this.props.cities} availableCities={this.props.availableCities} />
+        <PlayersLayer players={this.props.players} playersLocations={map.playersLocations} locations={map.locations} />
       </div>
     );
   }
 }
 
-const mapStateToProps = ({ map, players, cities }) => {
-  return { map, players, cities };
+const mapStateToProps = ({ map, players, cities, currentMove }) => {
+  return { map, players, cities, availableCities: currentMove.availableCities };
 };
 
 

@@ -1,47 +1,34 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import _ from 'lodash';
+import { partial, map } from 'lodash';
 import classnames from 'classnames';
 
 import * as actions from '../actions/mapActions';
+import { getCurrentCityId } from '../selectors';
 
 
 class Actions extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { showDriveOptions: false };
-  }
-
-  getDriveOptions() {
-    const options = [];
-    this.props.state.map.matrix[this.props.state.map.players[0]].forEach((v, i) => {
-      if (v === 1) {
-        options.push(i);
-      }
-    });
-    return options;
   }
 
   render() {
     return (
       <div className="actions">
-        <div className={classnames({ 'hide' : !this.state.showDriveOptions })}>
-          {this.getDriveOptions().map((o) =>
-            <button key={o} onClick={_.partial(this.props.actions.requestDrive, 0, o)}>{o}</button>
+        <div>
+          {map(this.props.currentMove.availableCities, (o, id) =>
+            <button key={id} onClick={partial(this.props.actions.moveToCity, 0, this.props.currentCityId, id, o.source)}>{o.name}</button>
           )}
         </div>
-        <button onClick={() => { this.setState({ showDriveOptions: true }); }}>Drive</button>
-        <button>Direct</button>
-        <button>Charter</button>
-        <button>Shuttle</button>
+        <button onClick={partial(this.props.actions.moveInit, 0)}>Move</button>
       </div>
     );
   }
 }
 
 const mapStateToProps = (state) => {
-  return { state };
+  return { currentMove: state.currentMove, currentCityId: getCurrentCityId(state) };
 };
 
 const mapDispatchToProps = (dispatch) => {

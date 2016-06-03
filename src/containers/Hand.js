@@ -15,7 +15,7 @@ class Hand extends React.Component {
   }
 }
 
-function mapStateToProps(state) {
+const mapStateToProps = (state) => {
   return {
     hand: state.players[0].hand,
     cities: state.cities
