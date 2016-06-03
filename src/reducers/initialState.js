@@ -41,6 +41,8 @@ export default {
     availableCities: []
   },
 
+  stationsLeft: 5,
+
   map: {
     matrix: [
       [0, 1, 0, 1, 0],

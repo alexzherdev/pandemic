@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import { partial, isEmpty } from 'lodash';
 
 import * as actions from '../actions/mapActions';
-import { getCurrentCityId } from '../selectors';
+import { getCurrentCityId, canBuildStation } from '../selectors';
 
 import MoveCityPicker from '../components/MoveCityPicker';
 
@@ -25,13 +25,14 @@ class Actions extends React.Component {
             moveToCity={this.props.actions.moveToCity}
             moveCancel={this.props.actions.moveCancel} />}
         <button onClick={partial(this.props.actions.moveInit, 0)}>Move</button>
+        <button onClick={partial(this.props.actions.buildStation, this.props.currentCityId)} disabled={!this.props.canBuildStation}>Station</button>
       </div>
     );
   }
 }
 
 const mapStateToProps = (state) => {
-  return { currentMove: state.currentMove, currentCityId: getCurrentCityId(state) };
+  return { currentMove: state.currentMove, currentCityId: getCurrentCityId(state), canBuildStation: canBuildStation(state) };
 };
 
 const mapDispatchToProps = (dispatch) => {

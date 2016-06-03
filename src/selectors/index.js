@@ -8,7 +8,7 @@ export function getAvailableCities(state) {
   const direct = reduceWithAttrs(getCitiesInHand(state, player.hand), { source: 'direct' });
   const neighbors = reduceWithAttrs(getNeighborCities(state, cityId), { source: 'drive' });
   const charters = isCharterAvailable(state) ? reduceWithAttrs(state.cities, { source: 'charter' }) : {};
-  const stations = isStationAvailable(state) ? reduceWithAttrs(getStationCities(state), { source: 'shuttle' }) : {};
+  const stations = isShuttleAvailable(state) ? reduceWithAttrs(getStationCities(state), { source: 'shuttle' }) : {};
   const cities = _.assign({}, charters, direct, neighbors, stations);
   delete cities[cityId];
   return cities;
@@ -20,6 +20,10 @@ export function getCurrentPlayer(state) {
 
 export function getCurrentCityId(state) {
   return state.map.playersLocations[0];
+}
+
+export function canBuildStation(state) {
+  return !isShuttleAvailable(state) && state.stationsLeft > 0;
 }
 
 function getNeighborCities(state, cityId) {
@@ -53,7 +57,7 @@ function isCharterAvailable(state) {
   return !!_.find(hand, { cardType: 'city', id: getCurrentCityId(state) });
 }
 
-function isStationAvailable(state) {
+function isShuttleAvailable(state) {
   const cityId = getCurrentCityId(state);
   return state.map.locations[cityId].station;
 }
