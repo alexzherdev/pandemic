@@ -50,6 +50,10 @@ export function treatedAllOfColor(state, color) {
   return _.chain(state.map.locations).values().every({ [color]: 0 }).value();
 }
 
+export function getActionsLeft(state) {
+  return state.currentMove.actionsLeft;
+}
+
 function getCurrentMapLocation(state) {
   const cityId = getCurrentCityId(state);
   return state.map.locations[cityId];

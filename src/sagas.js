@@ -3,11 +3,11 @@ import { select, put } from 'redux-saga/effects';
 
 import * as types from './constants/actionTypes';
 import { moveShowCities } from './actions/mapActions';
-import { discardFromHand } from './actions/cardActions';
+import { discardFromHand, drawCards } from './actions/cardActions';
 import { eradicateDisease } from './actions/diseaseActions';
 import { victory } from './actions/globalActions';
 import { getAvailableCities, getCurrentPlayer, treatedAllOfColor, getDiseaseStatus,
-  areAllDiseasesCured } from './selectors';
+  areAllDiseasesCured, getActionsLeft } from './selectors';
 
 
 function* showAvailableCities() {
@@ -43,6 +43,13 @@ function* checkForVictory() {
   }
 }
 
+function* checkActionsLeft() {
+  const actionsLeft = yield select(getActionsLeft);
+  if (actionsLeft === 0) {
+    yield put(drawCards());
+  }
+}
+
 function* watchMoveInit() {
   yield* takeEvery(types.PLAYER_MOVE_INIT, showAvailableCities);
 }
@@ -63,12 +70,18 @@ function* watchForVictory() {
   yield* takeEvery(types.PLAYER_CURE_DISEASE, checkForVictory);
 }
 
+function* watchActionsLeft() {
+  yield* takeEvery(types.ACTIONS, checkActionsLeft);
+}
+
+
 export default function* rootSaga() {
   yield [
     watchMoveInit(),
     watchMoveToCity(),
     watchForTreatEradication(),
     watchForCureEradication(),
-    watchForVictory()
+    watchForVictory(),
+    watchActionsLeft()
   ];
 }

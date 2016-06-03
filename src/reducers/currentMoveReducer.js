@@ -2,20 +2,30 @@ import initialState from './initialState';
 import * as types from '../constants/actionTypes';
 
 
-export default function currentMoveReducer(state = initialState.currentMove, action) {
+function actionsLeft(state = 0, action) {
+  if (types.ACTIONS.includes(action.type)) {
+    return state - 1;
+  } else {
+    return state;
+  }
+}
+
+function availableCities(state = [], action) {
   switch (action.type) {
     case types.PLAYER_MOVE_SHOW_CITIES:
-      return {
-        ...state,
-        availableCities: action.cities
-      };
+      return action.cities;
     case types.PLAYER_MOVE_TO_CITY:
     case types.PLAYER_MOVE_CANCEL:
-      return {
-        ...state,
-        availableCities: []
-      };
+      return [];
     default:
       return state;
   }
+}
+
+export default function currentMoveReducer(state = initialState.currentMove, action) {
+  return {
+    ...state,
+    availableCities: availableCities(state.availableCities, action),
+    actionsLeft: actionsLeft(state.actionsLeft, action)
+  };
 }

@@ -47,7 +47,8 @@ export default {
   },
 
   currentMove: {
-    availableCities: []
+    availableCities: [],
+    actionsLeft: 4
   },
 
   stationsLeft: 5,
