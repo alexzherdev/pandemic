@@ -3,19 +3,19 @@ export default {
 
   playerCards: {
     deck: [
+      { cardType: 'epidemic', name: 'Epidemic' },
       { cardType: 'city', id: '1' },
       { cardType: 'city', id: '8' },
       { cardType: 'city', id: '6' }, { cardType: 'city', id: '7' },
       { cardType: 'city', id: '0' }
 
-      // { cardType: 'epidemic', name: 'Epidemic' },
       // { cardType: 'event', id: '0' },
     ],
     discard: []
   },
 
   infectionCards: {
-    deck: ['1', '0', '3', '5', '6', '7', '8'],
+    deck: ['8', '7', '0', '5', '6', '1', '3'],
     discard: ['4', '2']
   },
 
@@ -25,8 +25,7 @@ export default {
       name: 'Name',
       hand: [
         { cardType: 'city', id: '3' }, { cardType: 'city', id: '4' },
-        { cardType: 'city', id: '2' }, { cardType: 'city', id: '5' },
-
+        { cardType: 'city', id: '2' }, { cardType: 'city', id: '5' }
       ]
     }
   },
@@ -116,11 +115,15 @@ export default {
 
   map: {
     matrix: [
-      [0, 1, 0, 1, 0],
-      [1, 0, 1, 0, 0],
-      [0, 1, 0, 1, 1],
-      [1, 0, 1, 0, 1],
-      [0, 0, 1, 1, 0]
+      [0, 1, 0, 1, 0, 0, 0, 0, 0],
+      [1, 0, 1, 0, 0, 0, 0, 0, 0],
+      [0, 1, 0, 1, 1, 0, 0, 0, 0],
+      [1, 0, 1, 0, 1, 0, 0, 0, 0],
+      [0, 0, 1, 1, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0]
     ],
 
     playersLocations: {
@@ -131,10 +134,10 @@ export default {
       0: {
         coords: [200, 100],
         station: true,
-        yellow: 1,
-        red: 3,
-        black: 0,
-        blue: 0
+        yellow: 2,
+        red: 1,
+        black: 2,
+        blue: 1
       },
       1: {
         coords: [100, 100],
@@ -148,14 +151,14 @@ export default {
         yellow: 1,
         red: 0,
         black: 0,
-        blue: 0
+        blue: 1
       },
       3: {
         coords: [200, 200],
         yellow: 1,
         red: 1,
         black: 1,
-        blue: 1
+        blue: 3
       },
       4: {
         coords: [150, 300],
@@ -170,7 +173,7 @@ export default {
         yellow: 1,
         red: 1,
         black: 1,
-        blue: 1
+        blue: 2
       },
       6: {
         coords: [300, 300],

@@ -201,7 +201,7 @@ function* watchMoveToCity() {
 }
 
 function* watchForTreatEradication() {
-  yield* takeEvery(types.PLAYER_TREAT_DISEASE, checkForEradication);
+  yield* takeEvery([types.PLAYER_TREAT_DISEASE, types.PLAYER_TREAT_ALL_DISEASE], checkForEradication);
 }
 
 function* watchForCureEradication() {

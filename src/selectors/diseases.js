@@ -10,6 +10,10 @@ export function canTreatColor(state, color) {
   return loc[color] > 0;
 }
 
+export function canTreatAllOfColor(state, color) {
+  return canTreatColor(state, color) && getDiseaseStatus(state, color) === 'cured';
+}
+
 export function getDiseaseStatus(state, color) {
   return state.diseases[color];
 }

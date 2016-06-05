@@ -39,5 +39,5 @@ export function getPlayerOverHandLimit(state) {
 }
 
 export function isPlaying(state) {
-  return state.status === 'playing'
+  return state.status === 'playing';
 }
