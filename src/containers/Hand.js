@@ -7,7 +7,7 @@ import Card from '../components/Card';
 class Hand extends React.Component {
   render() {
     const renderCard = (card) =>
-      <Card key={card.id} name={this.props.cities[card.id].name} />;
+      <Card key={card.id} name={card.cardType === 'epidemic' ? card.name : this.props.cities[card.id].name} />;
     const items = this.props.hand.map(renderCard);
     const drawn = this.props.cardsDrawn.map(renderCard);
     return (

@@ -6,7 +6,7 @@ function handReducer(state = [], action) {
     case types.CARD_DISCARD_FROM_HAND:
       return state.filter((c) => !(c.cardType === action.cardType && c.id === action.id));
     case types.CARD_DRAW_CARDS_HANDLE:
-      return [...state, action.card];
+      return action.card.cardType !== 'epidemic' ? [...state, action.card] : state;
     default:
       return state;
   }

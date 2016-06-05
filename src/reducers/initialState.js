@@ -1,9 +1,17 @@
 export default {
   status: 'playing',
 
-  playerDeck: [
-    { cardType: 'city', id: '1' }, { cardType: 'city', id: '0' }, { cardType: 'event', id: '0' }
-  ],
+  playerCards: {
+    deck: [
+      { cardType: 'epidemic', name: 'Epidemic' }, { cardType: 'city', id: '1' }, { cardType: 'city', id: '0' }, { cardType: 'event', id: '0' }
+    ],
+    discard: []
+  },
+
+  infectionCards: {
+    deck: ['1', '0', '3'],
+    discard: []
+  },
 
   players: {
     0: {
@@ -52,12 +60,19 @@ export default {
   },
 
   currentMove: {
-    availableCities: [],
+    availableCities: {},
     actionsLeft: 4,
     cardsDrawn: []
   },
 
   stationsLeft: 5,
+
+  infectionRate: {
+    values: [2, 2, 2, 3, 3, 4, 4],
+    index: 0
+  },
+
+  outbreaks: 0,
 
   map: {
     matrix: [

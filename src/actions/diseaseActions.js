@@ -11,3 +11,15 @@ export function cureDisease(color) {
 export function eradicateDisease(color) {
   return { type: types.ERADICATE_DISEASE, color };
 }
+
+export function initOutbreak(cityId) {
+  return { type: types.OUTBREAK_INIT, cityId };
+}
+
+export function infectCity(cityId, color, count) {
+  return { type: types.INFECT_CITY, cityId, color, count };
+}
+
+export function infectNeighbor(cityId, originId, color) {
+  return { type: types.INFECT_NEIGHBOR, cityId, originId, color };
+}

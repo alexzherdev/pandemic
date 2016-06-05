@@ -12,13 +12,13 @@ function actionsLeft(state = 0, action) {
   }
 }
 
-function availableCities(state = [], action) {
+function availableCities(state = {}, action) {
   switch (action.type) {
     case types.PLAYER_MOVE_SHOW_CITIES:
-      return action.cities.slice();
+      return {...action.cities};
     case types.PLAYER_MOVE_TO_CITY:
     case types.PLAYER_MOVE_CANCEL:
-      return [];
+      return {};
     default:
       return state;
   }

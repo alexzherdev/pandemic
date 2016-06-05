@@ -4,18 +4,24 @@ import map from './mapReducer';
 import players from './playersReducer';
 import currentMove from './currentMoveReducer';
 import stationsLeft from './stationsLeftReducer';
+import infectionRate from './infectionRateReducer';
+import outbreaks from './outbreaksReducer';
 import diseases from './diseasesReducer';
 import status from './statusReducer';
-import playerDeck from './playerDeckReducer';
+import playerCards from './playerCardsReducer';
+import infectionCards from './infectionCardsReducer';
 import initialState from './initialState';
 
 export default combineReducers({
   status,
-  playerDeck,
+  playerCards,
+  infectionCards,
   map,
   players,
   diseases,
+  outbreaks,
   currentMove,
   cities: () => initialState.cities,
-  stationsLeft
+  stationsLeft,
+  infectionRate
 });

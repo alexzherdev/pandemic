@@ -1,23 +1,45 @@
 import initialState from './initialState';
 import * as types from '../constants/actionTypes';
 
-function locationsReducer(state = [], action) {
+import { getNeighborCities } from '../selectors';
+
+
+function cityReducer(state = {}, action) {
   switch (action.type) {
     case types.PLAYER_BUILD_STATION:
       return {
         ...state,
-        [action.cityId]: {
-          ...state[action.cityId],
-          station: true
-        }
+        station: true
       };
     case types.PLAYER_TREAT_DISEASE:
       return {
         ...state,
-        [action.cityId]: {
-          ...state[action.cityId],
-          [action.color]: state[action.cityId][action.color] - 1
-        }
+        [action.color]: state[action.color] - 1
+      };
+    case types.INFECT_CITY:
+      return {
+        ...state,
+        [action.color]: Math.min(3, state[action.color] + action.count)
+      };
+    case types.INFECT_NEIGHBOR:
+      return {
+        ...state,
+        [action.color]: Math.min(3, state[action.color] + 1)
+      };
+    default:
+      return state;
+  }
+}
+
+function locationsReducer(state = [], action) {
+  switch (action.type) {
+    case types.PLAYER_BUILD_STATION:
+    case types.PLAYER_TREAT_DISEASE:
+    case types.INFECT_CITY:
+    case types.INFECT_NEIGHBOR:
+      return {
+        ...state,
+        [action.cityId]: cityReducer(state[action.cityId], action)
       };
     default:
       return state;
@@ -36,6 +58,8 @@ export default function mapReducer(state = initialState.map, action) {
       };
     case types.PLAYER_BUILD_STATION:
     case types.PLAYER_TREAT_DISEASE:
+    case types.INFECT_CITY:
+    case types.INFECT_NEIGHBOR:
       return {
         ...state,
         locations: locationsReducer(state.locations, action)
