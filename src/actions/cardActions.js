@@ -27,3 +27,7 @@ export function epidemicIncrease() {
 export function epidemicInfect(cityId) {
   return { type: types.EPIDEMIC_INFECT, cityId };
 }
+
+export function epidemicIntensify() {
+  return { type: types.EPIDEMIC_INTENSIFY };
+}

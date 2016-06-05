@@ -1,3 +1,5 @@
+import { shuffle } from 'lodash';
+
 import initialState from './initialState';
 import * as types from '../constants/actionTypes';
 
@@ -10,6 +12,14 @@ export default function infectionCardsReducer(state = initialState.infectionCard
         ...state,
         deck: state.deck.slice(1),
         discard: [card, ...state.discard]
+      };
+    }
+    case types.EPIDEMIC_INTENSIFY: {
+      const shuffled = shuffle(state.discard);
+      return {
+        ...state,
+        deck: [...shuffled, ...state.deck],
+        discard: []
       };
     }
     default:

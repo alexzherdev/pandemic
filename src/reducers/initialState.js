@@ -10,7 +10,7 @@ export default {
 
   infectionCards: {
     deck: ['1', '0', '3'],
-    discard: []
+    discard: ['4', '2']
   },
 
   players: {

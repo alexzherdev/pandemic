@@ -4,7 +4,7 @@ import { select, put } from 'redux-saga/effects';
 import * as types from './constants/actionTypes';
 import { moveShowCities } from './actions/mapActions';
 import { discardFromHand, addToPlayerDiscard, drawCardsInit, drawCardsHandle, epidemicIncrease,
-  epidemicInfect, discardBottomInfectionCard } from './actions/cardActions';
+  epidemicInfect, epidemicIntensify, discardBottomInfectionCard } from './actions/cardActions';
 import { eradicateDisease, infectCity, infectNeighbor, initOutbreak, completeOutbreak,
   queueOutbreak } from './actions/diseaseActions';
 import { victory, defeat } from './actions/globalActions';
@@ -82,6 +82,7 @@ function* yieldEpidemic() {
       yield yieldOutbreak(infectionCityId, color);
     }
   }
+  yield put(epidemicIntensify());
 }
 
 function* drawIfNoActionsLeft() {
