@@ -113,6 +113,12 @@ function* checkForInfectionRateDefeat() {
   }
 }
 
+function* checkForOutbreaksDefeat() {
+  if (yield select(sel.isOutbreaksCountOutOfBounds)) {
+    yield put(defeat());
+  }
+}
+
 function* watchMoveInit() {
   yield* takeEvery(types.PLAYER_MOVE_INIT, showAvailableCities);
 }
@@ -141,6 +147,10 @@ function* watchForInfectionRateDefeat() {
   yield* takeEvery(types.EPIDEMIC_INCREASE, checkForInfectionRateDefeat);
 }
 
+function* watchForOutbreaksDefeat() {
+  yield* takeEvery(types.OUTBREAK_INIT, checkForOutbreaksDefeat);
+}
+
 export default function* rootSaga() {
   yield [
     watchMoveInit(),
@@ -149,6 +159,7 @@ export default function* rootSaga() {
     watchForCureEradication(),
     watchForVictory(),
     watchActionsLeft(),
-    watchForInfectionRateDefeat()
+    watchForInfectionRateDefeat(),
+    watchForOutbreaksDefeat()
   ];
 }
