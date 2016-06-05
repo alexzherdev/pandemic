@@ -20,6 +20,10 @@ export function discardBottomInfectionCard() {
   return { type: types.CARD_DISCARD_FROM_INFECTION_DECK_BOTTOM };
 }
 
+export function discardTopInfectionCard() {
+  return { type: types.CARD_DISCARD_FROM_INFECTION_DECK_TOP };
+}
+
 export function epidemicIncrease() {
   return { type: types.EPIDEMIC_INCREASE };
 }

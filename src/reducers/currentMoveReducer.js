@@ -7,6 +7,8 @@ import * as types from '../constants/actionTypes';
 function actionsLeft(state = 0, action) {
   if (types.ACTIONS.includes(action.type)) {
     return state - 1;
+  } else if (action.type === types.PASS_TURN) {
+    return 4;
   } else {
     return state;
   }
@@ -55,7 +57,7 @@ function outbreak(state = {}, action) {
         pending: state.pending.includes(action.cityId) || state.complete.includes(action.cityId)
           ? state.pending
           : [...state.pending, action.cityId]
-      }
+      };
     default:
       return state;
   }

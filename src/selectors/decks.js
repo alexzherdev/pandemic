@@ -3,6 +3,14 @@ export function getPlayerCardsToDraw(state) {
 }
 
 export function getInfectionDeckBottom(state) {
-  const deck = state.infectionCards.deck;
+  const deck = getInfectionDeck(state);
   return deck[deck.length - 1];
+}
+
+export function peekAtInfectionDeck(state) {
+  return getInfectionDeck(state)[0];
+}
+
+function getInfectionDeck(state) {
+  return state.infectionCards.deck;
 }

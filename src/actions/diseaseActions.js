@@ -31,3 +31,7 @@ export function completeOutbreak(cityId) {
 export function queueOutbreak(cityId, color) {
   return { type: types.OUTBREAK_QUEUE, cityId, color };
 }
+
+export function infectCities() {
+  return { type: types.INFECT_CITIES };
+}

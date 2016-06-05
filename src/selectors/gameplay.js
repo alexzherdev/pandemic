@@ -17,6 +17,10 @@ export function isInfectionRateOutOfBounds(state) {
   return state.infectionRate.index >= state.infectionRate.values.length;
 }
 
+export function getInfectionRate(state) {
+  return state.infectionRate.values[state.infectionRate.index];
+}
+
 export function isOutbreaksCountOutOfBounds(state) {
   return state.outbreaks >= 8;
 }

@@ -4,10 +4,10 @@ import { select, put } from 'redux-saga/effects';
 import * as types from './constants/actionTypes';
 import { moveShowCities } from './actions/mapActions';
 import { discardFromHand, addToPlayerDiscard, drawCardsInit, drawCardsHandle, epidemicIncrease,
-  epidemicInfect, epidemicIntensify, discardBottomInfectionCard } from './actions/cardActions';
+  epidemicInfect, epidemicIntensify, discardBottomInfectionCard, discardTopInfectionCard } from './actions/cardActions';
 import { eradicateDisease, infectCity, infectNeighbor, initOutbreak, completeOutbreak,
-  queueOutbreak } from './actions/diseaseActions';
-import { victory, defeat } from './actions/globalActions';
+  queueOutbreak, infectCities } from './actions/diseaseActions';
+import { victory, defeat, passTurn } from './actions/globalActions';
 import * as sel from './selectors';
 
 
@@ -68,43 +68,67 @@ function* yieldOutbreak(cityId, color) {
   }
 }
 
+function* infectOrOutbreak(cityId, color, count) {
+  const cubesInCity = yield select(sel.getCubesInCity, cityId, color);
+  yield put(infectCity(cityId, color, count));
+  if (cubesInCity > 0) {
+    yield yieldOutbreak(cityId, color);
+  }
+}
+
 function* yieldEpidemic() {
   yield put(epidemicIncrease());
   const infectionCityId = yield select(sel.getInfectionDeckBottom);
   const color = yield select(sel.getCityColor, infectionCityId);
   const status = yield select(sel.getDiseaseStatus, color);
   if (status !== 'eradicated') {
-    const cubesInCity = yield select(sel.getCubesInCity, infectionCityId, color);
     yield put(epidemicInfect(infectionCityId));
-    yield put(infectCity(infectionCityId, color, 3));
+    yield infectOrOutbreak(infectionCityId, color, 3);
     yield put(discardBottomInfectionCard());
-    if (cubesInCity > 0) {
-      yield yieldOutbreak(infectionCityId, color);
-    }
   }
   yield put(epidemicIntensify());
+}
+
+function* drawPlayerCards() {
+  const cards = yield select(sel.getPlayerCardsToDraw);
+  if (cards.length < 2) {
+    yield put(defeat());
+  } else {
+    const currentPlayer = yield select(sel.getCurrentPlayer);
+    yield put(drawCardsInit(cards));
+    yield delay(1000);
+    yield put(drawCardsHandle(cards[0], currentPlayer.id));
+    if (cards[0].cardType === 'epidemic') {
+      yield yieldEpidemic();
+    }
+    yield delay(1000);
+    yield put(drawCardsHandle(cards[1], currentPlayer.id));
+    if (cards[1].cardType === 'epidemic') {
+      yield yieldEpidemic();
+    }
+  }
+}
+
+function* infections() {
+  yield put(infectCities());
+  const infectionRate = yield select(sel.getInfectionRate);
+  for (let i = 0; i < infectionRate; i++) {
+    const city = yield select(sel.peekAtInfectionDeck);
+    const color = yield select(sel.getCityColor, city);
+    const status = yield select(sel.getDiseaseStatus, color);
+    if (status !== 'eradicated') {
+      yield infectOrOutbreak(city, color, 1);
+    }
+    yield put(discardTopInfectionCard());
+  }
 }
 
 function* drawIfNoActionsLeft() {
   const actionsLeft = yield select(sel.getActionsLeft);
   if (actionsLeft === 0) {
-    const cards = yield select(sel.getPlayerCardsToDraw);
-    if (cards.length < 2) {
-      yield put(defeat());
-    } else {
-      const currentPlayer = yield select(sel.getCurrentPlayer);
-      yield put(drawCardsInit(cards));
-      yield delay(1000);
-      yield put(drawCardsHandle(cards[0], currentPlayer.id));
-      if (cards[0].cardType === 'epidemic') {
-        yield yieldEpidemic();
-      }
-      yield delay(1000);
-      yield put(drawCardsHandle(cards[1], currentPlayer.id));
-      if (cards[1].cardType === 'epidemic') {
-        yield yieldEpidemic();
-      }
-    }
+    yield drawPlayerCards();
+    yield infections();
+    yield put(passTurn());
   }
 }
 

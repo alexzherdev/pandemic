@@ -7,3 +7,7 @@ export function victory() {
 export function defeat() {
   return { type: types.DEFEAT };
 }
+
+export function passTurn() {
+  return { type: types.PASS_TURN };
+}
