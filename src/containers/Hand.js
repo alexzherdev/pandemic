@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import Card from '../components/Card';
-import { getPlayerHand } from '../selectors';
+import { getCurrentPlayerHand } from '../selectors';
 
 
 class Hand extends React.Component {
@@ -22,7 +22,7 @@ class Hand extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    hand: getPlayerHand(state, 0),
+    hand: getCurrentPlayerHand(state),
     cities: state.cities,
     cardsDrawn: state.currentMove.cardsDrawn
   };

@@ -57,7 +57,7 @@ export default function mapReducer(state = initialState.map, action) {
       return {
         ...state,
         playersLocations: {
-          ...state.players,
+          ...state.playersLocations,
           [action.playerId]: action.destinationId
         }
       };

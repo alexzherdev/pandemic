@@ -74,6 +74,15 @@ function playerOverHandLimit(state, action) {
   }
 }
 
+function player(state, action) {
+  switch (action.type) {
+    case types.PASS_TURN:
+      return action.playerId;
+    default:
+      return state;
+  }
+}
+
 export default function currentMoveReducer(state = initialState.currentMove, action) {
   return {
     ...state,
@@ -81,6 +90,7 @@ export default function currentMoveReducer(state = initialState.currentMove, act
     actionsLeft: actionsLeft(state.actionsLeft, action),
     cardsDrawn: cardsDrawn(state.cardsDrawn, action),
     outbreak: outbreak(state.outbreak, action),
-    playerOverHandLimit: playerOverHandLimit(state.playerOverHandLimit, action)
+    playerOverHandLimit: playerOverHandLimit(state.playerOverHandLimit, action),
+    player: player(state.player, action)
   };
 }

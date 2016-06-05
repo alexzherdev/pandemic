@@ -6,7 +6,7 @@ import { getCurrentPlayer } from './gameplay';
 
 
 export function getCurrentCityId(state) {
-  return state.map.playersLocations[0];
+  return state.map.playersLocations[getCurrentPlayer(state).id];
 }
 
 export function getAvailableCities(state) {

@@ -149,7 +149,8 @@ function* infections() {
 function* drawIfNoActionsLeft() {
   function* continueTurn() {
     yield infections();
-    yield put(passTurn());
+    const nextPlayer = yield select(sel.getNextPlayer);
+    yield put(passTurn(nextPlayer));
   }
 
   if (!(yield select(sel.isPlaying))) {

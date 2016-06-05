@@ -7,7 +7,7 @@ import * as mapActions from '../actions/mapActions';
 import * as diseaseActions from '../actions/diseaseActions';
 import * as cardActions from '../actions/cardActions';
 import { getCurrentCityId, canBuildStation, canTreatColor, canTreatAllOfColor, canCureDisease,
-  getPlayerHand, getPlayerOverHandLimit } from '../selectors';
+  getPlayerHand, getPlayerOverHandLimit, getCurrentPlayer } from '../selectors';
 
 import MoveCityPicker from '../components/MoveCityPicker';
 import DiscardOverLimitPicker from '../components/DiscardOverLimitPicker';
@@ -27,12 +27,13 @@ class Actions extends React.Component {
 
   render() {
     const { availableCities } = this.props.currentMove;
-    const { playerToDiscard } = this.props;
+    const { playerToDiscard, currentPlayer } = this.props;
     return (
       <div className="actions">
         {!isEmpty(availableCities) &&
           <MoveCityPicker
             availableCities={availableCities}
+            playerId={currentPlayer.id}
             currentCityId={this.props.currentCityId}
             moveToCity={this.props.actions.moveToCity}
             moveCancel={this.props.actions.moveCancel} />}
@@ -41,7 +42,7 @@ class Actions extends React.Component {
             hand={this.props.getPlayerHand(playerToDiscard)}
             playerId={playerToDiscard}
             onCardPicked={this.onDiscardCardPicked} />}
-        <button onClick={partial(this.props.actions.moveInit, 0)}>Move</button>
+        <button onClick={partial(this.props.actions.moveInit, currentPlayer.id)}>Move</button>
         <button onClick={partial(this.props.actions.buildStation, this.props.currentCityId)} disabled={!this.props.canBuildStation}>Station</button>
         {['red', 'blue', 'yellow', 'black'].map((color) =>
           <span key={color}>
@@ -65,7 +66,7 @@ const mapStateToProps = (state) => {
   return { currentMove: state.currentMove, currentCityId: getCurrentCityId(state), canBuildStation: canBuildStation(state),
     canTreatColor: partial(canTreatColor, state), canTreatAllOfColor: partial(canTreatAllOfColor, state),
     canCureDisease: partial(canCureDisease, state), getPlayerHand: partial(getPlayerHand, state),
-    playerToDiscard: getPlayerOverHandLimit(state) };
+    playerToDiscard: getPlayerOverHandLimit(state), currentPlayer: getCurrentPlayer(state) };
 };
 
 const mapDispatchToProps = (dispatch) => {

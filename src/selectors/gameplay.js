@@ -3,7 +3,11 @@ import { hasCurrentCityInHand } from './cities';
 
 
 export function getCurrentPlayer(state) {
-  return state.players[0];
+  return state.players[state.currentMove.player];
+}
+
+export function getNextPlayer(state) {
+  return state.currentMove.player === Object.keys(state.players).length - 1 ? 0 : state.currentMove.player + 1;
 }
 
 export function canBuildStation(state) {

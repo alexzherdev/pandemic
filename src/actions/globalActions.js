@@ -8,6 +8,6 @@ export function defeat() {
   return { type: types.DEFEAT };
 }
 
-export function passTurn() {
-  return { type: types.PASS_TURN };
+export function passTurn(playerId) {
+  return { type: types.PASS_TURN, playerId };
 }

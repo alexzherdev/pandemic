@@ -22,9 +22,15 @@ export default {
   players: {
     0: {
       id: '0',
-      name: 'Name',
+      name: 'P1',
       hand: [
-        { cardType: 'city', id: '3' }, { cardType: 'city', id: '4' },
+        { cardType: 'city', id: '3' }, { cardType: 'city', id: '4' }
+      ]
+    },
+    1: {
+      id: '1',
+      name: 'P2',
+      hand: [
         { cardType: 'city', id: '2' }, { cardType: 'city', id: '5' }
       ]
     }
@@ -86,6 +92,7 @@ export default {
   },
 
   currentMove: {
+    player: 0,
     availableCities: {},
     actionsLeft: 4,
     cardsDrawn: [],
@@ -127,7 +134,8 @@ export default {
     ],
 
     playersLocations: {
-      0: '0'
+      0: '0',
+      1: '1'
     },
 
     locations: {
