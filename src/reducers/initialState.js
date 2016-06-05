@@ -62,7 +62,12 @@ export default {
   currentMove: {
     availableCities: {},
     actionsLeft: 4,
-    cardsDrawn: []
+    cardsDrawn: [],
+    outbreak: {
+      color: null,
+      complete: [],
+      pending: []
+    }
   },
 
   stationsLeft: 5,
@@ -122,7 +127,7 @@ export default {
         yellow: 0,
         red: 0,
         black: 0,
-        blue: 0,
+        blue: 3,
         station: true
       }
     }

@@ -35,11 +35,38 @@ function cardsDrawn(state = [], action) {
   }
 }
 
+function outbreak(state = {}, action) {
+  switch (action.type) {
+    case types.OUTBREAK_INIT:
+      return {
+        ...state,
+        color: action.color,
+        pending: state.pending.filter((id) => id !== action.cityId)
+      };
+    case types.OUTBREAK_COMPLETE:
+      return {
+        ...state,
+        color: state.pending.length > 0 ? state.color : null,
+        complete: state.pending.length > 0 ? [...state.complete, action.cityId] : []
+      };
+    case types.OUTBREAK_QUEUE:
+      return {
+        ...state,
+        pending: state.pending.includes(action.cityId) || state.complete.includes(action.cityId)
+          ? state.pending
+          : [...state.pending, action.cityId]
+      }
+    default:
+      return state;
+  }
+}
+
 export default function currentMoveReducer(state = initialState.currentMove, action) {
   return {
     ...state,
     availableCities: availableCities(state.availableCities, action),
     actionsLeft: actionsLeft(state.actionsLeft, action),
-    cardsDrawn: cardsDrawn(state.cardsDrawn, action)
+    cardsDrawn: cardsDrawn(state.cardsDrawn, action),
+    outbreak: outbreak(state.outbreak, action)
   };
 }

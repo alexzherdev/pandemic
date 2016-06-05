@@ -12,8 +12,8 @@ export function eradicateDisease(color) {
   return { type: types.ERADICATE_DISEASE, color };
 }
 
-export function initOutbreak(cityId) {
-  return { type: types.OUTBREAK_INIT, cityId };
+export function initOutbreak(cityId, color) {
+  return { type: types.OUTBREAK_INIT, cityId, color };
 }
 
 export function infectCity(cityId, color, count) {
@@ -22,4 +22,12 @@ export function infectCity(cityId, color, count) {
 
 export function infectNeighbor(cityId, originId, color) {
   return { type: types.INFECT_NEIGHBOR, cityId, originId, color };
+}
+
+export function completeOutbreak(cityId) {
+  return { type: types.OUTBREAK_COMPLETE, cityId };
+}
+
+export function queueOutbreak(cityId, color) {
+  return { type: types.OUTBREAK_QUEUE, cityId, color };
 }

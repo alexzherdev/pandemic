@@ -1,8 +1,6 @@
 import initialState from './initialState';
 import * as types from '../constants/actionTypes';
 
-import { getNeighborCities } from '../selectors';
-
 
 function cityReducer(state = {}, action) {
   switch (action.type) {

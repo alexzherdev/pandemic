@@ -1,12 +1,12 @@
 import { takeEvery, delay } from 'redux-saga';
 import { select, put } from 'redux-saga/effects';
-import _ from 'lodash';
 
 import * as types from './constants/actionTypes';
 import { moveShowCities } from './actions/mapActions';
 import { discardFromHand, addToPlayerDiscard, drawCardsInit, drawCardsHandle, epidemicIncrease,
   epidemicInfect, discardBottomInfectionCard } from './actions/cardActions';
-import { eradicateDisease, infectCity, infectNeighbor, initOutbreak } from './actions/diseaseActions';
+import { eradicateDisease, infectCity, infectNeighbor, initOutbreak, completeOutbreak,
+  queueOutbreak } from './actions/diseaseActions';
 import { victory, defeat } from './actions/globalActions';
 import * as sel from './selectors';
 
@@ -50,13 +50,22 @@ function* checkForVictory() {
 }
 
 function* yieldOutbreak(cityId, color) {
-  yield put(initOutbreak(cityId));
+  yield put(initOutbreak(cityId, color));
   const neighbors = yield select(sel.getNeighborCities, cityId);
-  const ids = _.keys(neighbors);
-  for (let i = 0; i < ids.length; i++) {
-    yield put(infectNeighbor(ids[i], cityId, color));
-  }
 
+  for (let i = 0; i < neighbors.length; i++) {
+    const id = neighbors[i].id;
+    const cubesInNeighbor = yield select(sel.getCubesInCity, id, color);
+    yield put(infectNeighbor(id, cityId, color));
+    if (cubesInNeighbor === 3) {
+      yield put(queueOutbreak(id, color));
+    }
+  }
+  yield put(completeOutbreak(cityId));
+  const nextOutbreakCityId = yield select(sel.getNextOutbreakCityId);
+  if (nextOutbreakCityId) {
+    yield yieldOutbreak(nextOutbreakCityId, color);
+  }
 }
 
 function* yieldEpidemic() {
