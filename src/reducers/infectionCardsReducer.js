@@ -30,8 +30,6 @@ export default function infectionCardsReducer(state = initialState.infectionCard
         discard: []
       };
     }
-    case types.INFECT_CITIES:
-
     default:
       return state;
   }

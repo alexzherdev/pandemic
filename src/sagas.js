@@ -1,10 +1,11 @@
-import { takeEvery, delay } from 'redux-saga';
-import { select, put } from 'redux-saga/effects';
+import { takeEvery, delay, END } from 'redux-saga';
+import { select, put, take } from 'redux-saga/effects';
 
 import * as types from './constants/actionTypes';
 import { moveShowCities } from './actions/mapActions';
 import { discardFromHand, addToPlayerDiscard, drawCardsInit, drawCardsHandle, epidemicIncrease,
-  epidemicInfect, epidemicIntensify, discardBottomInfectionCard, discardTopInfectionCard } from './actions/cardActions';
+  epidemicInfect, epidemicIntensify, discardBottomInfectionCard, discardTopInfectionCard,
+  chooseCardsToDiscard, cardOverLimitComplete } from './actions/cardActions';
 import { eradicateDisease, infectCity, infectNeighbor, initOutbreak, completeOutbreak,
   queueOutbreak, infectCities, useDiseaseCubes } from './actions/diseaseActions';
 import { victory, defeat, passTurn } from './actions/globalActions';
@@ -45,7 +46,7 @@ function* checkForVictory() {
   const allCured = yield select(sel.areAllDiseasesCured);
 
   if (allCured) {
-    yield put(victory());
+    yield yieldVictory();
   }
 }
 
@@ -53,10 +54,20 @@ function* useCubes(cityId, color, count) {
   const cubesInCity = yield select(sel.getCubesInCity, cityId, color);
   const actualCubesToUse = Math.min(3 - cubesInCity, count);
   if (yield select(sel.isOutOfCubes, actualCubesToUse, color)) {
-    yield put(defeat());
+    yield yieldDefeat();
   } else {
     yield put(useDiseaseCubes(actualCubesToUse, color));
   }
+}
+
+function* yieldDefeat() {
+  yield put(defeat());
+  yield put(END);
+}
+
+function* yieldVictory() {
+  yield put(victory());
+  yield put(END);
 }
 
 function* yieldOutbreak(cityId, color) {
@@ -104,7 +115,7 @@ function* yieldEpidemic() {
 function* drawPlayerCards() {
   const cards = yield select(sel.getPlayerCardsToDraw);
   if (cards.length < 2) {
-    yield put(defeat());
+    yield yieldDefeat();
   } else {
     const currentPlayer = yield select(sel.getCurrentPlayer);
     yield put(drawCardsInit(cards));
@@ -136,23 +147,48 @@ function* infections() {
 }
 
 function* drawIfNoActionsLeft() {
-  const actionsLeft = yield select(sel.getActionsLeft);
-  if (actionsLeft === 0) {
-    yield drawPlayerCards();
+  function* continueTurn() {
     yield infections();
     yield put(passTurn());
+  }
+
+  if (!(yield select(sel.isPlaying))) {
+    // won
+    return;
+  }
+
+  const actionsLeft = yield select(sel.getActionsLeft);
+  if (actionsLeft === 0) {
+    const currentPlayer = yield select(sel.getCurrentPlayer);
+    yield drawPlayerCards();
+    if (!(yield select(sel.isPlaying))) {
+      // lost due to not enough player cards or won
+      return;
+    }
+    if (yield select(sel.isOverHandLimit, currentPlayer.id)) {
+      yield put(chooseCardsToDiscard(currentPlayer.id));
+      yield take(types.CARD_OVER_LIMIT_DISCARD_COMPLETE);
+    }
+    yield continueTurn();
   }
 }
 
 function* checkForInfectionRateDefeat() {
   if (yield select(sel.isInfectionRateOutOfBounds)) {
-    yield put(defeat());
+    yield yieldDefeat();
   }
 }
 
 function* checkForOutbreaksDefeat() {
   if (yield select(sel.isOutbreaksCountOutOfBounds)) {
-    yield put(defeat());
+    yield yieldDefeat();
+  }
+}
+
+function* checkHandLimit() {
+  const player = yield select(sel.getPlayerOverHandLimit);
+  if (player && !(yield select(sel.isOverHandLimit, player))) {
+    yield put(cardOverLimitComplete());
   }
 }
 
@@ -188,8 +224,8 @@ function* watchForOutbreaksDefeat() {
   yield* takeEvery(types.OUTBREAK_INIT, checkForOutbreaksDefeat);
 }
 
-function* watchForCubesDefeat() {
-  yield* takeEvery(types.USE_DISEASE_CUBES, checkForCubesDefeat);
+function* watchOverLimitDiscardComplete() {
+  yield* takeEvery(types.CARD_DISCARD_FROM_HAND, checkHandLimit);
 }
 
 export default function* rootSaga() {
@@ -201,6 +237,7 @@ export default function* rootSaga() {
     watchForVictory(),
     watchActionsLeft(),
     watchForInfectionRateDefeat(),
-    watchForOutbreaksDefeat()
+    watchForOutbreaksDefeat(),
+    watchOverLimitDiscardComplete()
   ];
 }

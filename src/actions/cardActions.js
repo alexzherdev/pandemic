@@ -35,3 +35,11 @@ export function epidemicInfect(cityId) {
 export function epidemicIntensify() {
   return { type: types.EPIDEMIC_INTENSIFY };
 }
+
+export function chooseCardsToDiscard(playerId) {
+  return { type: types.CARD_OVER_LIMIT_DISCARD_INIT, playerId };
+}
+
+export function cardOverLimitComplete() {
+  return { type: types.CARD_OVER_LIMIT_DISCARD_COMPLETE };
+}

@@ -2,9 +2,10 @@ import initialState from './initialState';
 import * as types from '../constants/actionTypes';
 
 
-function cityReducer(state = {}, action) {
+function cityReducer(state, action) {
   switch (action.type) {
     case types.PLAYER_BUILD_STATION:
+      // TODO move station from another city
       return {
         ...state,
         station: true
@@ -29,7 +30,7 @@ function cityReducer(state = {}, action) {
   }
 }
 
-function locationsReducer(state = [], action) {
+function locationsReducer(state, action) {
   switch (action.type) {
     case types.PLAYER_BUILD_STATION:
     case types.PLAYER_TREAT_DISEASE:

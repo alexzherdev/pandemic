@@ -1,4 +1,5 @@
 import { isAtStation } from './map';
+import { hasCurrentCityInHand } from './cities';
 
 
 export function getCurrentPlayer(state) {
@@ -6,7 +7,7 @@ export function getCurrentPlayer(state) {
 }
 
 export function canBuildStation(state) {
-  return !isAtStation(state) && state.stationsLeft > 0;
+  return !isAtStation(state) && hasCurrentCityInHand(state);
 }
 
 export function getActionsLeft(state) {
@@ -31,4 +32,12 @@ export function getNextOutbreakCityId(state) {
 
 export function isOutOfCubes(state, countNeeded, color) {
   return state.cubesLeft[color] < countNeeded;
+}
+
+export function getPlayerOverHandLimit(state) {
+  return state.currentMove.playerOverHandLimit;
+}
+
+export function isPlaying(state) {
+  return state.status === 'playing'
 }
