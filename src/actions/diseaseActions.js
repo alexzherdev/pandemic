@@ -35,3 +35,7 @@ export function queueOutbreak(cityId, color) {
 export function infectCities() {
   return { type: types.INFECT_CITIES };
 }
+
+export function useDiseaseCubes(count, color) {
+  return { type: types.USE_DISEASE_CUBES, count, color };
+}

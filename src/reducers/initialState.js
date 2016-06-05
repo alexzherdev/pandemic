@@ -72,6 +72,13 @@ export default {
 
   stationsLeft: 5,
 
+  cubesLeft: {
+    red: 5,
+    blue: 5,
+    yellow: 5,
+    black: 5
+  },
+
   infectionRate: {
     values: [2, 2, 2, 3, 3, 4, 4],
     index: 0

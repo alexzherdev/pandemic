@@ -4,6 +4,7 @@ import map from './mapReducer';
 import players from './playersReducer';
 import currentMove from './currentMoveReducer';
 import stationsLeft from './stationsLeftReducer';
+import cubesLeft from './cubesLeftReducer';
 import infectionRate from './infectionRateReducer';
 import outbreaks from './outbreaksReducer';
 import diseases from './diseasesReducer';
@@ -23,5 +24,6 @@ export default combineReducers({
   currentMove,
   cities: () => initialState.cities,
   stationsLeft,
+  cubesLeft,
   infectionRate
 });

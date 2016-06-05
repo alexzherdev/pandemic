@@ -28,3 +28,7 @@ export function isOutbreaksCountOutOfBounds(state) {
 export function getNextOutbreakCityId(state) {
   return state.currentMove.outbreak.pending[0];
 }
+
+export function isOutOfCubes(state, countNeeded, color) {
+  return state.cubesLeft[color] < countNeeded;
+}

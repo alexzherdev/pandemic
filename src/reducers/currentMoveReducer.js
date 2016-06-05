@@ -31,7 +31,7 @@ function cardsDrawn(state = [], action) {
     case types.CARD_DRAW_CARDS_INIT:
       return action.cards.slice();
     case types.CARD_DRAW_CARDS_HANDLE:
-      return state.filter((c) => isEqual(c, action.card));
+      return state.filter((c) => !isEqual(c, action.card));
     default:
       return state;
   }

@@ -6,7 +6,7 @@ import { moveShowCities } from './actions/mapActions';
 import { discardFromHand, addToPlayerDiscard, drawCardsInit, drawCardsHandle, epidemicIncrease,
   epidemicInfect, epidemicIntensify, discardBottomInfectionCard, discardTopInfectionCard } from './actions/cardActions';
 import { eradicateDisease, infectCity, infectNeighbor, initOutbreak, completeOutbreak,
-  queueOutbreak, infectCities } from './actions/diseaseActions';
+  queueOutbreak, infectCities, useDiseaseCubes } from './actions/diseaseActions';
 import { victory, defeat, passTurn } from './actions/globalActions';
 import * as sel from './selectors';
 
@@ -49,6 +49,16 @@ function* checkForVictory() {
   }
 }
 
+function* useCubes(cityId, color, count) {
+  const cubesInCity = yield select(sel.getCubesInCity, cityId, color);
+  const actualCubesToUse = Math.min(3 - cubesInCity, count);
+  if (yield select(sel.isOutOfCubes, actualCubesToUse, color)) {
+    yield put(defeat());
+  } else {
+    yield put(useDiseaseCubes(actualCubesToUse, color));
+  }
+}
+
 function* yieldOutbreak(cityId, color) {
   yield put(initOutbreak(cityId, color));
   const neighbors = yield select(sel.getNeighborCities, cityId);
@@ -56,6 +66,7 @@ function* yieldOutbreak(cityId, color) {
   for (let i = 0; i < neighbors.length; i++) {
     const id = neighbors[i].id;
     const cubesInNeighbor = yield select(sel.getCubesInCity, id, color);
+    yield useCubes(id, color, 1);
     yield put(infectNeighbor(id, cityId, color));
     if (cubesInNeighbor === 3) {
       yield put(queueOutbreak(id, color));
@@ -70,8 +81,9 @@ function* yieldOutbreak(cityId, color) {
 
 function* infectOrOutbreak(cityId, color, count) {
   const cubesInCity = yield select(sel.getCubesInCity, cityId, color);
+  yield useCubes(cityId, color, count);
   yield put(infectCity(cityId, color, count));
-  if (cubesInCity > 0) {
+  if (cubesInCity + count > 3) {
     yield yieldOutbreak(cityId, color);
   }
 }
@@ -174,6 +186,10 @@ function* watchForInfectionRateDefeat() {
 
 function* watchForOutbreaksDefeat() {
   yield* takeEvery(types.OUTBREAK_INIT, checkForOutbreaksDefeat);
+}
+
+function* watchForCubesDefeat() {
+  yield* takeEvery(types.USE_DISEASE_CUBES, checkForCubesDefeat);
 }
 
 export default function* rootSaga() {
