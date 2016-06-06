@@ -2,7 +2,7 @@ import { getCurrentCityId } from './cities';
 
 
 export function isAtStation(state) {
-  return getCurrentMapLocation(state).station;
+  return !!getCurrentMapLocation(state).station;
 }
 
 export function getCurrentMapLocation(state) {

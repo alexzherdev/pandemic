@@ -40,6 +40,6 @@ export function infectCities() {
   return { type: types.INFECT_CITIES };
 }
 
-export function useDiseaseCubes(count, color) {
+export function useDiseaseCubes(color, count) {
   return { type: types.USE_DISEASE_CUBES, count, color };
 }

@@ -20,21 +20,19 @@ export default {
       id: '0',
       name: 'P1',
       hand: [
- { cardType: 'city', id: '6' },
+        { cardType: 'city', id: '6' },
         { cardType: 'city', id: '7' },
-      { cardType: 'city', id: '0' },
-      { cardType: 'city', id: '3' },
-
-        { cardType: 'city', id: '2' }, { cardType: 'city', id: '5' },
-{ cardType: 'city', id: '1' }
-
+        { cardType: 'city', id: '0' },
+        { cardType: 'city', id: '3' },
+        { cardType: 'city', id: '2' },
+        { cardType: 'city', id: '5' },
+        { cardType: 'city', id: '1' }
       ]
     },
     1: {
       id: '1',
       name: 'P2',
       hand: [
-
         { cardType: 'city', id: '4' }
       ]
     }

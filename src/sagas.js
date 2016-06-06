@@ -61,7 +61,7 @@ function* useCubes(cityId, color, count) {
   if (yield select(sel.isOutOfCubes, actualCubesToUse, color)) {
     yield yieldDefeat();
   } else {
-    yield put(useDiseaseCubes(actualCubesToUse, color));
+    yield put(useDiseaseCubes(color, actualCubesToUse));
   }
 }
 

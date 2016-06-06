@@ -20,7 +20,7 @@ export function getPlayerHand(state, playerId) {
 }
 
 export function isOverHandLimit(state, playerId) {
-  return getPlayerHand(state, playerId).length > 7;
+  return state.players[playerId].hand.length > 7;
 }
 
 export function hasCurrentCityInHand(state, playerId = null) {

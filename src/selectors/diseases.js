@@ -24,7 +24,7 @@ export function areAllDiseasesCured(state) {
 
 export function canCureDisease(state, color) {
   const hand = getCurrentPlayer(state).hand;
-  return 2 <= _.filter(getCitiesInHand(state, hand), { color }).length
+  return 5 <= _.filter(getCitiesInHand(state, hand), { color }).length
     && getDiseaseStatus(state, color) === 'active'
     && isAtStation(state);
 }
