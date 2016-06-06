@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-import { getCitiesInHand } from './hand';
+import { getCitiesInHand, hasCurrentCityInHand } from './hand';
 import { isAtStation } from './map';
 import { getCurrentPlayer } from './gameplay';
 
@@ -38,11 +38,6 @@ export function getNeighborCities(state, cityId) {
     }
   });
   return cities;
-}
-
-export function hasCurrentCityInHand(state) {
-  const hand = getCurrentPlayer(state).hand;
-  return !!_.find(hand, { cardType: 'city', id: getCurrentCityId(state) });
 }
 
 function getStationCities(state) {

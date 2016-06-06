@@ -1,7 +1,7 @@
 import _ from 'lodash';
 
 import { getCurrentPlayer } from './gameplay';
-
+import { getCurrentCityId } from './cities';
 
 export function getCitiesInHand(state, hand) {
   return _.chain(hand)
@@ -21,4 +21,9 @@ export function getPlayerHand(state, playerId) {
 
 export function isOverHandLimit(state, playerId) {
   return getPlayerHand(state, playerId).length > 7;
+}
+
+export function hasCurrentCityInHand(state, playerId = null) {
+  const hand = playerId ? getPlayerHand(state, playerId) : getCurrentPlayerHand(state);
+  return !!_.find(hand, { cardType: 'city', id: getCurrentCityId(state) });
 }

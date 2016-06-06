@@ -7,16 +7,18 @@ import * as mapActions from '../actions/mapActions';
 import * as diseaseActions from '../actions/diseaseActions';
 import * as cardActions from '../actions/cardActions';
 import { getCurrentCityId, canBuildStation, canTreatColor, canTreatAllOfColor, canCureDisease,
-  getPlayerHand, getPlayerOverHandLimit, getCurrentPlayer } from '../selectors';
+  getPlayerHand, getPlayerOverHandLimit, getCurrentPlayer, canShareCards } from '../selectors';
 
 import MoveCityPicker from '../components/MoveCityPicker';
 import DiscardOverLimitPicker from '../components/DiscardOverLimitPicker';
+import PlayerPicker from '../components/PlayerPicker';
 
 
 class Actions extends React.Component {
   constructor(props) {
     super(props);
     this.onDiscardCardPicked = this.onDiscardCardPicked.bind(this);
+    this.onShareCandidatePicked = this.onShareCandidatePicked.bind(this);
   }
 
   onDiscardCardPicked(cardType, id) {
@@ -25,11 +27,27 @@ class Actions extends React.Component {
     }
   }
 
+  onShareCandidatePicked(id, share) {
+    const { currentPlayer } = this.props;
+    const [giver, receiver] =
+      share === 'giver' ? [id, currentPlayer.id] : [currentPlayer.id, id];
+
+    this.props.actions.shareCard(giver, receiver, this.props.currentCityId);
+  }
+
   render() {
-    const { availableCities } = this.props.currentMove;
+    const { availableCities, shareCandidates } = this.props.currentMove;
     const { playerToDiscard, currentPlayer } = this.props;
     return (
       <div className="actions">
+        {!isNull(playerToDiscard) &&
+          <DiscardOverLimitPicker
+            hand={this.props.getPlayerHand(playerToDiscard)}
+            playerId={playerToDiscard}
+            onCardPicked={this.onDiscardCardPicked} />}
+        <button
+          onClick={partial(this.props.actions.moveInit, currentPlayer.id)}
+          disabled={!isEmpty(availableCities)}>Move</button>
         {!isEmpty(availableCities) &&
           <MoveCityPicker
             availableCities={availableCities}
@@ -37,13 +55,15 @@ class Actions extends React.Component {
             currentCityId={this.props.currentCityId}
             moveToCity={this.props.actions.moveToCity}
             moveCancel={this.props.actions.moveCancel} />}
-        {!isNull(playerToDiscard) &&
-          <DiscardOverLimitPicker
-            hand={this.props.getPlayerHand(playerToDiscard)}
-            playerId={playerToDiscard}
-            onCardPicked={this.onDiscardCardPicked} />}
-        <button onClick={partial(this.props.actions.moveInit, currentPlayer.id)}>Move</button>
         <button onClick={partial(this.props.actions.buildStation, this.props.currentCityId)} disabled={!this.props.canBuildStation}>Station</button>
+        <button
+          onClick={this.props.actions.shareCardsInit}
+          disabled={!this.props.canShareCards || !isEmpty(shareCandidates)}>Share</button>
+        {!isEmpty(shareCandidates) &&
+          <PlayerPicker
+            players={shareCandidates}
+            onPlayerPicked={this.onShareCandidatePicked}
+            onCancel={this.props.actions.shareCardsCancel} />}
         {['red', 'blue', 'yellow', 'black'].map((color) =>
           <span key={color}>
             <button
@@ -66,7 +86,8 @@ const mapStateToProps = (state) => {
   return { currentMove: state.currentMove, currentCityId: getCurrentCityId(state), canBuildStation: canBuildStation(state),
     canTreatColor: partial(canTreatColor, state), canTreatAllOfColor: partial(canTreatAllOfColor, state),
     canCureDisease: partial(canCureDisease, state), getPlayerHand: partial(getPlayerHand, state),
-    playerToDiscard: getPlayerOverHandLimit(state), currentPlayer: getCurrentPlayer(state) };
+    playerToDiscard: getPlayerOverHandLimit(state), currentPlayer: getCurrentPlayer(state),
+    canShareCards: canShareCards(state) };
 };
 
 const mapDispatchToProps = (dispatch) => {

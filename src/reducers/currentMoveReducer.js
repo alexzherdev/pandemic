@@ -26,6 +26,18 @@ function availableCities(state, action) {
   }
 }
 
+function shareCandidates(state, action) {
+  switch (action.type) {
+    case types.PLAYER_SHARE_SHOW_CANDIDATES:
+      return [...action.players];
+    case types.PLAYER_SHARE_CARD:
+    case types.PLAYER_SHARE_CANCEL:
+      return [];
+    default:
+      return state;
+  }
+}
+
 function cardsDrawn(state, action) {
   switch (action.type) {
     case types.CARD_DRAW_CARDS_INIT:
@@ -87,6 +99,7 @@ export default function currentMoveReducer(state = initialState.currentMove, act
   return {
     ...state,
     availableCities: availableCities(state.availableCities, action),
+    shareCandidates: shareCandidates(state.shareCandidates, action),
     actionsLeft: actionsLeft(state.actionsLeft, action),
     cardsDrawn: cardsDrawn(state.cardsDrawn, action),
     outbreak: outbreak(state.outbreak, action),

@@ -5,7 +5,7 @@ import * as types from './constants/actionTypes';
 import { moveShowCities } from './actions/mapActions';
 import { discardFromHand, addToPlayerDiscard, drawCardsInit, drawCardsHandle, epidemicIncrease,
   epidemicInfect, epidemicIntensify, discardBottomInfectionCard, discardTopInfectionCard,
-  chooseCardsToDiscard, cardOverLimitComplete } from './actions/cardActions';
+  chooseCardsToDiscard, cardOverLimitComplete, shareCardsShowCandidates } from './actions/cardActions';
 import { eradicateDisease, infectCity, infectNeighbor, initOutbreak, completeOutbreak,
   queueOutbreak, infectCities, useDiseaseCubes } from './actions/diseaseActions';
 import { victory, defeat, passTurn } from './actions/globalActions';
@@ -32,6 +32,11 @@ function* processMoveToCity(action) {
       yield discardCard(currentPlayer.id, action.originId);
       break;
   }
+}
+
+function* showShareCandidates() {
+  const players = yield select(sel.getShareCandidates);
+  yield put(shareCardsShowCandidates(players));
 }
 
 function* checkForEradication({ color }) {
@@ -166,11 +171,15 @@ function* drawIfNoActionsLeft() {
       // lost due to not enough player cards or won
       return;
     }
-    if (yield select(sel.isOverHandLimit, currentPlayer.id)) {
-      yield put(chooseCardsToDiscard(currentPlayer.id));
-      yield take(types.CARD_OVER_LIMIT_DISCARD_COMPLETE);
-    }
+    yield waitToDiscardIfOverLimit(currentPlayer.id);
     yield continueTurn();
+  }
+}
+
+function* waitToDiscardIfOverLimit(playerId) {
+  if (yield select(sel.isOverHandLimit, playerId)) {
+    yield put(chooseCardsToDiscard(playerId));
+    yield take(types.CARD_OVER_LIMIT_DISCARD_COMPLETE);
   }
 }
 
@@ -186,11 +195,15 @@ function* checkForOutbreaksDefeat() {
   }
 }
 
-function* checkHandLimit() {
+function* checkIfHandWentUnderLimit() {
   const player = yield select(sel.getPlayerOverHandLimit);
   if (player && !(yield select(sel.isOverHandLimit, player))) {
     yield put(cardOverLimitComplete());
   }
+}
+
+function* checkIfSharedOverLimit({ receiverId }) {
+  yield waitToDiscardIfOverLimit(receiverId);
 }
 
 function* watchMoveInit() {
@@ -199,6 +212,14 @@ function* watchMoveInit() {
 
 function* watchMoveToCity() {
   yield* takeEvery(types.PLAYER_MOVE_TO_CITY, processMoveToCity);
+}
+
+function* watchShareInit() {
+  yield* takeEvery(types.PLAYER_SHARE_INIT, showShareCandidates);
+}
+
+function* watchShareOverLimit() {
+  yield* takeEvery(types.PLAYER_SHARE_CARD, checkIfSharedOverLimit);
 }
 
 function* watchForTreatEradication() {
@@ -226,13 +247,15 @@ function* watchForOutbreaksDefeat() {
 }
 
 function* watchOverLimitDiscardComplete() {
-  yield* takeEvery(types.CARD_DISCARD_FROM_HAND, checkHandLimit);
+  yield* takeEvery(types.CARD_DISCARD_FROM_HAND, checkIfHandWentUnderLimit);
 }
 
 export default function* rootSaga() {
   yield [
     watchMoveInit(),
     watchMoveToCity(),
+    watchShareInit(),
+    watchShareOverLimit(),
     watchForTreatEradication(),
     watchForCureEradication(),
     watchForVictory(),

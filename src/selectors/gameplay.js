@@ -1,5 +1,8 @@
+import { chain } from 'lodash';
+
 import { isAtStation } from './map';
-import { hasCurrentCityInHand } from './cities';
+import { getCurrentCityId } from './cities';
+import { hasCurrentCityInHand } from './hand';
 
 
 export function getCurrentPlayer(state) {
@@ -44,4 +47,23 @@ export function getPlayerOverHandLimit(state) {
 
 export function isPlaying(state) {
   return state.status === 'playing';
+}
+
+export function canShareCards(state) {
+  return getShareCandidates(state).length > 0;
+}
+
+export function getShareCandidates(state) {
+  const currentPlayer = getCurrentPlayer(state);
+  const locs = state.map.playersLocations;
+  const sameCityPlayers = chain(locs)
+    .keys()
+    .filter((id) => id !== currentPlayer.id && locs[id] === getCurrentCityId(state))
+    .value();
+  const receivers = hasCurrentCityInHand(state)
+    ? sameCityPlayers.map((id) => ({ ...state.players[id], share: 'receiver' }))
+    : [];
+  const givers = sameCityPlayers.filter((id) => hasCurrentCityInHand(state, id))
+    .map((id) => ({ ...state.players[id], share: 'giver' }));
+  return [...receivers, ...givers];
 }
