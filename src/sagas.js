@@ -3,7 +3,7 @@ import { select, put, take } from 'redux-saga/effects';
 
 import * as types from './constants/actionTypes';
 import { moveShowCities } from './actions/mapActions';
-import { discardFromHand, addToPlayerDiscard, drawCardsInit, drawCardsHandle, epidemicIncrease,
+import { discardFromHand, drawCardsInit, drawCardsHandle, epidemicIncrease,
   epidemicInfect, epidemicIntensify, discardBottomInfectionCard, discardTopInfectionCard,
   chooseCardsToDiscard, cardOverLimitComplete, shareCardsShowCandidates } from './actions/cardActions';
 import { eradicateDisease, infectCity, infectNeighbor, initOutbreak, completeOutbreak,
@@ -17,19 +17,14 @@ function* showAvailableCities() {
   yield put(moveShowCities(cities));
 }
 
-function* discardCard(playerId, cityId) {
-  yield put(discardFromHand('city', playerId, cityId));
-  yield put(addToPlayerDiscard('city', cityId));
-}
-
 function* processMoveToCity(action) {
   const currentPlayer = yield select(sel.getCurrentPlayer);
   switch (action.source) {
     case 'direct':
-      yield discardCard(currentPlayer.id, action.destinationId);
+      yield put(discardFromHand('city', currentPlayer.id, action.destinationId));
       break;
     case 'charter':
-      yield discardCard(currentPlayer.id, action.originId);
+      yield put(discardFromHand('city', currentPlayer.id, action.originId));
       break;
   }
 }
@@ -37,6 +32,11 @@ function* processMoveToCity(action) {
 function* showShareCandidates() {
   const players = yield select(sel.getShareCandidates);
   yield put(shareCardsShowCandidates(players));
+
+  const action = yield take([types.PLAYER_SHARE_CARD, types.PLAYER_SHARE_CANCEL]);
+  if (action.type === types.PLAYER_SHARE_CARD) {
+    yield waitToDiscardIfOverLimit(action.receiverId);
+  }
 }
 
 function* checkForEradication({ color }) {
@@ -202,9 +202,6 @@ function* checkIfHandWentUnderLimit() {
   }
 }
 
-function* checkIfSharedOverLimit({ receiverId }) {
-  yield waitToDiscardIfOverLimit(receiverId);
-}
 
 function* watchMoveInit() {
   yield* takeEvery(types.PLAYER_MOVE_INIT, showAvailableCities);
@@ -216,10 +213,6 @@ function* watchMoveToCity() {
 
 function* watchShareInit() {
   yield* takeEvery(types.PLAYER_SHARE_INIT, showShareCandidates);
-}
-
-function* watchShareOverLimit() {
-  yield* takeEvery(types.PLAYER_SHARE_CARD, checkIfSharedOverLimit);
 }
 
 function* watchForTreatEradication() {
@@ -255,7 +248,6 @@ export default function* rootSaga() {
     watchMoveInit(),
     watchMoveToCity(),
     watchShareInit(),
-    watchShareOverLimit(),
     watchForTreatEradication(),
     watchForCureEradication(),
     watchForVictory(),
