@@ -1,7 +1,5 @@
 import React from 'react';
 
-import { partial } from 'lodash';
-
 
 export default class MultiCardPicker extends React.Component {
   constructor(props) {
