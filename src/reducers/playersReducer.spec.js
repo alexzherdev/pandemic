@@ -34,7 +34,7 @@ describe('PlayersReducer', () => {
         name: 'P1',
         hand: [
           { cardType: 'city', id: '2' },
-          { cardType: 'event', id: '0' },
+          { cardType: 'event', id: '0' }
         ]
       }};
     expect(reducer(initial, action)).to.deep.equal(expected);
@@ -74,7 +74,7 @@ describe('PlayersReducer', () => {
         name: 'P1',
         hand: [
           { cardType: 'city', id: '2' },
-          { cardType: 'event', id: '0' },
+          { cardType: 'event', id: '0' }
         ]
       },
       1: {

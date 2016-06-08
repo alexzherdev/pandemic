@@ -95,6 +95,18 @@ function player(state, action) {
   }
 }
 
+function curingDisease(state, action) {
+  switch (action.type) {
+    case types.PLAYER_CURE_DISEASE_SHOW_CARDS:
+      return { cards: [...action.cards], color: action.color };
+    case types.PLAYER_CURE_DISEASE_COMPLETE:
+    case types.PLAYER_CURE_DISEASE_CANCEL:
+      return {};
+    default:
+      return state;
+  }
+}
+
 export default function currentMoveReducer(state = initialState.currentMove, action) {
   return {
     ...state,
@@ -104,6 +116,7 @@ export default function currentMoveReducer(state = initialState.currentMove, act
     cardsDrawn: cardsDrawn(state.cardsDrawn, action),
     outbreak: outbreak(state.outbreak, action),
     playerOverHandLimit: playerOverHandLimit(state.playerOverHandLimit, action),
-    player: player(state.player, action)
+    player: player(state.player, action),
+    curingDisease: curingDisease(state.curingDisease, action)
   };
 }

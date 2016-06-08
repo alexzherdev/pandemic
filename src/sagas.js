@@ -7,7 +7,7 @@ import { discardFromHand, drawCardsInit, drawCardsHandle, epidemicIncrease,
   epidemicInfect, epidemicIntensify, discardBottomInfectionCard, discardTopInfectionCard,
   chooseCardsToDiscard, cardOverLimitComplete, shareCardsShowCandidates } from './actions/cardActions';
 import { eradicateDisease, infectCity, infectNeighbor, initOutbreak, completeOutbreak,
-  queueOutbreak, infectCities, useDiseaseCubes } from './actions/diseaseActions';
+  queueOutbreak, infectCities, useDiseaseCubes, cureDiseaseShowCards } from './actions/diseaseActions';
 import { victory, defeat, passTurn } from './actions/globalActions';
 import * as sel from './selectors';
 
@@ -203,6 +203,19 @@ function* checkIfHandWentUnderLimit() {
 }
 
 
+function* showCardsToCure({ color }) {
+  const cards = yield select(sel.getCardsOfColorInCurrentHand, color);
+  yield put(cureDiseaseShowCards(cards, color));
+  const action = yield take([types.PLAYER_CURE_DISEASE_COMPLETE, types.PLAYER_CURE_DISEASE_CANCEL]);
+  if (action.type === types.PLAYER_CURE_DISEASE_COMPLETE) {
+    const { cityIds } = action;
+    const currentPlayer = yield select(sel.getCurrentPlayer);
+    for (let i = 0; i < cityIds.length; i++) {
+      yield put(discardFromHand('city', currentPlayer.id, cityIds[i]));
+    }
+  }
+}
+
 function* watchMoveInit() {
   yield* takeEvery(types.PLAYER_MOVE_INIT, showAvailableCities);
 }
@@ -216,11 +229,11 @@ function* watchForTreatEradication() {
 }
 
 function* watchForCureEradication() {
-  yield* takeEvery(types.PLAYER_CURE_DISEASE, checkForEradication);
+  yield* takeEvery(types.PLAYER_CURE_DISEASE_COMPLETE, checkForEradication);
 }
 
 function* watchForVictory() {
-  yield* takeEvery(types.PLAYER_CURE_DISEASE, checkForVictory);
+  yield* takeEvery(types.PLAYER_CURE_DISEASE_COMPLETE, checkForVictory);
 }
 
 function* watchActionsLeft() {
@@ -239,6 +252,11 @@ function* watchOverLimitDiscardComplete() {
   yield* takeEvery(types.CARD_DISCARD_FROM_HAND, checkIfHandWentUnderLimit);
 }
 
+function* watchForCureInit() {
+  yield* takeEvery(types.PLAYER_CURE_DISEASE_INIT, showCardsToCure);
+}
+
+
 export default function* rootSaga() {
   yield [
     watchMoveInit(),
@@ -249,6 +267,7 @@ export default function* rootSaga() {
     watchActionsLeft(),
     watchForInfectionRateDefeat(),
     watchForOutbreaksDefeat(),
-    watchOverLimitDiscardComplete()
+    watchOverLimitDiscardComplete(),
+    watchForCureInit()
   ];
 }

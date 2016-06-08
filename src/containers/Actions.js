@@ -1,17 +1,18 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { partial, isEmpty, isNull, assign } from 'lodash';
+import { partial, isEmpty, isNull } from 'lodash';
 
 import * as mapActions from '../actions/mapActions';
 import * as diseaseActions from '../actions/diseaseActions';
 import * as cardActions from '../actions/cardActions';
 import { getCurrentCityId, canBuildStation, canTreatColor, canTreatAllOfColor, canCureDisease,
-  getPlayerHand, getPlayerOverHandLimit, getCurrentPlayer, canShareCards } from '../selectors';
+  getPlayerHand, getPlayerOverHandLimit, getCurrentPlayer, canShareCards, cardsNeededToCure } from '../selectors';
 
 import MoveCityPicker from '../components/MoveCityPicker';
 import DiscardOverLimitPicker from '../components/DiscardOverLimitPicker';
 import PlayerPicker from '../components/PlayerPicker';
+import MultiCardPicker from '../components/MultiCardPicker';
 
 
 class Actions extends React.Component {
@@ -19,6 +20,7 @@ class Actions extends React.Component {
     super(props);
     this.onDiscardCardPicked = this.onDiscardCardPicked.bind(this);
     this.onShareCandidatePicked = this.onShareCandidatePicked.bind(this);
+    this.onCureCardsPicked = this.onCureCardsPicked.bind(this);
   }
 
   onDiscardCardPicked(cardType, id) {
@@ -35,8 +37,12 @@ class Actions extends React.Component {
     this.props.actions.shareCard(giver, receiver, this.props.currentCityId);
   }
 
+  onCureCardsPicked(ids) {
+    this.props.actions.cureDiseaseComplete(ids, this.props.currentMove.curingDisease.color);
+  }
+
   render() {
-    const { availableCities, shareCandidates } = this.props.currentMove;
+    const { availableCities, shareCandidates, curingDisease } = this.props.currentMove;
     const { playerToDiscard, currentPlayer } = this.props;
     return (
       <div className="actions">
@@ -55,7 +61,9 @@ class Actions extends React.Component {
             currentCityId={this.props.currentCityId}
             moveToCity={this.props.actions.moveToCity}
             moveCancel={this.props.actions.moveCancel} />}
-        <button onClick={partial(this.props.actions.buildStation, this.props.currentCityId)} disabled={!this.props.canBuildStation}>Station</button>
+        <button
+          onClick={partial(this.props.actions.buildStation, this.props.currentCityId)}
+          disabled={!this.props.canBuildStation}>Station</button>
         <button
           onClick={this.props.actions.shareCardsInit}
           disabled={!this.props.canShareCards || !isEmpty(shareCandidates)}>Share</button>
@@ -73,10 +81,18 @@ class Actions extends React.Component {
               disabled={!this.props.canTreatColor(color)}>
               Treat {this.props.canTreatAllOfColor(color) ? 'all ' : ''}{color}
             </button>
-            <button onClick={partial(this.props.actions.cureDisease, color)}disabled={!this.props.canCureDisease(color)}>Cure {color}</button>
+            <button
+              onClick={partial(this.props.actions.cureDiseaseInit, color)}
+              disabled={!this.props.canCureDisease(color)}>Cure {color}</button>
           </span>
         )}
-
+        {!isEmpty(curingDisease) &&
+          <MultiCardPicker
+            cards={curingDisease.cards}
+            countNeeded={this.props.cardsNeededToCure}
+            onSubmit={this.onCureCardsPicked}
+            onCancel={this.props.actions.cureDiseaseCancel} />
+        }
       </div>
     );
   }
@@ -87,12 +103,12 @@ const mapStateToProps = (state) => {
     canTreatColor: partial(canTreatColor, state), canTreatAllOfColor: partial(canTreatAllOfColor, state),
     canCureDisease: partial(canCureDisease, state), getPlayerHand: partial(getPlayerHand, state),
     playerToDiscard: getPlayerOverHandLimit(state), currentPlayer: getCurrentPlayer(state),
-    canShareCards: canShareCards(state) };
+    canShareCards: canShareCards(state), cardsNeededToCure: cardsNeededToCure(state) };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    actions: bindActionCreators(assign({}, mapActions, diseaseActions, cardActions), dispatch)
+    actions: bindActionCreators(Object.assign({}, mapActions, diseaseActions, cardActions), dispatch)
   };
 };
 

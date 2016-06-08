@@ -104,7 +104,8 @@ export default {
       complete: [],
       pending: []
     },
-    playerOverHandLimit: null
+    playerOverHandLimit: null,
+    curingDisease: {}
   },
 
   stationsLeft: 5,
@@ -147,7 +148,7 @@ export default {
         station: true,
         yellow: 2,
         red: 1,
-        black: 2,
+        black: 0,
         blue: 1
       },
       1: {
@@ -168,7 +169,7 @@ export default {
         coords: [200, 200],
         yellow: 1,
         red: 1,
-        black: 1,
+        black: 0,
         blue: 3
       },
       4: {
@@ -183,14 +184,14 @@ export default {
         coords: [300, 200],
         yellow: 1,
         red: 1,
-        black: 1,
+        black: 0,
         blue: 2
       },
       6: {
         coords: [300, 300],
         yellow: 1,
         red: 1,
-        black: 1,
+        black: 0,
         blue: 1
       },
       7: {

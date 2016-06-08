@@ -16,7 +16,8 @@ describe('CurrentMoveReducer', () => {
       complete: [],
       pending: []
     },
-    playerOverHandLimit: null
+    playerOverHandLimit: null,
+    curingDisease: {}
   });
 
   it('resets move counter and switches players on PASS_TURN', () => {
@@ -123,10 +124,39 @@ describe('CurrentMoveReducer', () => {
     expect(reducer(initial, action)).to.deep.equal(expected);
   });
 
+  it('stores the cards to choose from when curing disease on PLAYER_CURE_DISEASE_SHOW_CARDS', () => {
+    const action = { type: types.PLAYER_CURE_DISEASE_SHOW_CARDS, color: 'red',
+      cards: [{ cardType: 'city', id: '0', name: 'London' }, { cardType: 'city', id: '1', name: 'Paris' }]};
+    const initial = getInitialState();
+    const expected = { ...initial,
+      curingDisease: { color: 'red', cards: [{ cardType: 'city', id: '0', name: 'London' }, { cardType: 'city', id: '1', name: 'Paris' }]}};
+    expect(reducer(initial, action)).to.deep.equal(expected);
+  });
+
+  it('cleans up the cards for curing disease on PLAYER_CURE_DISEASE_CANCEL or PLAYER_CURE_DISEASE_COMPLETE', () => {
+    const initial = { ...getInitialState(),
+      curingDisease: { color: 'red', cards: [{ cardType: 'city', id: '0', name: 'London' }, { cardType: 'city', id: '1', name: 'Paris' }]}};
+
+    const cancelAction = { type: types.PLAYER_CURE_DISEASE_CANCEL };
+    expect(reducer(initial, cancelAction)).to.deep.equal(getInitialState());
+
+    const completeAction = { type: types.PLAYER_CURE_DISEASE_COMPLETE };
+    const expected = { ...getInitialState(), actionsLeft: 2 };
+    expect(reducer(initial, completeAction)).to.deep.equal(expected);
+  });
+
   context('outbreaks', () => {
     it('stores initial outbreak data on OUTBREAK_INIT', () => {
       const action = { type: types.OUTBREAK_INIT, color: 'red', cityId: '0' };
       const initial = getInitialState();
+      const expected = { ...initial, outbreak: { color: 'red', complete: [], pending: []}};
+
+      expect(reducer(initial, action)).to.deep.equal(expected);
+    });
+
+    it('removes a city from the queue when a queued outbreak starts on OUTBREAK_INIT', () => {
+      const action = { type: types.OUTBREAK_INIT, color: 'red', cityId: '0' };
+      const initial = { ...getInitialState(), outbreak: { color: 'red', complete: [], pending: ['0']}};
       const expected = { ...initial, outbreak: { color: 'red', complete: [], pending: []}};
 
       expect(reducer(initial, action)).to.deep.equal(expected);

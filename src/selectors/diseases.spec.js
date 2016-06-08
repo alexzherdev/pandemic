@@ -26,7 +26,7 @@ describe('Diseases selector', () => {
       }
     },
     currentMove: {
-      player: 0,
+      player: 0
     },
     diseases: {
       red: 'active',
