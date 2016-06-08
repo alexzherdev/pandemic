@@ -15,17 +15,17 @@ import * as sel from './selectors';
 function* showAvailableCities() {
   const cities = yield select(sel.getAvailableCities);
   yield put(moveShowCities(cities));
-}
-
-function* processMoveToCity(action) {
-  const currentPlayer = yield select(sel.getCurrentPlayer);
-  switch (action.source) {
-    case 'direct':
-      yield put(discardFromHand('city', currentPlayer.id, action.destinationId));
-      break;
-    case 'charter':
-      yield put(discardFromHand('city', currentPlayer.id, action.originId));
-      break;
+  const action = yield take([types.PLAYER_MOVE_TO_CITY, types.PLAYER_MOVE_CANCEL]);
+  if (action.type === types.PLAYER_MOVE_TO_CITY) {
+    const currentPlayer = yield select(sel.getCurrentPlayer);
+    switch (action.source) {
+      case 'direct':
+        yield put(discardFromHand('city', currentPlayer.id, action.destinationId));
+        break;
+      case 'charter':
+        yield put(discardFromHand('city', currentPlayer.id, action.originId));
+        break;
+    }
   }
 }
 
@@ -207,10 +207,6 @@ function* watchMoveInit() {
   yield* takeEvery(types.PLAYER_MOVE_INIT, showAvailableCities);
 }
 
-function* watchMoveToCity() {
-  yield* takeEvery(types.PLAYER_MOVE_TO_CITY, processMoveToCity);
-}
-
 function* watchShareInit() {
   yield* takeEvery(types.PLAYER_SHARE_INIT, showShareCandidates);
 }
@@ -246,7 +242,6 @@ function* watchOverLimitDiscardComplete() {
 export default function* rootSaga() {
   yield [
     watchMoveInit(),
-    watchMoveToCity(),
     watchShareInit(),
     watchForTreatEradication(),
     watchForCureEradication(),
