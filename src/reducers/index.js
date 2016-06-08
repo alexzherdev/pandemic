@@ -23,6 +23,7 @@ export default combineReducers({
   outbreaks,
   currentMove,
   cities: () => initialState.cities,
+  events: () => initialState.events,
   stationsLeft,
   cubesLeft,
   infectionRate

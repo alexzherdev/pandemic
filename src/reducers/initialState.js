@@ -4,6 +4,8 @@ export default {
   playerCards: {
     deck: [
       { cardType: 'city', id: '8' },
+      { cardType: 'city', id: '6' },
+      { cardType: 'city', id: '7' },
       { cardType: 'epidemic', name: 'Epidemic' }
 
     ],
@@ -15,13 +17,19 @@ export default {
     discard: ['4', '2']
   },
 
+  events: {
+    'one_quiet_night': {
+      id: 'one_quiet_night',
+      name: 'One Quiet Night'
+    }
+  },
+
   players: {
     0: {
       id: '0',
       name: 'P1',
       hand: [
-        { cardType: 'city', id: '6' },
-        { cardType: 'city', id: '7' },
+        { cardType: 'event', id: 'one_quiet_night' },
         { cardType: 'city', id: '0' },
         { cardType: 'city', id: '3' },
         { cardType: 'city', id: '2' },
@@ -105,7 +113,8 @@ export default {
       pending: []
     },
     playerOverHandLimit: null,
-    curingDisease: {}
+    curingDisease: {},
+    skipInfectionsStep: false
   },
 
   stationsLeft: 5,
@@ -177,7 +186,7 @@ export default {
         yellow: 0,
         red: 0,
         black: 0,
-        blue: 3,
+        blue: 0,
         station: true
       },
       5: {

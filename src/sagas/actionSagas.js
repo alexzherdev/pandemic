@@ -41,7 +41,9 @@ export function* showShareCandidates() {
 
 export function* drawIfNoActionsLeft() {
   function* continueTurn() {
-    yield infections();
+    if (!(yield select(sel.shouldSkipInfectionsStep))) {
+      yield call(infections);
+    }
     const nextPlayer = yield select(sel.getNextPlayer);
     yield put(passTurn(nextPlayer));
   }
@@ -73,7 +75,7 @@ function* checkIfHandWentUnderLimit() {
 
 export function* waitToDiscardIfOverLimit(playerId) {
   function* watchOverLimitDiscardComplete() {
-    yield* takeEvery(types.CARD_DISCARD_FROM_HAND, checkIfHandWentUnderLimit);
+    yield* takeEvery([types.CARD_DISCARD_FROM_HAND, types.PLAYER_PLAY_EVENT], checkIfHandWentUnderLimit);
   }
 
   if (yield select(sel.isOverHandLimit, playerId)) {

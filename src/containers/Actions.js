@@ -26,6 +26,8 @@ class Actions extends React.Component {
   onDiscardCardPicked(cardType, id) {
     if (cardType === 'city') {
       this.props.actions.discardFromHand('city', this.props.playerToDiscard, id);
+    } else {
+      this.props.actions.playEvent(this.props.playerToDiscard, id);
     }
   }
 

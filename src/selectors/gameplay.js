@@ -67,3 +67,7 @@ export function getShareCandidates(state) {
     .map((id) => ({ ...state.players[id], share: 'giver' }));
   return [...receivers, ...givers];
 }
+
+export function shouldSkipInfectionsStep(state) {
+  return state.currentMove.skipInfectionsStep;
+}

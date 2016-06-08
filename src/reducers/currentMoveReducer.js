@@ -107,6 +107,21 @@ function curingDisease(state, action) {
   }
 }
 
+function skipInfectionsStep(state, action) {
+  switch (action.type) {
+    case types.PLAYER_PLAY_EVENT:
+      if (action.id === 'one_quiet_night') {
+        return true;
+      } else {
+        return state;
+      }
+    case types.PASS_TURN:
+      return false;
+    default:
+      return state;
+  }
+}
+
 export default function currentMoveReducer(state = initialState.currentMove, action) {
   return {
     ...state,
@@ -117,6 +132,7 @@ export default function currentMoveReducer(state = initialState.currentMove, act
     outbreak: outbreak(state.outbreak, action),
     playerOverHandLimit: playerOverHandLimit(state.playerOverHandLimit, action),
     player: player(state.player, action),
-    curingDisease: curingDisease(state.curingDisease, action)
+    curingDisease: curingDisease(state.curingDisease, action),
+    skipInfectionsStep: skipInfectionsStep(state.skipInfectionsStep, action)
   };
 }
