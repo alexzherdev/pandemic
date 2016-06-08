@@ -22,7 +22,7 @@ export function areAllDiseasesCured(state) {
   return _.every(['blue', 'red', 'yellow', 'black'], (c) => getDiseaseStatus(state, c) !== 'active');
 }
 
-export function cardsNeededToCure(state) {
+export function cardsNeededToCure() {
   return 2;
 }
 

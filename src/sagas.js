@@ -1,5 +1,5 @@
 import { takeEvery, delay, END } from 'redux-saga';
-import { select, put, take } from 'redux-saga/effects';
+import { select, put, take, fork, cancel } from 'redux-saga/effects';
 
 import * as types from './constants/actionTypes';
 import { moveShowCities } from './actions/mapActions';
@@ -177,9 +177,15 @@ function* drawIfNoActionsLeft() {
 }
 
 function* waitToDiscardIfOverLimit(playerId) {
+  function* watchOverLimitDiscardComplete() {
+    yield* takeEvery(types.CARD_DISCARD_FROM_HAND, checkIfHandWentUnderLimit);
+  }
+
   if (yield select(sel.isOverHandLimit, playerId)) {
     yield put(chooseCardsToDiscard(playerId));
+    const task = yield fork(watchOverLimitDiscardComplete);
     yield take(types.CARD_OVER_LIMIT_DISCARD_COMPLETE);
+    yield cancel(task);
   }
 }
 
@@ -248,10 +254,6 @@ function* watchForOutbreaksDefeat() {
   yield* takeEvery(types.OUTBREAK_INIT, checkForOutbreaksDefeat);
 }
 
-function* watchOverLimitDiscardComplete() {
-  yield* takeEvery(types.CARD_DISCARD_FROM_HAND, checkIfHandWentUnderLimit);
-}
-
 function* watchForCureInit() {
   yield* takeEvery(types.PLAYER_CURE_DISEASE_INIT, showCardsToCure);
 }
@@ -267,7 +269,6 @@ export default function* rootSaga() {
     watchActionsLeft(),
     watchForInfectionRateDefeat(),
     watchForOutbreaksDefeat(),
-    watchOverLimitDiscardComplete(),
     watchForCureInit()
   ];
 }
