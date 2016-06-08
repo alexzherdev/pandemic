@@ -22,9 +22,13 @@ export function areAllDiseasesCured(state) {
   return _.every(['blue', 'red', 'yellow', 'black'], (c) => getDiseaseStatus(state, c) !== 'active');
 }
 
+export function cardsNeededToCure(state) {
+  return 2;
+}
+
 export function canCureDisease(state, color) {
   const hand = getCurrentPlayer(state).hand;
-  return 5 <= _.filter(getCitiesInHand(state, hand), { color }).length
+  return cardsNeededToCure(state) <= _.filter(getCitiesInHand(state, hand), { color }).length
     && getDiseaseStatus(state, color) === 'active'
     && isAtStation(state);
 }

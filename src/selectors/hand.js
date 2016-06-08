@@ -1,7 +1,7 @@
 import _ from 'lodash';
 
 import { getCurrentPlayer } from './gameplay';
-import { getCurrentCityId } from './cities';
+import { getCurrentCityId, getCityColor } from './cities';
 
 export function getCitiesInHand(state, hand) {
   return _.chain(hand)
@@ -26,4 +26,9 @@ export function isOverHandLimit(state, playerId) {
 export function hasCurrentCityInHand(state, playerId = null) {
   const hand = playerId ? getPlayerHand(state, playerId) : getCurrentPlayerHand(state);
   return !!_.find(hand, { cardType: 'city', id: getCurrentCityId(state) });
+}
+
+export function getCardsOfColorInCurrentHand(state, color) {
+  const hand = getCurrentPlayerHand(state);
+  return hand.filter((c) => c.cardType === 'city' && getCityColor(state, c.id) === color);
 }

@@ -10,7 +10,7 @@ function hand(state = [], action) {
     case types.CARD_DRAW_CARDS_HANDLE:
       return action.card.cardType !== 'epidemic' ? [...state, action.card] : state;
     case types.PLAYER_SHARE_CARD:
-      return !!find(state, { cardType: 'city', id: action.cityId })
+      return find(state, { cardType: 'city', id: action.cityId })
         ? state.filter((c) => !(c.cardType === 'city' && c.id === action.cityId))
         : [...state, { cardType: 'city', id: action.cityId }];
     default:

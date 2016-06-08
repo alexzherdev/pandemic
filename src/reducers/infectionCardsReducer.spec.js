@@ -27,4 +27,12 @@ describe('InfectionCardsReducer', () => {
       discard: ['1', '3']
     });
   });
+
+  it('shuffles the discards pile and puts it on top of the deck on EPIDEMIC_INTENSIFY', () => {
+    const action = { type: types.EPIDEMIC_INTENSIFY };
+
+    const actual = reducer(getInitialState(), action);
+    expect(actual.discard).to.be.empty;
+    expect(actual.deck).to.have.members(['0', '1', '2', '3']);
+  });
 });

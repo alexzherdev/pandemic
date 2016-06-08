@@ -27,11 +27,13 @@ describe('Hand selector', () => {
     cities: {
       0: {
         id: '0',
-        name: 'London'
+        name: 'London',
+        color: 'red'
       },
       1: {
         id: '1',
-        name: 'Paris'
+        name: 'Paris',
+        color: 'blue'
       }
     },
     map: {
@@ -49,9 +51,9 @@ describe('Hand selector', () => {
       { cardType: 'city', id: '0' },
       { cardType: 'event', id: '0' },
       { cardType: 'epidemic' }
-    ]
+    ];
     expect(sel.getCitiesInHand(getState(), hand)).to.deep.equal(
-      [{ id: '0', name: 'London' }]
+      [{ id: '0', name: 'London', color: 'red' }]
     );
   });
 
@@ -95,5 +97,11 @@ describe('Hand selector', () => {
 
   it('shows if another player has the current player\'s city in hand', () => {
     expect(sel.hasCurrentCityInHand(getState(), '1')).to.equal(false);
+  });
+
+  it('selects cards of a given color from the current player\'s hand', () => {
+    expect(sel.getCardsOfColorInCurrentHand(getState(), 'red')).to.deep.equal(
+      [{ cardType: 'city', id: '0', name: 'London' }]
+    );
   });
 });

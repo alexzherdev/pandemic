@@ -8,8 +8,20 @@ export function treatAllDisease(cityId, color) {
   return { type: types.PLAYER_TREAT_ALL_DISEASE, cityId, color };
 }
 
-export function cureDisease(color) {
-  return { type: types.PLAYER_CURE_DISEASE, color };
+export function cureDiseaseInit(color) {
+  return { type: types.PLAYER_CURE_DISEASE_INIT, color };
+}
+
+export function cureDiseaseShowCards(cards, color) {
+  return { type: types.PLAYER_CURE_DISEASE_SHOW_CARDS, cards, color };
+}
+
+export function cureDiseaseComplete(cityIds, color) {
+  return { type: types.PLAYER_CURE_DISEASE_COMPLETE, cityIds, color };
+}
+
+export function cureDiseaseCancel() {
+  return { type: types.PLAYER_CURE_DISEASE_CANCEL };
 }
 
 export function eradicateDisease(color) {

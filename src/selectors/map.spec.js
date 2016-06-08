@@ -18,7 +18,7 @@ describe('Map selector', () => {
       }
     },
     currentMove: {
-      player: 0,
+      player: 0
     },
 
     map: {

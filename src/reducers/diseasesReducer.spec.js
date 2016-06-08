@@ -12,8 +12,8 @@ describe('DiseasesReducer', () => {
     black: 'eradicated'
   });
 
-  it('cures an active disease on PLAYER_CURE_DISEASE', () => {
-    const action = { type: types.PLAYER_CURE_DISEASE, color: 'red' };
+  it('cures an active disease on PLAYER_CURE_DISEASE_COMPLETE', () => {
+    const action = { type: types.PLAYER_CURE_DISEASE_COMPLETE, color: 'red' };
 
     const initial = getInitialState();
     const expected = { ...initial, red: 'cured' };
