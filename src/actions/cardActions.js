@@ -4,10 +4,6 @@ export function discardFromHand(cardType, playerId, id) {
   return { type: types.CARD_DISCARD_FROM_HAND, cardType, id, playerId };
 }
 
-export function addToPlayerDiscard(cardType, id) {
-  return { type: types.CARD_ADD_TO_PLAYER_DISCARD, cardType, id };
-}
-
 export function drawCardsInit(cards) {
   return { type: types.CARD_DRAW_CARDS_INIT, cards };
 }
