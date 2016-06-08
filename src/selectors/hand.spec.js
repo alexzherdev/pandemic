@@ -11,8 +11,7 @@ describe('Hand selector', () => {
         name: 'P1',
         hand: [
           { cardType: 'city', id: '0' },
-          { cardType: 'event', id: '0' },
-          { cardType: 'epidemic' }
+          { cardType: 'event', id: '0' }
         ]
       },
       1: {
@@ -23,6 +22,10 @@ describe('Hand selector', () => {
           { cardType: 'event', id: '1' }
         ]
       }
+    },
+    events: {
+      0: { id: '0', name: 'Event 1' },
+      1: { id: '1', name: 'Event 2' }
     },
     cities: {
       0: {
@@ -61,8 +64,7 @@ describe('Hand selector', () => {
     expect(sel.getCurrentPlayerHand(getState())).to.deep.equal(
       [
         { cardType: 'city', id: '0', name: 'London' },
-        { cardType: 'event', id: '0' },
-        { cardType: 'epidemic' }
+        { cardType: 'event', id: '0', name: 'Event 1' }
       ]
     );
   });
@@ -71,7 +73,7 @@ describe('Hand selector', () => {
     expect(sel.getPlayerHand(getState(), '1')).to.deep.equal(
       [
         { cardType: 'city', id: '1', name: 'Paris' },
-        { cardType: 'event', id: '1' }
+        { cardType: 'event', id: '1', name: 'Event 2' }
       ]
     );
   });
@@ -103,5 +105,12 @@ describe('Hand selector', () => {
     expect(sel.getCardsOfColorInCurrentHand(getState(), 'red')).to.deep.equal(
       [{ cardType: 'city', id: '0', name: 'London' }]
     );
+  });
+
+  it('selects all events the players have in hand', () => {
+    expect(sel.getEventsInHands(getState())).to.deep.equal([
+      { cardType: 'event', id: '0', name: 'Event 1', playerId: '0' },
+      { cardType: 'event', id: '1', name: 'Event 2', playerId: '1' }
+    ]);
   });
 });

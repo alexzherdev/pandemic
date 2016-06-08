@@ -17,7 +17,8 @@ describe('CurrentMoveReducer', () => {
       pending: []
     },
     playerOverHandLimit: null,
-    curingDisease: {}
+    curingDisease: {},
+    skipInfectionsStep: false
   });
 
   it('resets move counter and switches players on PASS_TURN', () => {
@@ -196,6 +197,20 @@ describe('CurrentMoveReducer', () => {
       const initial = { ...getInitialState(), outbreak: { color: 'red', complete: [], pending: ['2']}};
       const expected = { ...initial, outbreak: { color: 'red', complete: ['1'], pending: ['2']}};
       expect(reducer(initial, action)).to.deep.equal(expected);
+    });
+
+    it('stores a flag to skip the next infections step', () => {
+      const action = { type: types.PLAYER_PLAY_EVENT, id: 'one_quiet_night' };
+      const initial = getInitialState();
+      const expected = { ...initial, skipInfectionsStep: true };
+      expect(reducer(getInitialState(), action)).to.deep.equal(expected);
+    });
+
+    it('resets that flag when a new turn starts', () => {
+      const action = { type: types.PASS_TURN, playerId: '1' };
+      const initial = { ...getInitialState(), skipInfectionsStep: true };
+      const expected = { ...getInitialState(), actionsLeft: 4, player: '1' };
+      expect(reducer(getInitialState(), action)).to.deep.equal(expected);
     });
   });
 });

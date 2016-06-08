@@ -55,3 +55,7 @@ export function shareCard(giverId, receiverId, cityId) {
 export function shareCardsCancel() {
   return { type: types.PLAYER_SHARE_CANCEL };
 }
+
+export function playEvent(playerId, id) {
+  return { type: types.PLAYER_PLAY_EVENT, playerId, id };
+}
