@@ -22,6 +22,10 @@ export function getAvailableCities(state) {
   return cities;
 }
 
+export function getCitiesForGovGrant(state) {
+  return _.values(state.cities).filter((c) => !state.map.locations[c.id].station);
+}
+
 export function getCubesInCity(state, cityId, color) {
   return state.map.locations[cityId][color];
 }

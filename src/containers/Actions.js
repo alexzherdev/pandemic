@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { partial, isEmpty, isNull } from 'lodash';
+import { partial, isEmpty, isNull, values } from 'lodash';
 
 import * as mapActions from '../actions/mapActions';
 import * as diseaseActions from '../actions/diseaseActions';
@@ -9,7 +9,7 @@ import * as cardActions from '../actions/cardActions';
 import { getCurrentCityId, canBuildStation, canTreatColor, canTreatAllOfColor, canCureDisease,
   getPlayerHand, getPlayerOverHandLimit, getCurrentPlayer, canShareCards, cardsNeededToCure } from '../selectors';
 
-import MoveCityPicker from '../components/MoveCityPicker';
+import CityPicker from '../components/CityPicker';
 import DiscardOverLimitPicker from '../components/DiscardOverLimitPicker';
 import PlayerPicker from '../components/PlayerPicker';
 import MultiCardPicker from '../components/MultiCardPicker';
@@ -21,6 +21,8 @@ class Actions extends React.Component {
     this.onDiscardCardPicked = this.onDiscardCardPicked.bind(this);
     this.onShareCandidatePicked = this.onShareCandidatePicked.bind(this);
     this.onCureCardsPicked = this.onCureCardsPicked.bind(this);
+    this.onMoveCityPicked = this.onMoveCityPicked.bind(this);
+    this.onGovGrantCityPicked = this.onGovGrantCityPicked.bind(this);
   }
 
   onDiscardCardPicked(cardType, id) {
@@ -43,8 +45,20 @@ class Actions extends React.Component {
     this.props.actions.cureDiseaseComplete(ids, this.props.currentMove.curingDisease.color);
   }
 
+  onMoveCityPicked(id) {
+    this.props.actions.moveToCity(
+      this.props.currentPlayer.id,
+      this.props.currentCityId,
+      id,
+      this.props.currentMove.availableCities[id].source);
+  }
+
+  onGovGrantCityPicked(id) {
+    this.props.actions.govGrantBuildStation(id);
+  }
+
   render() {
-    const { availableCities, shareCandidates, curingDisease } = this.props.currentMove;
+    const { availableCities, shareCandidates, curingDisease, govGrantCities } = this.props.currentMove;
     const { playerToDiscard, currentPlayer } = this.props;
     return (
       <div className="actions">
@@ -57,12 +71,10 @@ class Actions extends React.Component {
           onClick={partial(this.props.actions.moveInit, currentPlayer.id)}
           disabled={!isEmpty(availableCities)}>Move</button>
         {!isEmpty(availableCities) &&
-          <MoveCityPicker
-            availableCities={availableCities}
-            playerId={currentPlayer.id}
-            currentCityId={this.props.currentCityId}
-            moveToCity={this.props.actions.moveToCity}
-            moveCancel={this.props.actions.moveCancel} />}
+          <CityPicker
+            cities={values(availableCities)}
+            onSubmit={this.onMoveCityPicked}
+            onCancel={this.props.actions.moveCancel} />}
         <button
           onClick={partial(this.props.actions.buildStation, this.props.currentCityId)}
           disabled={!this.props.canBuildStation}>Station</button>
@@ -94,6 +106,11 @@ class Actions extends React.Component {
             countNeeded={this.props.cardsNeededToCure}
             onSubmit={this.onCureCardsPicked}
             onCancel={this.props.actions.cureDiseaseCancel} />
+        }
+        {!isEmpty(govGrantCities) &&
+          <CityPicker
+            cities={govGrantCities}
+            onSubmit={this.onGovGrantCityPicked} />
         }
       </div>
     );

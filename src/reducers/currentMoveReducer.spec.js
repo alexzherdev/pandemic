@@ -18,7 +18,8 @@ describe('CurrentMoveReducer', () => {
     },
     playerOverHandLimit: null,
     curingDisease: {},
-    skipInfectionsStep: false
+    skipInfectionsStep: false,
+    govGrantCities: []
   });
 
   it('resets move counter and switches players on PASS_TURN', () => {
@@ -44,109 +45,119 @@ describe('CurrentMoveReducer', () => {
     expect(reducer(initial, action)).to.deep.equal(initial);
   });
 
-  it('stores available cities on PLAYER_MOVE_SHOW_CITIES', () => {
-    const action = { type: types.PLAYER_MOVE_SHOW_CITIES, cities: { 0: { id: '0' }}};
+  describe('availableCities', () => {
+    it('stores available cities on PLAYER_MOVE_SHOW_CITIES', () => {
+      const action = { type: types.PLAYER_MOVE_SHOW_CITIES, cities: { 0: { id: '0' }}};
 
-    const initial = getInitialState();
-    const expected = { ...initial, availableCities: { 0: { id: '0' }}};
-    expect(reducer(initial, action)).to.deep.equal(expected);
+      const initial = getInitialState();
+      const expected = { ...initial, availableCities: { 0: { id: '0' }}};
+      expect(reducer(initial, action)).to.deep.equal(expected);
+    });
+
+    it('cleans up available cities on PLAYER_MOVE_CANCEL', () => {
+      const action = { type: types.PLAYER_MOVE_CANCEL };
+
+      const initial = { ...getInitialState(), availableCities: { 0: { id: '0' }}};
+      const expected = { ...initial, availableCities: {}};
+      expect(reducer(initial, action)).to.deep.equal(expected);
+    });
+
+    it('cleans up available cities and decrements move counter on PLAYER_MOVE_TO_CITY', () => {
+      const action = { type: types.PLAYER_MOVE_TO_CITY };
+
+      const initial = { ...getInitialState(), availableCities: { 0: { id: '0' }}};
+      const expected = { ...initial, availableCities: {}, actionsLeft: 2 };
+      expect(reducer(initial, action)).to.deep.equal(expected);
+    });
   });
 
-  it('cleans up available cities on PLAYER_MOVE_CANCEL', () => {
-    const action = { type: types.PLAYER_MOVE_CANCEL };
+  describe('shareCandidates', () => {
+    it('stores share candidates on PLAYER_SHARE_SHOW_CANDIDATES', () => {
+      const action = { type: types.PLAYER_SHARE_SHOW_CANDIDATES, players: [{ id: '0', name: 'P1' }] };
 
-    const initial = { ...getInitialState(), availableCities: { 0: { id: '0' }}};
-    const expected = { ...initial, availableCities: {}};
-    expect(reducer(initial, action)).to.deep.equal(expected);
+      const initial = getInitialState();
+      const expected = { ...initial, shareCandidates: [{ id: '0', name: 'P1' }]};
+      expect(reducer(initial, action)).to.deep.equal(expected);
+    });
+
+    it('cleans up share candidates on PLAYER_SHARE_CANCEL', () => {
+      const action = { type: types.PLAYER_SHARE_CANCEL };
+
+      const initial = { ...getInitialState(), shareCandidates: [{ id: '0', name: 'P1' }]};
+      const expected = { ...initial, shareCandidates: []};
+
+      expect(reducer(initial, action)).to.deep.equal(expected);
+    });
+
+    it('cleans up share candidates and decrements move counter on PLAYER_SHARE_CARD', () => {
+      const action = { type: types.PLAYER_SHARE_CARD };
+      const initial = { ...getInitialState(), shareCandidates: [{ id: '0', name: 'P1' }]};
+      const expected = { ...initial, shareCandidates: [], actionsLeft: 2 };
+
+      expect(reducer(initial, action)).to.deep.equal(expected);
+    });
   });
 
-  it('cleans up available cities and decrements move counter on PLAYER_MOVE_TO_CITY', () => {
-    const action = { type: types.PLAYER_MOVE_TO_CITY };
+  describe('cardsDrawn', () => {
+    it('stores cards drawn on CARD_DRAW_CARDS_INIT', () => {
+      const action = { type: types.CARD_DRAW_CARDS_INIT, cards: [{ id: '0', cardType: 'city' }]};
+      const initial = getInitialState();
+      const expected = { ...initial, cardsDrawn: [{ id: '0', cardType: 'city' }] };
 
-    const initial = { ...getInitialState(), availableCities: { 0: { id: '0' }}};
-    const expected = { ...initial, availableCities: {}, actionsLeft: 2 };
-    expect(reducer(initial, action)).to.deep.equal(expected);
+      expect(reducer(initial, action)).to.deep.equal(expected);
+    });
+
+    it('removes a card from cards drawn on CARD_DRAW_CARDS_HANDLE', () => {
+      const action = { type: types.CARD_DRAW_CARDS_HANDLE, card: { id: '0', cardType: 'city' }};
+      const initial = { ...getInitialState(), cardsDrawn: [{ id: '0', cardType: 'city' }]};
+      const expected = getInitialState();
+
+      expect(reducer(initial, action)).to.deep.equal(expected);
+    });
   });
 
-  it('stores share candidates on PLAYER_SHARE_SHOW_CANDIDATES', () => {
-    const action = { type: types.PLAYER_SHARE_SHOW_CANDIDATES, players: [{ id: '0', name: 'P1' }] };
+  describe('playerOverHandLimit', () => {
+    it('stores player over hand limit on CARD_OVER_LIMIT_DISCARD_INIT', () => {
+      const action = { type: types.CARD_OVER_LIMIT_DISCARD_INIT, playerId: '0' };
+      const initial = getInitialState();
+      const expected = { ...initial, playerOverHandLimit: '0' };
 
-    const initial = getInitialState();
-    const expected = { ...initial, shareCandidates: [{ id: '0', name: 'P1' }]};
-    expect(reducer(initial, action)).to.deep.equal(expected);
+      expect(reducer(initial, action)).to.deep.equal(expected);
+    });
+
+    it('cleans up player over hand limit on CARD_OVER_LIMIT_DISCARD_COMPLETE', () => {
+      const action = { type: types.CARD_OVER_LIMIT_DISCARD_COMPLETE };
+      const initial = { ...getInitialState(), playerOverHandLimit: '0' };
+      const expected = getInitialState();
+
+      expect(reducer(initial, action)).to.deep.equal(expected);
+    });
   });
 
-  it('cleans up share candidates on PLAYER_SHARE_CANCEL', () => {
-    const action = { type: types.PLAYER_SHARE_CANCEL };
+  describe('curingDisease', () => {
+    it('stores the cards to choose from when curing disease on PLAYER_CURE_DISEASE_SHOW_CARDS', () => {
+      const action = { type: types.PLAYER_CURE_DISEASE_SHOW_CARDS, color: 'red',
+        cards: [{ cardType: 'city', id: '0', name: 'London' }, { cardType: 'city', id: '1', name: 'Paris' }]};
+      const initial = getInitialState();
+      const expected = { ...initial,
+        curingDisease: { color: 'red', cards: [{ cardType: 'city', id: '0', name: 'London' }, { cardType: 'city', id: '1', name: 'Paris' }]}};
+      expect(reducer(initial, action)).to.deep.equal(expected);
+    });
 
-    const initial = { ...getInitialState(), shareCandidates: [{ id: '0', name: 'P1' }]};
-    const expected = { ...initial, shareCandidates: []};
+    it('cleans up the cards for curing disease on PLAYER_CURE_DISEASE_CANCEL or PLAYER_CURE_DISEASE_COMPLETE', () => {
+      const initial = { ...getInitialState(),
+        curingDisease: { color: 'red', cards: [{ cardType: 'city', id: '0', name: 'London' }, { cardType: 'city', id: '1', name: 'Paris' }]}};
 
-    expect(reducer(initial, action)).to.deep.equal(expected);
+      const cancelAction = { type: types.PLAYER_CURE_DISEASE_CANCEL };
+      expect(reducer(initial, cancelAction)).to.deep.equal(getInitialState());
+
+      const completeAction = { type: types.PLAYER_CURE_DISEASE_COMPLETE };
+      const expected = { ...getInitialState(), actionsLeft: 2 };
+      expect(reducer(initial, completeAction)).to.deep.equal(expected);
+    });
   });
 
-  it('cleans up share candidates and decrements move counter on PLAYER_SHARE_CARD', () => {
-    const action = { type: types.PLAYER_SHARE_CARD };
-    const initial = { ...getInitialState(), shareCandidates: [{ id: '0', name: 'P1' }]};
-    const expected = { ...initial, shareCandidates: [], actionsLeft: 2 };
-
-    expect(reducer(initial, action)).to.deep.equal(expected);
-  });
-
-  it('stores cards drawn on CARD_DRAW_CARDS_INIT', () => {
-    const action = { type: types.CARD_DRAW_CARDS_INIT, cards: [{ id: '0', cardType: 'city' }]};
-    const initial = getInitialState();
-    const expected = { ...initial, cardsDrawn: [{ id: '0', cardType: 'city' }] };
-
-    expect(reducer(initial, action)).to.deep.equal(expected);
-  });
-
-  it('removes a card from cards drawn on CARD_DRAW_CARDS_HANDLE', () => {
-    const action = { type: types.CARD_DRAW_CARDS_HANDLE, card: { id: '0', cardType: 'city' }};
-    const initial = { ...getInitialState(), cardsDrawn: [{ id: '0', cardType: 'city' }]};
-    const expected = getInitialState();
-
-    expect(reducer(initial, action)).to.deep.equal(expected);
-  });
-
-  it('stores player over hand limit on CARD_OVER_LIMIT_DISCARD_INIT', () => {
-    const action = { type: types.CARD_OVER_LIMIT_DISCARD_INIT, playerId: '0' };
-    const initial = getInitialState();
-    const expected = { ...initial, playerOverHandLimit: '0' };
-
-    expect(reducer(initial, action)).to.deep.equal(expected);
-  });
-
-  it('cleans up player over hand limit on CARD_OVER_LIMIT_DISCARD_COMPLETE', () => {
-    const action = { type: types.CARD_OVER_LIMIT_DISCARD_COMPLETE };
-    const initial = { ...getInitialState(), playerOverHandLimit: '0' };
-    const expected = getInitialState();
-
-    expect(reducer(initial, action)).to.deep.equal(expected);
-  });
-
-  it('stores the cards to choose from when curing disease on PLAYER_CURE_DISEASE_SHOW_CARDS', () => {
-    const action = { type: types.PLAYER_CURE_DISEASE_SHOW_CARDS, color: 'red',
-      cards: [{ cardType: 'city', id: '0', name: 'London' }, { cardType: 'city', id: '1', name: 'Paris' }]};
-    const initial = getInitialState();
-    const expected = { ...initial,
-      curingDisease: { color: 'red', cards: [{ cardType: 'city', id: '0', name: 'London' }, { cardType: 'city', id: '1', name: 'Paris' }]}};
-    expect(reducer(initial, action)).to.deep.equal(expected);
-  });
-
-  it('cleans up the cards for curing disease on PLAYER_CURE_DISEASE_CANCEL or PLAYER_CURE_DISEASE_COMPLETE', () => {
-    const initial = { ...getInitialState(),
-      curingDisease: { color: 'red', cards: [{ cardType: 'city', id: '0', name: 'London' }, { cardType: 'city', id: '1', name: 'Paris' }]}};
-
-    const cancelAction = { type: types.PLAYER_CURE_DISEASE_CANCEL };
-    expect(reducer(initial, cancelAction)).to.deep.equal(getInitialState());
-
-    const completeAction = { type: types.PLAYER_CURE_DISEASE_COMPLETE };
-    const expected = { ...getInitialState(), actionsLeft: 2 };
-    expect(reducer(initial, completeAction)).to.deep.equal(expected);
-  });
-
-  context('outbreaks', () => {
+  describe('outbreak', () => {
     it('stores initial outbreak data on OUTBREAK_INIT', () => {
       const action = { type: types.OUTBREAK_INIT, color: 'red', cityId: '0' };
       const initial = getInitialState();
@@ -198,19 +209,44 @@ describe('CurrentMoveReducer', () => {
       const expected = { ...initial, outbreak: { color: 'red', complete: ['1'], pending: ['2']}};
       expect(reducer(initial, action)).to.deep.equal(expected);
     });
+  });
 
+  describe('skipInfectionsStep', () => {
     it('stores a flag to skip the next infections step', () => {
       const action = { type: types.PLAYER_PLAY_EVENT, id: 'one_quiet_night' };
       const initial = getInitialState();
       const expected = { ...initial, skipInfectionsStep: true };
-      expect(reducer(getInitialState(), action)).to.deep.equal(expected);
+      expect(reducer(initial, action)).to.deep.equal(expected);
+    });
+
+    it('does not store a flag for any event other than one quiet night', () => {
+      const action = { type: types.PLAYER_PLAY_EVENT, id: 'gov_grant' };
+      const initial = getInitialState();
+
+      expect(reducer(initial, action)).to.deep.equal(initial);
     });
 
     it('resets that flag when a new turn starts', () => {
       const action = { type: types.PASS_TURN, playerId: '1' };
       const initial = { ...getInitialState(), skipInfectionsStep: true };
       const expected = { ...getInitialState(), actionsLeft: 4, player: '1' };
-      expect(reducer(getInitialState(), action)).to.deep.equal(expected);
+      expect(reducer(initial, action)).to.deep.equal(expected);
+    });
+  });
+
+  describe('govGrantCities', () => {
+    it('stores cities on EVENT_GOV_GRANT_SHOW_CITIES', () => {
+      const action = { type: types.EVENT_GOV_GRANT_SHOW_CITIES, cities: [{ id: '0', name: 'London', color: 'red' }]};
+      const initial = getInitialState();
+      const expected = { ...initial, govGrantCities: [{ id: '0', name: 'London', color: 'red' }]};
+      expect(reducer(initial, action)).to.deep.equals(expected);
+    });
+
+    it('cleans up cities on EVENT_GOV_GRANT_BUILD_STATION', () => {
+      const action = { type: types.EVENT_GOV_GRANT_BUILD_STATION, cityId: '0' };
+      const initial = { ...getInitialState(), govGrantCities: [{ id: '0', name: 'London', color: 'red' }]};
+      const expected = getInitialState();
+      expect(reducer(initial, action)).to.deep.equals(expected);
     });
   });
 });

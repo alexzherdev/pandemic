@@ -12,4 +12,10 @@ describe('StationsLeftReducer', () => {
 
     expect(reducer(getInitialState(), action)).to.equal(4);
   });
+
+  it('decrements the counter on EVENT_GOV_GRANT_BUILD_STATION', () => {
+    const action = { type: types.EVENT_GOV_GRANT_BUILD_STATION };
+
+    expect(reducer(getInitialState(), action)).to.equal(4);
+  });
 });

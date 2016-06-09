@@ -5,6 +5,7 @@ import * as types from '../constants/actionTypes';
 function cityReducer(state, action) {
   switch (action.type) {
     case types.PLAYER_BUILD_STATION:
+    case types.EVENT_GOV_GRANT_BUILD_STATION:
       // TODO move station from another city
       return {
         ...state,
@@ -38,6 +39,7 @@ function cityReducer(state, action) {
 function locationsReducer(state, action) {
   switch (action.type) {
     case types.PLAYER_BUILD_STATION:
+    case types.EVENT_GOV_GRANT_BUILD_STATION:
     case types.PLAYER_TREAT_DISEASE:
     case types.PLAYER_TREAT_ALL_DISEASE:
     case types.INFECT_CITY:
@@ -62,6 +64,7 @@ export default function mapReducer(state = initialState.map, action) {
         }
       };
     case types.PLAYER_BUILD_STATION:
+    case types.EVENT_GOV_GRANT_BUILD_STATION:
     case types.PLAYER_TREAT_DISEASE:
     case types.PLAYER_TREAT_ALL_DISEASE:
     case types.INFECT_CITY:
