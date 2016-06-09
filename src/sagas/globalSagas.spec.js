@@ -1,8 +1,6 @@
 import { expect } from 'chai';
-import { select, put, call } from 'redux-saga/effects';
+import { select, call } from 'redux-saga/effects';
 
-import { cureDiseaseComplete } from '../actions/diseaseActions';
-import { victory } from '../actions/globalActions';
 import { checkForVictory, yieldVictory, checkForInfectionRateDefeat, yieldDefeat,
   checkForOutbreaksDefeat } from './globalSagas';
 import * as sel from '../selectors';

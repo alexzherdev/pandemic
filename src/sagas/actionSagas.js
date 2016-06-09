@@ -89,24 +89,24 @@ export function* waitToDiscardIfOverLimit(playerId) {
 export function* drawPlayerCards() {
   const cards = yield select(sel.getPlayerCardsToDraw);
   if (cards.length < 2) {
-    yield yieldDefeat();
+    yield call(yieldDefeat);
   } else {
     const currentPlayer = yield select(sel.getCurrentPlayer);
-    yield put(drawCardsInit(cards));
-    yield delay(1000);
-    yield put(drawCardsHandle(cards[0], currentPlayer.id));
-    if (cards[0].cardType === 'epidemic') {
-      yield yieldEpidemic();
-    }
-    yield delay(1000);
-    yield put(drawCardsHandle(cards[1], currentPlayer.id));
     if (cards[1].cardType === 'epidemic') {
-      yield yieldEpidemic();
+      cards.reverse();
+    }
+    yield put(drawCardsInit(cards));
+    for (let i = 0; i < 2; i++) {
+      yield delay(1000);
+      yield put(drawCardsHandle(cards[i], currentPlayer.id));
+      if (cards[i].cardType === 'epidemic') {
+        yield call(yieldEpidemic);
+      }
     }
   }
 }
 
-function* showCardsToCure({ color }) {
+export function* showCardsToCure({ color }) {
   const cards = yield select(sel.getCardsOfColorInCurrentHand, color);
   yield put(cureDiseaseShowCards(cards, color));
   const action = yield take([types.PLAYER_CURE_DISEASE_COMPLETE, types.PLAYER_CURE_DISEASE_CANCEL]);

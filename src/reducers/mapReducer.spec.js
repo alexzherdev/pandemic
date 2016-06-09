@@ -80,6 +80,19 @@ describe('MapReducer', () => {
     });
   });
 
+  it('builds a station on EVENT_GOV_GRANT_BUILD_STATION', () => {
+    const action = { type: types.EVENT_GOV_GRANT_BUILD_STATION, cityId: '1' };
+
+    verifyLocationChange(action, '1', {
+      station: true,
+      coords: [100, 100],
+      yellow: 1,
+      red: 0,
+      black: 0,
+      blue: 1
+    });
+  });
+
   it('removes a disease cube of one color on PLAYER_TREAT_DISEASE', () => {
     const action = { type: types.PLAYER_TREAT_DISEASE, cityId: '0', color: 'yellow' };
 

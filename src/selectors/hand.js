@@ -38,7 +38,7 @@ export function getEventsInHands(state) {
   _.forOwn(state.players, (player, id) => {
 
     events.push(..._.filter(player.hand, { cardType: 'event' })
-      .map((c) => ({ ...c, name: state.events[c.id].name, playerId: player.id })));
+      .map((c) => ({ ...c, name: state.events[id].name, playerId: player.id })));
   });
   return events;
 }

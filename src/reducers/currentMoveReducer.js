@@ -122,6 +122,17 @@ function skipInfectionsStep(state, action) {
   }
 }
 
+function govGrantCities(state, action) {
+  switch (action.type) {
+    case types.EVENT_GOV_GRANT_SHOW_CITIES:
+      return [...action.cities];
+    case types.EVENT_GOV_GRANT_BUILD_STATION:
+      return [];
+    default:
+      return state;
+  }
+}
+
 export default function currentMoveReducer(state = initialState.currentMove, action) {
   return {
     ...state,
@@ -133,6 +144,7 @@ export default function currentMoveReducer(state = initialState.currentMove, act
     playerOverHandLimit: playerOverHandLimit(state.playerOverHandLimit, action),
     player: player(state.player, action),
     curingDisease: curingDisease(state.curingDisease, action),
-    skipInfectionsStep: skipInfectionsStep(state.skipInfectionsStep, action)
+    skipInfectionsStep: skipInfectionsStep(state.skipInfectionsStep, action),
+    govGrantCities: govGrantCities(state.govGrantCities, action)
   };
 }

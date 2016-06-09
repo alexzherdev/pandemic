@@ -21,6 +21,10 @@ export default {
     'one_quiet_night': {
       id: 'one_quiet_night',
       name: 'One Quiet Night'
+    },
+    'gov_grant': {
+      id: 'gov_grant',
+      name: 'Government Grant'
     }
   },
 
@@ -29,7 +33,7 @@ export default {
       id: '0',
       name: 'P1',
       hand: [
-        { cardType: 'event', id: 'one_quiet_night' },
+        { cardType: 'event', id: 'gov_grant' },
         { cardType: 'city', id: '0' },
         { cardType: 'city', id: '3' },
         { cardType: 'city', id: '2' },
@@ -114,7 +118,8 @@ export default {
     },
     playerOverHandLimit: null,
     curingDisease: {},
-    skipInfectionsStep: false
+    skipInfectionsStep: false,
+    govGrantCities: []
   },
 
   stationsLeft: 5,

@@ -20,3 +20,11 @@ export function moveCancel() {
 export function buildStation(cityId) {
   return { type: types.PLAYER_BUILD_STATION, cityId };
 }
+
+export function govGrantShowCities(cities) {
+  return { type: types.EVENT_GOV_GRANT_SHOW_CITIES, cities };
+}
+
+export function govGrantBuildStation(cityId) {
+  return { type: types.EVENT_GOV_GRANT_BUILD_STATION, cityId };
+}
