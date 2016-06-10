@@ -22,11 +22,13 @@ describe('Diseases selector', () => {
       1: {
         id: '1',
         name: 'P2',
-        hand: []
+        role: 'scientist',
+        hand: [{ cardType: 'city', id: '0' }, { cardType: 'city', id: '2' },
+          { cardType: 'city', id: '1' }, { cardType: 'city', id: '3' }]
       }
     },
     currentMove: {
-      player: 0
+      player: '0'
     },
     diseases: {
       red: 'active',
@@ -46,7 +48,7 @@ describe('Diseases selector', () => {
 
       playersLocations: {
         0: '0',
-        1: '1'
+        1: '0'
       },
 
       locations: {
@@ -113,6 +115,8 @@ describe('Diseases selector', () => {
     expect(sel.canCureDisease(state, 'red')).to.equal(false);
     // at a station with 5 player cards in hand
     expect(sel.canCureDisease(state, 'blue')).to.equal(true);
+    // scientist needs 4 player cards
+    expect(sel.canCureDisease({ ...state, currentMove: { player: '1' }}, 'blue')).to.equal(true);
     // not at a station
     expect(sel.canCureDisease({ ...state, map: { ...state.map, playersLocations: { 0: '1', 1: '1' }}},
       'blue')).to.equal(false);
