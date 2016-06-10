@@ -21,6 +21,10 @@ export function* processEvent(action) {
       yield put(playEventComplete(action.playerId, action.id));
       break;
     }
+    case 'res_pop':
+      yield take(types.EVENT_RES_POP_REMOVE_CARD);
+      yield put(playEventComplete(action.playerId, action.id));
+      break;
   }
 }
 

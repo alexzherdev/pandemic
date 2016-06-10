@@ -30,6 +30,11 @@ export default function infectionCardsReducer(state = initialState.infectionCard
         discard: []
       };
     }
+    case types.EVENT_RES_POP_REMOVE_CARD:
+      return {
+        ...state,
+        discard: state.discard.filter((c) => c !== action.cityId)
+      };
     default:
       return state;
   }

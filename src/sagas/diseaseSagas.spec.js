@@ -1,14 +1,15 @@
 import { expect } from 'chai';
-import { put, select, call } from 'redux-saga/effects';
+import { put, select, call, take } from 'redux-saga/effects';
 
 import { epidemicIncrease, epidemicInfect, epidemicIntensify, discardBottomInfectionCard,
-  discardTopInfectionCard } from '../actions/cardActions';
+  discardTopInfectionCard, resPopSuggest } from '../actions/cardActions';
 import { infectCities, initOutbreak, queueOutbreak, completeOutbreak, infectCity,
   useDiseaseCubes, eradicateDisease } from '../actions/diseaseActions';
 import { yieldEpidemic, infectOrOutbreak, infections, yieldOutbreak, useCubes,
   checkForEradication } from './diseaseSagas';
 import { yieldDefeat } from './globalSagas';
 import * as sel from '../selectors';
+import * as types from '../constants/actionTypes';
 
 
 describe('DiseaseSagas', function() {
@@ -24,7 +25,8 @@ describe('DiseaseSagas', function() {
     });
 
     it('skips infections for an eradicated disease', () => {
-      this.next = this.generator.next('eradicated');
+      this.generator.next('eradicated');
+      this.next = this.generator.next(null);
       expect(this.next.value).to.deep.equal(put(epidemicIntensify()));
       this.next = this.generator.next();
       expect(this.next.done).to.be.true;
@@ -37,10 +39,38 @@ describe('DiseaseSagas', function() {
       expect(this.next.value).to.deep.equal(call(infectOrOutbreak, '0', 'blue', 3));
       this.next = this.generator.next();
       expect(this.next.value).to.deep.equal(put(discardBottomInfectionCard()));
-      this.next = this.generator.next();
+      this.generator.next();
+      this.next = this.generator.next(null);
       expect(this.next.value).to.deep.equal(put(epidemicIntensify()));
       this.next = this.generator.next();
       expect(this.next.done).to.be.true;
+    });
+
+    context('there is a res pop available', () => {
+      beforeEach(() => {
+        this.next = this.generator.next('cured');
+        expect(this.next.value).to.deep.equal(put(epidemicInfect('0')));
+        this.next = this.generator.next();
+        expect(this.next.value).to.deep.equal(call(infectOrOutbreak, '0', 'blue', 3));
+        this.next = this.generator.next();
+        expect(this.next.value).to.deep.equal(put(discardBottomInfectionCard()));
+        this.next = this.generator.next();
+        expect(this.next.value).to.deep.equal(select(sel.getResPopOwner));
+        this.next = this.generator.next('0');
+        expect(this.next.value).to.deep.equal(put(resPopSuggest('0')));
+        this.next = this.generator.next();
+        expect(this.next.value).to.deep.equal(take([types.PLAYER_PLAY_EVENT_COMPLETE, types.CONTINUE]));
+      });
+
+      it('waits to continue turn', () => {
+        this.next = this.generator.next({ type: types.CONTINUE });
+        expect(this.next.value).to.deep.equal(put(epidemicIntensify()));
+      });
+
+      it('waits for event completion', () => {
+        this.next = this.generator.next({ type: types.PLAYER_PLAY_EVENT_COMPLETE });
+        expect(this.next.value).to.deep.equal(put(epidemicIntensify()));
+      });
     });
   });
 

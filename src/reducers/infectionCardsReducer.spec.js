@@ -35,4 +35,11 @@ describe('InfectionCardsReducer', () => {
     expect(actual.discard).to.be.empty;
     expect(actual.deck).to.have.members(['0', '1', '2', '3']);
   });
+
+  it('removes a card from the discard pile on EVENT_RES_POP_REMOVE_CARD', () => {
+    const action = { type: types.EVENT_RES_POP_REMOVE_CARD, cityId: '3' };
+    const initial = getInitialState();
+    const expected = { ...initial, discard: []};
+    expect(reducer(initial, action)).to.deep.equal(expected);
+  });
 });

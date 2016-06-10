@@ -38,7 +38,19 @@ export function getEventsInHands(state) {
   _.forOwn(state.players, (player, id) => {
 
     events.push(..._.filter(player.hand, { cardType: 'event' })
-      .map((c) => ({ ...c, name: state.events[c.id].name, playerId: player.id })));
+      .map((c) => ({ ...c, name: state.events[c.id].name, playerId: id})));
   });
   return events;
+}
+
+export function getResPopOwner(state) {
+  let playerId = null;
+  _.forOwn(state.players, (player, id) => {
+    const hand = getPlayerHand(state, id);
+    if (_.find(hand, { cardType: 'event', id: 'res_pop' })) {
+      playerId = id;
+      return false;
+    }
+  });
+  return playerId;
 }
