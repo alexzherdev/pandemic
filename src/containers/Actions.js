@@ -29,7 +29,7 @@ class Actions extends React.Component {
     if (cardType === 'city') {
       this.props.actions.discardFromHand('city', this.props.playerToDiscard, id);
     } else {
-      this.props.actions.playEvent(this.props.playerToDiscard, id);
+      this.props.actions.playEventInit(this.props.playerToDiscard, id);
     }
   }
 

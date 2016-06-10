@@ -40,8 +40,8 @@ describe('PlayersReducer', () => {
     expect(reducer(initial, action)).to.deep.equal(expected);
   });
 
-  it('discards an event card on PLAYER_PLAY_EVENT', () => {
-    const action = { type: types.PLAYER_PLAY_EVENT, id: '0', playerId: '0' };
+  it('discards an event card on PLAYER_PLAY_EVENT_COMPLETE', () => {
+    const action = { type: types.PLAYER_PLAY_EVENT_COMPLETE, id: '0', playerId: '0' };
 
     const initial = getInitialState();
     const expected = { ...initial,

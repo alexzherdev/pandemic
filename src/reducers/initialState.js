@@ -5,8 +5,8 @@ export default {
     deck: [
       { cardType: 'city', id: '8' },
       { cardType: 'city', id: '6' },
-      { cardType: 'city', id: '7' },
-      { cardType: 'epidemic', name: 'Epidemic' }
+      { cardType: 'epidemic', name: 'Epidemic' },
+      { cardType: 'city', id: '7' }
 
     ],
     discard: []
@@ -33,7 +33,7 @@ export default {
       id: '0',
       name: 'P1',
       hand: [
-        { cardType: 'event', id: 'gov_grant' },
+        { cardType: 'event', id: 'one_quiet_night' },
         { cardType: 'city', id: '0' },
         { cardType: 'city', id: '3' },
         { cardType: 'city', id: '2' },

@@ -75,7 +75,7 @@ function* checkIfHandWentUnderLimit() {
 
 export function* waitToDiscardIfOverLimit(playerId) {
   function* watchOverLimitDiscardComplete() {
-    yield* takeEvery([types.CARD_DISCARD_FROM_HAND, types.PLAYER_PLAY_EVENT], checkIfHandWentUnderLimit);
+    yield* takeEvery([types.CARD_DISCARD_FROM_HAND, types.PLAYER_PLAY_EVENT_COMPLETE], checkIfHandWentUnderLimit);
   }
 
   if (yield select(sel.isOverHandLimit, playerId)) {

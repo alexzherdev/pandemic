@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import { select, put, call } from 'redux-saga/effects';
 
 import { moveShowCities, moveCancel, moveToCity } from '../actions/mapActions';
-import { discardFromHand, shareCardsShowCandidates, shareCardsCancel, drawCardsInit,
+import { discardFromHand, shareCardsShowCandidates, shareCardsCancel, shareCard, drawCardsInit,
   drawCardsHandle } from '../actions/cardActions';
 import { cureDiseaseShowCards } from '../actions/diseaseActions';
 import { showAvailableCities, showShareCandidates, drawIfNoActionsLeft,
@@ -59,26 +59,23 @@ describe('ActionSagas', function() {
     beforeEach(() => {
       this.generator = showShareCandidates();
       this.players = [{ id: '0', name: 'P1' }];
+      this.next = this.generator.next();
+      expect(this.next.value).to.deep.equal(select(sel.getShareCandidates));
+      this.next = this.generator.next(this.players);
+      expect(this.next.value).to.deep.equal(put(shareCardsShowCandidates(this.players)));
+      this.generator.next();
     });
 
     it('shows candidates and exits on cancel', () => {
-      let next = this.generator.next();
-      expect(next.value).to.deep.equal(select(sel.getShareCandidates));
-      next = this.generator.next(this.players);
-      expect(next.value).to.deep.equal(put(shareCardsShowCandidates(this.players)));
-      this.generator.next();
-      next = this.generator.next(shareCardsCancel());
-      expect(next.done).to.be.true;
+      this.next = this.generator.next(shareCardsCancel());
+      expect(this.next.done).to.be.true;
     });
 
-    it('shows candidates and exits on cancel', () => {
-      let next = this.generator.next();
-      expect(next.value).to.deep.equal(select(sel.getShareCandidates));
-      next = this.generator.next(this.players);
-      expect(next.value).to.deep.equal(put(shareCardsShowCandidates(this.players)));
-      this.generator.next();
-      next = this.generator.next(shareCardsCancel());
-      expect(next.done).to.be.true;
+    it('shows candidates, shares card, and waits for discarding if over limit', () => {
+      this.next = this.generator.next(shareCard('0', '1', '2'));
+      expect(this.next.value).to.deep.equal(call(waitToDiscardIfOverLimit, '1'));
+      this.next = this.generator.next()
+      expect(this.next.done).to.be.true;
     });
   });
 

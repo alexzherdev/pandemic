@@ -212,18 +212,11 @@ describe('CurrentMoveReducer', () => {
   });
 
   describe('skipInfectionsStep', () => {
-    it('stores a flag to skip the next infections step', () => {
-      const action = { type: types.PLAYER_PLAY_EVENT, id: 'one_quiet_night' };
+    it('stores a flag to skip the next infections step on EVENT_ONE_QUIET_NIGHT_SKIP', () => {
+      const action = { type: types.EVENT_ONE_QUIET_NIGHT_SKIP };
       const initial = getInitialState();
       const expected = { ...initial, skipInfectionsStep: true };
       expect(reducer(initial, action)).to.deep.equal(expected);
-    });
-
-    it('does not store a flag for any event other than one quiet night', () => {
-      const action = { type: types.PLAYER_PLAY_EVENT, id: 'gov_grant' };
-      const initial = getInitialState();
-
-      expect(reducer(initial, action)).to.deep.equal(initial);
     });
 
     it('resets that flag when a new turn starts', () => {

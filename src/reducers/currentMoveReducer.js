@@ -109,12 +109,8 @@ function curingDisease(state, action) {
 
 function skipInfectionsStep(state, action) {
   switch (action.type) {
-    case types.PLAYER_PLAY_EVENT:
-      if (action.id === 'one_quiet_night') {
-        return true;
-      } else {
-        return state;
-      }
+    case types.EVENT_ONE_QUIET_NIGHT_SKIP:
+      return true;
     case types.PASS_TURN:
       return false;
     default:
