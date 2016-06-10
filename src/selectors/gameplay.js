@@ -9,6 +9,14 @@ export function getCurrentPlayer(state) {
   return state.players[state.currentMove.player];
 }
 
+export function getCurrentRole(state) {
+  return getCurrentPlayer(state).role;
+}
+
+export function getPlayerRole(state, playerId) {
+  return state.players[playerId].role;
+}
+
 export function getPlayers(state) {
   return values(state.players);
 }

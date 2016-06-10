@@ -1,3 +1,5 @@
+import { reduce } from 'lodash';
+
 import initialState from './initialState';
 import * as types from '../constants/actionTypes';
 
@@ -21,6 +23,13 @@ function cityReducer(state, action) {
         ...state,
         [action.color]: 0
       };
+    case types.MEDIC_TREAT_CURED_DISEASES: {
+      const colors = reduce(action.colors, (acc, c) => { acc[c] = 0; return acc; }, {});
+      return {
+        ...state,
+        ...colors
+      };
+    }
     case types.INFECT_CITY:
       return {
         ...state,
@@ -42,6 +51,7 @@ function locationsReducer(state, action) {
     case types.EVENT_GOV_GRANT_BUILD_STATION:
     case types.PLAYER_TREAT_DISEASE:
     case types.PLAYER_TREAT_ALL_DISEASE:
+    case types.MEDIC_TREAT_CURED_DISEASES:
     case types.INFECT_CITY:
     case types.INFECT_NEIGHBOR:
       return {
@@ -68,6 +78,7 @@ export default function mapReducer(state = initialState.map, action) {
     case types.EVENT_GOV_GRANT_BUILD_STATION:
     case types.PLAYER_TREAT_DISEASE:
     case types.PLAYER_TREAT_ALL_DISEASE:
+    case types.MEDIC_TREAT_CURED_DISEASES:
     case types.INFECT_CITY:
     case types.INFECT_NEIGHBOR:
       return {

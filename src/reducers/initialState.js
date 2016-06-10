@@ -4,8 +4,8 @@ export default {
   playerCards: {
     deck: [
       { cardType: 'city', id: '8' },
-      { cardType: 'city', id: '6' },
-      { cardType: 'epidemic', name: 'Epidemic' }
+      { cardType: 'epidemic', name: 'Epidemic' },
+      { cardType: 'city', id: '6' }
     ],
     discard: []
   },
@@ -42,7 +42,7 @@ export default {
     0: {
       id: '0',
       name: 'P1',
-      role: 'scientist',
+      role: 'medic',
       hand: [
         { cardType: 'event', id: 'forecast' },
         { cardType: 'event', id: 'airlift' },
@@ -112,7 +112,7 @@ export default {
 
   diseases: {
     red: 'active',
-    blue: 'active',
+    blue: 'cured',
     yellow: 'cured',
     black: 'eradicated'
   },
