@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 import { getCitiesInHand, hasCurrentCityInHand } from './hand';
 import { isAtStation } from './map';
-import { getCurrentPlayer } from './gameplay';
+import { getCurrentPlayer, getPlayerRole } from './gameplay';
 
 
 export function getCurrentCityId(state) {
@@ -20,6 +20,11 @@ export function getAvailableCities(state) {
   const cities = _.assign({}, charters, direct, neighbors, stations);
   delete cities[cityId];
   return cities;
+}
+
+export function getMedicInCity(state, cityId) {
+  return _.findKey(state.map.playersLocations,
+    (loc, playerId) => loc === cityId && getPlayerRole(state, playerId) === 'medic');
 }
 
 export function getCitiesForGovGrant(state) {

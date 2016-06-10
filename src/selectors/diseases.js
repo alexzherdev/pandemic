@@ -2,16 +2,20 @@ import _ from 'lodash';
 
 import { isAtStation, getCurrentMapLocation } from './map';
 import { getCitiesInHand } from './hand';
-import { getCurrentPlayer } from './gameplay';
+import { getCurrentPlayer, getCurrentRole } from './gameplay';
 
 
 export function canTreatColor(state, color) {
+  if (getCurrentRole(state) === 'medic') {
+    return false;
+  }
   const loc = getCurrentMapLocation(state);
   return loc[color] > 0;
 }
 
 export function canTreatAllOfColor(state, color) {
-  return canTreatColor(state, color) && getDiseaseStatus(state, color) === 'cured';
+  return getCurrentRole(state) === 'medic'
+    || canTreatColor(state, color) && getDiseaseStatus(state, color) === 'cured';
 }
 
 export function getDiseaseStatus(state, color) {
@@ -23,8 +27,7 @@ export function areAllDiseasesCured(state) {
 }
 
 export function cardsNeededToCure(state) {
-  const player = getCurrentPlayer(state);
-  return player.role === 'scientist' ? 4 : 5;
+  return getCurrentRole(state) === 'scientist' ? 4 : 5;
 }
 
 export function canCureDisease(state, color) {
@@ -36,4 +39,8 @@ export function canCureDisease(state, color) {
 
 export function treatedAllOfColor(state, color) {
   return _.chain(state.map.locations).values().every({ [color]: 0 }).value();
+}
+
+export function getCuredDiseases(state) {
+  return ['blue', 'red', 'yellow', 'black'].filter((c) => getDiseaseStatus(state, c) === 'cured');
 }

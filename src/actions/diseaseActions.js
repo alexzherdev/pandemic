@@ -59,3 +59,11 @@ export function useDiseaseCubes(color, count) {
 export function oneQuietNightSkip() {
   return { type: types.EVENT_ONE_QUIET_NIGHT_SKIP };
 }
+
+export function medicTreatCuredDiseases(cityId, colors) {
+  return { type: types.MEDIC_TREAT_CURED_DISEASES, cityId, colors };
+}
+
+export function medicPreventInfection(playerId, cityId, color, count) {
+  return { type: types.MEDIC_PREVENT_INFECTION, playerId, cityId, color, count };
+}

@@ -126,7 +126,9 @@ class Actions extends React.Component {
               onClick={partial(this.props.canTreatAllOfColor(color)
                 ? this.props.actions.treatAllDisease
                 : this.props.actions.treatDisease, this.props.currentCityId, color)}
-              disabled={!this.props.canTreatColor(color)}>
+              disabled={this.props.canTreatAllOfColor(color)
+                ? false
+                : !this.props.canTreatColor(color)}>
               Treat {this.props.canTreatAllOfColor(color) ? 'all ' : ''}{color}
             </button>
             <button
