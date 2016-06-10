@@ -1,8 +1,8 @@
 import { expect } from 'chai';
-import { select, put } from 'redux-saga/effects';
+import { select, put, take } from 'redux-saga/effects';
 
 import { processEvent } from './eventSagas';
-import { govGrantShowCities } from '../actions/mapActions';
+import { govGrantShowCities, airliftShowCities } from '../actions/mapActions';
 import { playEventComplete } from '../actions/cardActions';
 import { oneQuietNightSkip } from '../actions/diseaseActions';
 import * as sel from '../selectors';
@@ -33,6 +33,24 @@ describe('EventSagas', () => {
         expect(next.value).to.deep.equal(put(oneQuietNightSkip()));
         next = generator.next();
         expect(next.value).to.deep.equal(put(playEventComplete('0', 'one_quiet_night')));
+        next = generator.next();
+        expect(next.done).to.be.true;
+      });
+    });
+
+    context('airlift', () => {
+      it('shows cities and moves player', () => {
+        const generator = processEvent({ type: types.PLAYER_PLAY_EVENT_INIT, playerId: '0', id: 'airlift' });
+        let next = generator.next();
+        expect(next.value).to.deep.equal(take(types.EVENT_AIRLIFT_CHOOSE_PLAYER));
+        next = generator.next({ type: types.EVENT_AIRLIFT_CHOOSE_PLAYER, playerId: '1' });
+        expect(next.value).to.deep.equal(select(sel.getCitiesForAirlift, '1'));
+        next = generator.next([{ id: '0', name: 'London', color: 'red' }]);
+        expect(next.value).to.deep.equal(put(airliftShowCities([{ id: '0', name: 'London', color: 'red' }])));
+        next = generator.next();
+        expect(next.value).to.deep.equal(take(types.EVENT_AIRLIFT_MOVE_TO_CITY));
+        next = generator.next({ type: types.EVENT_AIRLIFT_MOVE_TO_CITY, playerId: '1', destinationId: '0' });
+        expect(next.value).to.deep.equal(put(playEventComplete('0', 'airlift')));
         next = generator.next();
         expect(next.done).to.be.true;
       });

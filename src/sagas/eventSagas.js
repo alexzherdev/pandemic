@@ -1,8 +1,8 @@
 import { takeEvery } from 'redux-saga';
 import { select, put, take } from 'redux-saga/effects';
 
-import { govGrantShowCities } from '../actions/mapActions';
 import { playEventComplete, forecastShowCards } from '../actions/cardActions';
+import { govGrantShowCities, airliftShowCities } from '../actions/mapActions';
 import { oneQuietNightSkip } from '../actions/diseaseActions';
 import * as sel from '../selectors';
 import * as types from '../constants/actionTypes';
@@ -32,6 +32,14 @@ export function* processEvent(action) {
       yield take(types.EVENT_RES_POP_REMOVE_CARD);
       yield put(playEventComplete(action.playerId, action.id));
       break;
+    case 'airlift': {
+      const playerAction = yield take(types.EVENT_AIRLIFT_CHOOSE_PLAYER);
+      const cities = yield select(sel.getCitiesForAirlift, playerAction.playerId);
+      yield put(airliftShowCities(cities));
+      yield take(types.EVENT_AIRLIFT_MOVE_TO_CITY);
+      yield put(playEventComplete(action.playerId, action.id));
+      break;
+    }
   }
 }
 

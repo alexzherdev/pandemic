@@ -9,7 +9,7 @@ import * as cardActions from '../actions/cardActions';
 import * as globalActions from '../actions/globalActions';
 import { getCurrentCityId, canBuildStation, canTreatColor, canTreatAllOfColor, canCureDisease,
   getPlayerHand, getPlayerOverHandLimit, getCurrentPlayer, canShareCards, cardsNeededToCure,
-  getInfectionDiscard } from '../selectors';
+  getInfectionDiscard, getPlayers } from '../selectors';
 
 import CityPicker from '../components/CityPicker';
 import DiscardOverLimitPicker from '../components/DiscardOverLimitPicker';
@@ -20,6 +20,7 @@ import MultiCardPicker from '../components/MultiCardPicker';
 class Actions extends React.Component {
   constructor(props) {
     super(props);
+
     this.onDiscardCardPicked = this.onDiscardCardPicked.bind(this);
     this.onShareCandidatePicked = this.onShareCandidatePicked.bind(this);
     this.onCureCardsPicked = this.onCureCardsPicked.bind(this);
@@ -29,6 +30,8 @@ class Actions extends React.Component {
     this.onResPopUsed = this.onResPopUsed.bind(this);
     this.onContinueTurn = this.onContinueTurn.bind(this);
     this.onForecastShuffled = this.onForecastShuffled.bind(this);
+    this.onAirliftPlayerPicked = this.onAirliftPlayerPicked.bind(this);
+    this.onAirliftCityPicked = this.onAirliftCityPicked.bind(this);
   }
 
   onDiscardCardPicked(cardType, id) {
@@ -79,10 +82,18 @@ class Actions extends React.Component {
     this.props.actions.forecastShuffle(shuffle([...this.props.currentMove.forecastCards]));
   }
 
+  onAirliftPlayerPicked(id) {
+    this.props.actions.airliftChoosePlayer(id);
+  }
+
+  onAirliftCityPicked(id) {
+    this.props.actions.airliftMoveToCity(this.props.currentMove.airlift.playerId, id);
+  }
+
   render() {
     const { availableCities, shareCandidates, curingDisease, govGrantCities, resPopChooseCard,
-      resPopSuggestOwner, forecastCards } = this.props.currentMove;
-    const { playerToDiscard, currentPlayer, infectionDiscard } = this.props;
+      resPopSuggestOwner, forecastCards, airlift } = this.props.currentMove;
+    const { playerToDiscard, currentPlayer, infectionDiscard, players } = this.props;
     return (
       <div className="actions">
         {!isNull(playerToDiscard) &&
@@ -149,6 +160,16 @@ class Actions extends React.Component {
         {!isEmpty(forecastCards) &&
           <button onClick={this.onForecastShuffled}>Shuffle</button>
         }
+        {!isEmpty(airlift) && !airlift.playerId &&
+          <PlayerPicker
+            players={players}
+            onPlayerPicked={this.onAirliftPlayerPicked} />
+        }
+        {!isEmpty(airlift) && !isEmpty(airlift.cities) &&
+          <CityPicker
+            cities={airlift.cities}
+            onSubmit={this.onAirliftCityPicked} />
+        }
       </div>
     );
   }
@@ -160,7 +181,7 @@ const mapStateToProps = (state) => {
     canCureDisease: partial(canCureDisease, state), getPlayerHand: partial(getPlayerHand, state),
     playerToDiscard: getPlayerOverHandLimit(state), currentPlayer: getCurrentPlayer(state),
     canShareCards: canShareCards(state), cardsNeededToCure: cardsNeededToCure(state),
-    infectionDiscard: getInfectionDiscard(state) };
+    infectionDiscard: getInfectionDiscard(state), players: getPlayers(state) };
 };
 
 const mapDispatchToProps = (dispatch) => {

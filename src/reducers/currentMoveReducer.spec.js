@@ -22,7 +22,8 @@ describe('CurrentMoveReducer', () => {
     govGrantCities: [],
     resPopChooseCard: false,
     resPopSuggestOwner: null,
-    forecastCards: []
+    forecastCards: [],
+    airlift: {}
   });
 
   it('resets move counter and switches players on PASS_TURN', () => {
@@ -273,6 +274,38 @@ describe('CurrentMoveReducer', () => {
     it('resets flag on EVENT_RES_POP_REMOVE_CARD', () => {
       const action = { type: types.EVENT_RES_POP_REMOVE_CARD, cityId: '0' };
       const initial = { ...getInitialState(), resPopChooseCard: true };
+      const expected = getInitialState();
+      expect(reducer(initial, action)).to.deep.equals(expected);
+    });
+  });
+
+  describe('airlift', () => {
+    it('initializes with empty values on PLAYER_PLAY_EVENT_INIT', () => {
+      const action = { type: types.PLAYER_PLAY_EVENT_INIT, id: 'airlift' };
+      const initial = getInitialState();
+      const expected = { ...getInitialState(), airlift: { playerId: null, cities: []}};
+      expect(reducer(initial, action)).to.deep.equals(expected);
+    });
+
+    it('stores playerId on EVENT_AIRLIFT_CHOOSE_PLAYER', () => {
+      const action = { type: types.EVENT_AIRLIFT_CHOOSE_PLAYER, playerId: '0' };
+      const initial = { ...getInitialState(), airlift: { playerId: null, cities: []}};
+      const expected = { ...getInitialState(), airlift: { playerId: '0', cities: []}};
+      expect(reducer(initial, action)).to.deep.equals(expected);
+    });
+
+    it('stores cities on EVENT_AIRLIFT_SHOW_CITIES', () => {
+      const action = { type: types.EVENT_AIRLIFT_SHOW_CITIES, cities: [{ id: '0', name: 'London', color: 'red' }]};
+      const initial = { ...getInitialState(), airlift: { playerId: '0', cities: []}};
+      const expected = { ...getInitialState(), airlift:
+        { playerId: '0', cities: [{ id: '0', name: 'London', color: 'red' }]}};
+      expect(reducer(initial, action)).to.deep.equals(expected);
+    });
+
+    it('empties state on EVENT_AIRLIFT_MOVE_TO_CITY', () => {
+      const action = { type: types.EVENT_AIRLIFT_MOVE_TO_CITY, playerId: '0', destinationId: '0' };
+      const initial = { ...getInitialState(), airlift:
+        { playerId: '0', cities: [{ id: '0', name: 'London', color: 'red' }]}};
       const expected = getInitialState();
       expect(reducer(initial, action)).to.deep.equals(expected);
     });

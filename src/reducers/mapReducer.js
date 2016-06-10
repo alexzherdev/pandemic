@@ -56,6 +56,7 @@ function locationsReducer(state, action) {
 export default function mapReducer(state = initialState.map, action) {
   switch (action.type) {
     case types.PLAYER_MOVE_TO_CITY:
+    case types.EVENT_AIRLIFT_MOVE_TO_CITY:
       return {
         ...state,
         playersLocations: {

@@ -17,7 +17,7 @@ function actionsLeft(state, action) {
 function availableCities(state, action) {
   switch (action.type) {
     case types.PLAYER_MOVE_SHOW_CITIES:
-      return {...action.cities};
+      return action.cities;
     case types.PLAYER_MOVE_TO_CITY:
     case types.PLAYER_MOVE_CANCEL:
       return {};
@@ -29,7 +29,7 @@ function availableCities(state, action) {
 function shareCandidates(state, action) {
   switch (action.type) {
     case types.PLAYER_SHARE_SHOW_CANDIDATES:
-      return [...action.players];
+      return action.players;
     case types.PLAYER_SHARE_CARD:
     case types.PLAYER_SHARE_CANCEL:
       return [];
@@ -41,7 +41,7 @@ function shareCandidates(state, action) {
 function cardsDrawn(state, action) {
   switch (action.type) {
     case types.CARD_DRAW_CARDS_INIT:
-      return action.cards.slice();
+      return action.cards;
     case types.CARD_DRAW_CARDS_HANDLE:
       return state.filter((c) => !isEqual(c, action.card));
     default:
@@ -98,7 +98,7 @@ function player(state, action) {
 function curingDisease(state, action) {
   switch (action.type) {
     case types.PLAYER_CURE_DISEASE_SHOW_CARDS:
-      return { cards: [...action.cards], color: action.color };
+      return { cards: action.cards, color: action.color };
     case types.PLAYER_CURE_DISEASE_COMPLETE:
     case types.PLAYER_CURE_DISEASE_CANCEL:
       return {};
@@ -121,7 +121,7 @@ function skipInfectionsStep(state, action) {
 function govGrantCities(state, action) {
   switch (action.type) {
     case types.EVENT_GOV_GRANT_SHOW_CITIES:
-      return [...action.cities];
+      return action.cities;
     case types.EVENT_GOV_GRANT_BUILD_STATION:
       return [];
     default:
@@ -166,6 +166,24 @@ function forecastCards(state, action) {
   }
 }
 
+function airlift(state, action) {
+  switch (action.type) {
+    case types.PLAYER_PLAY_EVENT_INIT:
+      if (action.id === 'airlift') {
+        return { playerId: null, cities: []};
+      }
+      return state;
+    case types.EVENT_AIRLIFT_CHOOSE_PLAYER:
+      return { ...state, playerId: action.playerId };
+    case types.EVENT_AIRLIFT_SHOW_CITIES:
+      return { ...state, cities: action.cities };
+    case types.EVENT_AIRLIFT_MOVE_TO_CITY:
+      return {};
+    default:
+      return state;
+  }
+}
+
 export default function currentMoveReducer(state = initialState.currentMove, action) {
   return {
     ...state,
@@ -181,6 +199,7 @@ export default function currentMoveReducer(state = initialState.currentMove, act
     govGrantCities: govGrantCities(state.govGrantCities, action),
     resPopChooseCard: resPopChooseCard(state.resPopChooseCard, action),
     resPopSuggestOwner: resPopSuggestOwner(state.resPopSuggestOwner, action),
-    forecastCards: forecastCards(state.forecastCards, action)
+    forecastCards: forecastCards(state.forecastCards, action),
+    airlift: airlift(state.airlift, action)
   };
 }
