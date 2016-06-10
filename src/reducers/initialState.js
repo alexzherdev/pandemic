@@ -42,6 +42,7 @@ export default {
     0: {
       id: '0',
       name: 'P1',
+      role: 'scientist',
       hand: [
         { cardType: 'event', id: 'forecast' },
         { cardType: 'event', id: 'airlift' },

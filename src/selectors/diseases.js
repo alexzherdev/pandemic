@@ -22,8 +22,9 @@ export function areAllDiseasesCured(state) {
   return _.every(['blue', 'red', 'yellow', 'black'], (c) => getDiseaseStatus(state, c) !== 'active');
 }
 
-export function cardsNeededToCure() {
-  return 2;
+export function cardsNeededToCure(state) {
+  const player = getCurrentPlayer(state);
+  return player.role === 'scientist' ? 4 : 5;
 }
 
 export function canCureDisease(state, color) {
