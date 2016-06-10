@@ -8,9 +8,17 @@ import { getCurrentPlayerHand } from '../selectors';
 class Hand extends React.Component {
   render() {
     const renderCard = (card) => {
-      const name = card.cardType === 'city'
-        ? this.props.cities[card.id].name
-        : this.props.events[card.id].name;
+      let name;
+      switch (card.cardType) {
+        case 'city':
+          name = this.props.cities[card.id].name;
+          break;
+        case 'event':
+          name = this.props.events[card.id].name;
+          break;
+        default:
+          name = card.name;
+      }
       return (
         <Card key={card.id} name={name} />
       );

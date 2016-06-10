@@ -56,6 +56,10 @@ export function shareCardsCancel() {
   return { type: types.PLAYER_SHARE_CANCEL };
 }
 
-export function playEvent(playerId, id) {
-  return { type: types.PLAYER_PLAY_EVENT, playerId, id };
+export function playEventInit(playerId, id) {
+  return { type: types.PLAYER_PLAY_EVENT_INIT, playerId, id };
+}
+
+export function playEventComplete(playerId, id) {
+  return { type: types.PLAYER_PLAY_EVENT_COMPLETE, playerId, id };
 }

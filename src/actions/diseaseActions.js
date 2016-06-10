@@ -55,3 +55,7 @@ export function infectCities() {
 export function useDiseaseCubes(color, count) {
   return { type: types.USE_DISEASE_CUBES, count, color };
 }
+
+export function oneQuietNightSkip() {
+  return { type: types.EVENT_ONE_QUIET_NIGHT_SKIP };
+}

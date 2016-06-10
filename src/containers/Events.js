@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { partial } from 'lodash';
 
-import { playEvent } from '../actions/cardActions';
+import { playEventInit } from '../actions/cardActions';
 import { getEventsInHands } from '../selectors';
 
 
@@ -15,7 +15,7 @@ class Events extends React.Component {
     return (
       <div>
         {this.props.events.map((c) =>
-          <button key={c.id} onClick={partial(this.props.dispatch, playEvent(c.playerId, c.id))}>{c.name}</button>)}
+          <button key={c.id} onClick={partial(this.props.dispatch, playEventInit(c.playerId, c.id))}>{c.name}</button>)}
       </div>
     );
   }

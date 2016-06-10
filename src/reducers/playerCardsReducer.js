@@ -10,7 +10,7 @@ export default function playerCardsReducer(state = initialState.playerCards, act
         deck: state.deck.slice(2)
       };
     case types.CARD_DISCARD_FROM_HAND:
-    case types.PLAYER_PLAY_EVENT:
+    case types.PLAYER_PLAY_EVENT_COMPLETE:
       return {
         ...state,
         discard: [{ cardType: action.cardType, id: action.id }, ...state.discard]
