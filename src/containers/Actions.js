@@ -6,8 +6,10 @@ import { partial, isEmpty, isNull, values } from 'lodash';
 import * as mapActions from '../actions/mapActions';
 import * as diseaseActions from '../actions/diseaseActions';
 import * as cardActions from '../actions/cardActions';
+import * as globalActions from '../actions/globalActions';
 import { getCurrentCityId, canBuildStation, canTreatColor, canTreatAllOfColor, canCureDisease,
-  getPlayerHand, getPlayerOverHandLimit, getCurrentPlayer, canShareCards, cardsNeededToCure } from '../selectors';
+  getPlayerHand, getPlayerOverHandLimit, getCurrentPlayer, canShareCards, cardsNeededToCure,
+  getInfectionDiscard } from '../selectors';
 
 import CityPicker from '../components/CityPicker';
 import DiscardOverLimitPicker from '../components/DiscardOverLimitPicker';
@@ -23,6 +25,9 @@ class Actions extends React.Component {
     this.onCureCardsPicked = this.onCureCardsPicked.bind(this);
     this.onMoveCityPicked = this.onMoveCityPicked.bind(this);
     this.onGovGrantCityPicked = this.onGovGrantCityPicked.bind(this);
+    this.onResPopCardPicked = this.onResPopCardPicked.bind(this);
+    this.onResPopUsed = this.onResPopUsed.bind(this);
+    this.onContinueTurn = this.onContinueTurn.bind(this);
   }
 
   onDiscardCardPicked(cardType, id) {
@@ -57,9 +62,22 @@ class Actions extends React.Component {
     this.props.actions.govGrantBuildStation(id);
   }
 
+  onResPopCardPicked(id) {
+    this.props.actions.resPopRemoveCard(id);
+  }
+
+  onResPopUsed() {
+    this.props.actions.playEventInit(this.props.currentMove.resPopSuggestOwner, 'res_pop');
+  }
+
+  onContinueTurn() {
+    this.props.actions.continueTurn();
+  }
+
   render() {
-    const { availableCities, shareCandidates, curingDisease, govGrantCities } = this.props.currentMove;
-    const { playerToDiscard, currentPlayer } = this.props;
+    const { availableCities, shareCandidates, curingDisease, govGrantCities, resPopChooseCard,
+      resPopSuggestOwner } = this.props.currentMove;
+    const { playerToDiscard, currentPlayer, infectionDiscard } = this.props;
     return (
       <div className="actions">
         {!isNull(playerToDiscard) &&
@@ -112,6 +130,17 @@ class Actions extends React.Component {
             cities={govGrantCities}
             onSubmit={this.onGovGrantCityPicked} />
         }
+        {resPopChooseCard &&
+          <CityPicker
+            cities={infectionDiscard}
+            onSubmit={this.onResPopCardPicked} />
+        }
+        {resPopSuggestOwner &&
+          <div>
+            <button onClick={this.onResPopUsed}>Use res pop</button>
+            <button onClick={this.onContinueTurn}>Continue</button>
+          </div>
+        }
       </div>
     );
   }
@@ -122,12 +151,13 @@ const mapStateToProps = (state) => {
     canTreatColor: partial(canTreatColor, state), canTreatAllOfColor: partial(canTreatAllOfColor, state),
     canCureDisease: partial(canCureDisease, state), getPlayerHand: partial(getPlayerHand, state),
     playerToDiscard: getPlayerOverHandLimit(state), currentPlayer: getCurrentPlayer(state),
-    canShareCards: canShareCards(state), cardsNeededToCure: cardsNeededToCure(state) };
+    canShareCards: canShareCards(state), cardsNeededToCure: cardsNeededToCure(state),
+    infectionDiscard: getInfectionDiscard(state) };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    actions: bindActionCreators(Object.assign({}, mapActions, diseaseActions, cardActions), dispatch)
+    actions: bindActionCreators(Object.assign({}, mapActions, diseaseActions, cardActions, globalActions), dispatch)
   };
 };
 

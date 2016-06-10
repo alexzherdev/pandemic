@@ -14,3 +14,7 @@ export function peekAtInfectionDeck(state) {
 function getInfectionDeck(state) {
   return state.infectionCards.deck;
 }
+
+export function getInfectionDiscard(state) {
+  return state.infectionCards.discard.map((id) => ({ id, name: state.cities[id].name }));
+}

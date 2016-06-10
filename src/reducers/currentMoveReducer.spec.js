@@ -19,7 +19,9 @@ describe('CurrentMoveReducer', () => {
     playerOverHandLimit: null,
     curingDisease: {},
     skipInfectionsStep: false,
-    govGrantCities: []
+    govGrantCities: [],
+    resPopChooseCard: false,
+    resPopSuggestOwner: null
   });
 
   it('resets move counter and switches players on PASS_TURN', () => {
@@ -238,6 +240,22 @@ describe('CurrentMoveReducer', () => {
     it('cleans up cities on EVENT_GOV_GRANT_BUILD_STATION', () => {
       const action = { type: types.EVENT_GOV_GRANT_BUILD_STATION, cityId: '0' };
       const initial = { ...getInitialState(), govGrantCities: [{ id: '0', name: 'London', color: 'red' }]};
+      const expected = getInitialState();
+      expect(reducer(initial, action)).to.deep.equals(expected);
+    });
+  });
+
+  describe('resPopChooseCard', () => {
+    it('stores a flag on PLAYER_PLAY_EVENT_INIT', () => {
+      const action = { type: types.PLAYER_PLAY_EVENT_INIT, id: 'res_pop' };
+      const initial = getInitialState();
+      const expected = { ...getInitialState(), resPopChooseCard: true };
+      expect(reducer(initial, action)).to.deep.equals(expected);
+    });
+
+    it('resets flag on EVENT_RES_POP_REMOVE_CARD', () => {
+      const action = { type: types.EVENT_RES_POP_REMOVE_CARD, cityId: '0' };
+      const initial = { ...getInitialState(), resPopChooseCard: true };
       const expected = getInitialState();
       expect(reducer(initial, action)).to.deep.equals(expected);
     });

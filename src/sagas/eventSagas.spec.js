@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import { select, put } from 'redux-saga/effects';
 
 import { processEvent } from './eventSagas';
-import { govGrantShowCities, govGrantBuildStation } from '../actions/mapActions';
+import { govGrantShowCities } from '../actions/mapActions';
 import { playEventComplete } from '../actions/cardActions';
 import { oneQuietNightSkip } from '../actions/diseaseActions';
 import * as sel from '../selectors';

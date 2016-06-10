@@ -4,8 +4,8 @@ export default {
   playerCards: {
     deck: [
       { cardType: 'city', id: '8' },
-      { cardType: 'city', id: '6' },
       { cardType: 'epidemic', name: 'Epidemic' },
+      { cardType: 'city', id: '6' },
       { cardType: 'city', id: '7' }
 
     ],
@@ -25,6 +25,10 @@ export default {
     'gov_grant': {
       id: 'gov_grant',
       name: 'Government Grant'
+    },
+    'res_pop': {
+      id: 'res_pop',
+      name: 'Resilient Population'
     }
   },
 
@@ -33,7 +37,7 @@ export default {
       id: '0',
       name: 'P1',
       hand: [
-        { cardType: 'event', id: 'one_quiet_night' },
+        { cardType: 'event', id: 'res_pop' },
         { cardType: 'city', id: '0' },
         { cardType: 'city', id: '3' },
         { cardType: 'city', id: '2' },
@@ -119,7 +123,9 @@ export default {
     playerOverHandLimit: null,
     curingDisease: {},
     skipInfectionsStep: false,
-    govGrantCities: []
+    govGrantCities: [],
+    resPopChooseCard: false,
+    resPopSuggestOwner: null
   },
 
   stationsLeft: 5,
