@@ -21,7 +21,8 @@ describe('CurrentMoveReducer', () => {
     skipInfectionsStep: false,
     govGrantCities: [],
     resPopChooseCard: false,
-    resPopSuggestOwner: null
+    resPopSuggestOwner: null,
+    forecastCards: []
   });
 
   it('resets move counter and switches players on PASS_TURN', () => {
@@ -240,6 +241,22 @@ describe('CurrentMoveReducer', () => {
     it('cleans up cities on EVENT_GOV_GRANT_BUILD_STATION', () => {
       const action = { type: types.EVENT_GOV_GRANT_BUILD_STATION, cityId: '0' };
       const initial = { ...getInitialState(), govGrantCities: [{ id: '0', name: 'London', color: 'red' }]};
+      const expected = getInitialState();
+      expect(reducer(initial, action)).to.deep.equals(expected);
+    });
+  });
+
+  describe('forecastCards', () => {
+    it('stores cards on EVENT_FORECAST_SHOW_CARDS', () => {
+      const action = { type: types.EVENT_FORECAST_SHOW_CARDS, cards: [{ id: '0', cardType: 'city' }]};
+      const initial = getInitialState();
+      const expected = { ...initial, forecastCards: [{ id: '0', cardType: 'city' }]};
+      expect(reducer(initial, action)).to.deep.equals(expected);
+    });
+
+    it('cleans up cards on EVENT_FORECAST_SHUFFLE', () => {
+      const action = { type: types.EVENT_FORECAST_SHUFFLE };
+      const initial = { ...getInitialState(), forecastCards: [{ id: '0', cardType: 'city' }]};
       const expected = getInitialState();
       expect(reducer(initial, action)).to.deep.equals(expected);
     });

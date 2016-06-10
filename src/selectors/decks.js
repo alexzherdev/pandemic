@@ -18,3 +18,7 @@ function getInfectionDeck(state) {
 export function getInfectionDiscard(state) {
   return state.infectionCards.discard.map((id) => ({ id, name: state.cities[id].name }));
 }
+
+export function getCardsForForecast(state) {
+  return getInfectionDeck(state).slice(0, 6);
+}

@@ -35,6 +35,11 @@ export default function infectionCardsReducer(state = initialState.infectionCard
         ...state,
         discard: state.discard.filter((c) => c !== action.cityId)
       };
+    case types.EVENT_FORECAST_SHUFFLE:
+      return {
+        ...state,
+        deck: [...action.cards, ...state.deck.slice(6)]
+      };
     default:
       return state;
   }

@@ -74,7 +74,7 @@ describe('ActionSagas', function() {
     it('shows candidates, shares card, and waits for discarding if over limit', () => {
       this.next = this.generator.next(shareCard('0', '1', '2'));
       expect(this.next.value).to.deep.equal(call(waitToDiscardIfOverLimit, '1'));
-      this.next = this.generator.next()
+      this.next = this.generator.next();
       expect(this.next.done).to.be.true;
     });
   });
