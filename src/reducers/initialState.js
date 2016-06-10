@@ -20,17 +20,21 @@ export default {
       id: 'forecast',
       name: 'Forecast'
     },
-    'one_quiet_night': {
+    one_quiet_night: {
       id: 'one_quiet_night',
       name: 'One Quiet Night'
     },
-    'gov_grant': {
+    gov_grant: {
       id: 'gov_grant',
       name: 'Government Grant'
     },
-    'res_pop': {
+    res_pop: {
       id: 'res_pop',
       name: 'Resilient Population'
+    },
+    airlift: {
+      id: 'airlift',
+      name: 'Airlift'
     }
   },
 
@@ -40,11 +44,11 @@ export default {
       name: 'P1',
       hand: [
         { cardType: 'event', id: 'forecast' },
+        { cardType: 'event', id: 'airlift' },
         { cardType: 'city', id: '0' },
         { cardType: 'city', id: '3' },
         { cardType: 'city', id: '2' },
         { cardType: 'city', id: '5' },
-        { cardType: 'city', id: '7' },
         { cardType: 'city', id: '1' }
       ]
     },
@@ -129,7 +133,8 @@ export default {
     govGrantCities: [],
     resPopChooseCard: false,
     resPopSuggestOwner: null,
-    forecastCards: []
+    forecastCards: [],
+    airlift: {}
   },
 
   stationsLeft: 5,

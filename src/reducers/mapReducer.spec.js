@@ -67,6 +67,18 @@ describe('MapReducer', () => {
     expect(actual).to.deep.equal(expected);
   });
 
+  it('moves a player to a location on EVENT_AIRLIFT_MOVE_TO_CITY', () => {
+    const action = { type: types.EVENT_AIRLIFT_MOVE_TO_CITY, destinationId: '1', playerId: '0' };
+
+    const initial = getInitialState();
+    const actual = reducer(initial, action);
+    const expected = { ...initial, playersLocations: {
+      0: '1',
+      1: '1'
+    }};
+    expect(actual).to.deep.equal(expected);
+  });
+
   it('builds a station on PLAYER_BUILD_STATION', () => {
     const action = { type: types.PLAYER_BUILD_STATION, cityId: '1' };
 

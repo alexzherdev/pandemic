@@ -1,4 +1,4 @@
-import { chain } from 'lodash';
+import { chain, values } from 'lodash';
 
 import { isAtStation } from './map';
 import { getCurrentCityId } from './cities';
@@ -7,6 +7,10 @@ import { hasCurrentCityInHand } from './hand';
 
 export function getCurrentPlayer(state) {
   return state.players[state.currentMove.player];
+}
+
+export function getPlayers(state) {
+  return values(state.players);
 }
 
 export function getNextPlayer(state) {
