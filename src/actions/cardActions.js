@@ -71,3 +71,11 @@ export function resPopRemoveCard(cityId) {
 export function resPopSuggest(playerId) {
   return { type: types.EVENT_RES_POP_SUGGEST, playerId };
 }
+
+export function forecastShowCards(cards) {
+  return { type: types.EVENT_FORECAST_SHOW_CARDS, cards };
+}
+
+export function forecastShuffle(cards) {
+  return { type: types.EVENT_FORECAST_SHUFFLE, cards };
+}

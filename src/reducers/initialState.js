@@ -4,10 +4,8 @@ export default {
   playerCards: {
     deck: [
       { cardType: 'city', id: '8' },
-      { cardType: 'epidemic', name: 'Epidemic' },
       { cardType: 'city', id: '6' },
-      { cardType: 'city', id: '7' }
-
+      { cardType: 'epidemic', name: 'Epidemic' }
     ],
     discard: []
   },
@@ -18,6 +16,10 @@ export default {
   },
 
   events: {
+    forecast: {
+      id: 'forecast',
+      name: 'Forecast'
+    },
     'one_quiet_night': {
       id: 'one_quiet_night',
       name: 'One Quiet Night'
@@ -37,11 +39,12 @@ export default {
       id: '0',
       name: 'P1',
       hand: [
-        { cardType: 'event', id: 'res_pop' },
+        { cardType: 'event', id: 'forecast' },
         { cardType: 'city', id: '0' },
         { cardType: 'city', id: '3' },
         { cardType: 'city', id: '2' },
         { cardType: 'city', id: '5' },
+        { cardType: 'city', id: '7' },
         { cardType: 'city', id: '1' }
       ]
     },
@@ -125,7 +128,8 @@ export default {
     skipInfectionsStep: false,
     govGrantCities: [],
     resPopChooseCard: false,
-    resPopSuggestOwner: null
+    resPopSuggestOwner: null,
+    forecastCards: []
   },
 
   stationsLeft: 5,

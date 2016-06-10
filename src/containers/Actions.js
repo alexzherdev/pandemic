@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { partial, isEmpty, isNull, values } from 'lodash';
+import { partial, isEmpty, isNull, values, shuffle } from 'lodash';
 
 import * as mapActions from '../actions/mapActions';
 import * as diseaseActions from '../actions/diseaseActions';
@@ -28,6 +28,7 @@ class Actions extends React.Component {
     this.onResPopCardPicked = this.onResPopCardPicked.bind(this);
     this.onResPopUsed = this.onResPopUsed.bind(this);
     this.onContinueTurn = this.onContinueTurn.bind(this);
+    this.onForecastShuffled = this.onForecastShuffled.bind(this);
   }
 
   onDiscardCardPicked(cardType, id) {
@@ -74,9 +75,13 @@ class Actions extends React.Component {
     this.props.actions.continueTurn();
   }
 
+  onForecastShuffled() {
+    this.props.actions.forecastShuffle(shuffle([...this.props.currentMove.forecastCards]));
+  }
+
   render() {
     const { availableCities, shareCandidates, curingDisease, govGrantCities, resPopChooseCard,
-      resPopSuggestOwner } = this.props.currentMove;
+      resPopSuggestOwner, forecastCards } = this.props.currentMove;
     const { playerToDiscard, currentPlayer, infectionDiscard } = this.props;
     return (
       <div className="actions">
@@ -140,6 +145,9 @@ class Actions extends React.Component {
             <button onClick={this.onResPopUsed}>Use res pop</button>
             <button onClick={this.onContinueTurn}>Continue</button>
           </div>
+        }
+        {!isEmpty(forecastCards) &&
+          <button onClick={this.onForecastShuffled}>Shuffle</button>
         }
       </div>
     );

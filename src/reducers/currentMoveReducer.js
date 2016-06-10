@@ -155,6 +155,17 @@ function resPopSuggestOwner(state, action) {
   }
 }
 
+function forecastCards(state, action) {
+  switch (action.type) {
+    case types.EVENT_FORECAST_SHOW_CARDS:
+      return action.cards;
+    case types.EVENT_FORECAST_SHUFFLE:
+      return [];
+    default:
+      return state;
+  }
+}
+
 export default function currentMoveReducer(state = initialState.currentMove, action) {
   return {
     ...state,
@@ -169,6 +180,7 @@ export default function currentMoveReducer(state = initialState.currentMove, act
     skipInfectionsStep: skipInfectionsStep(state.skipInfectionsStep, action),
     govGrantCities: govGrantCities(state.govGrantCities, action),
     resPopChooseCard: resPopChooseCard(state.resPopChooseCard, action),
-    resPopSuggestOwner: resPopSuggestOwner(state.resPopSuggestOwner, action)
+    resPopSuggestOwner: resPopSuggestOwner(state.resPopSuggestOwner, action),
+    forecastCards: forecastCards(state.forecastCards, action)
   };
 }
