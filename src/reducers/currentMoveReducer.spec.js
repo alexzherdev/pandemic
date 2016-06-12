@@ -16,14 +16,18 @@ describe('CurrentMoveReducer', () => {
       complete: [],
       pending: []
     },
-    playerOverHandLimit: null,
+    playerToDiscard: null,
     curingDisease: {},
     skipInfectionsStep: false,
     govGrantCities: [],
     resPopChooseCard: false,
     resPopSuggestOwner: null,
     forecastCards: [],
-    airlift: {}
+    airlift: {},
+    opsMoveAbility: {
+      cards: [],
+      used: false
+    }
   });
 
   it('resets move counter and switches players on PASS_TURN', () => {
@@ -120,18 +124,18 @@ describe('CurrentMoveReducer', () => {
     });
   });
 
-  describe('playerOverHandLimit', () => {
+  describe('playerToDiscard', () => {
     it('stores player over hand limit on CARD_OVER_LIMIT_DISCARD_INIT', () => {
       const action = { type: types.CARD_OVER_LIMIT_DISCARD_INIT, playerId: '0' };
       const initial = getInitialState();
-      const expected = { ...initial, playerOverHandLimit: '0' };
+      const expected = { ...initial, playerToDiscard: '0' };
 
       expect(reducer(initial, action)).to.deep.equal(expected);
     });
 
     it('cleans up player over hand limit on CARD_OVER_LIMIT_DISCARD_COMPLETE', () => {
       const action = { type: types.CARD_OVER_LIMIT_DISCARD_COMPLETE };
-      const initial = { ...getInitialState(), playerOverHandLimit: '0' };
+      const initial = { ...getInitialState(), playerToDiscard: '0' };
       const expected = getInitialState();
 
       expect(reducer(initial, action)).to.deep.equal(expected);
@@ -308,6 +312,36 @@ describe('CurrentMoveReducer', () => {
         { playerId: '0', cities: [{ id: '0', name: 'London', color: 'red' }]}};
       const expected = getInitialState();
       expect(reducer(initial, action)).to.deep.equals(expected);
+    });
+  });
+
+  describe('opsMoveAbility', () => {
+    it('stores the cards to choose from on OPS_SHOW_CARDS_TO_DISCARD', () => {
+      const action = { type: types.OPS_SHOW_CARDS_TO_DISCARD, cards: [{ id: '0', name: 'London', color: 'red' }]};
+      const initial = getInitialState();
+      const expected = { ...initial, opsMoveAbility: { used: false, cards: [{ id: '0', name: 'London', color: 'red' }]}};
+      expect(reducer(initial, action)).to.deep.equal(expected);
+    });
+
+    it('marks the ability as used on CARD_DISCARD_FROM_HAND', () => {
+      const action = { type: types.CARD_DISCARD_FROM_HAND, cards: [{ id: '0', name: 'London', color: 'red' }]};
+      const initial = { ...getInitialState(), opsMoveAbility: { used: false, cards: [{ id: '0', name: 'London', color: 'red' }]}};
+      const expected = { ...initial, opsMoveAbility: { used: true, cards: []}};
+      expect(reducer(initial, action)).to.deep.equal(expected);
+    });
+
+    it('does not care about CARD_DISCARD_FROM_HAND actions that happen when the ability is not being used', () => {
+      const action = { type: types.CARD_DISCARD_FROM_HAND, cards: [{ id: '0', name: 'London', color: 'red' }]};
+      const initial = { ...getInitialState(), opsMoveAbility: { used: false, cards: []}};
+      const expected = initial;
+      expect(reducer(initial, action)).to.deep.equal(expected);
+    });
+
+    it('clears the flag on passing the turn', () => {
+      const action = { type: types.PASS_TURN, playerId: '1' };
+      const initial = { ...getInitialState(), opsMoveAbility: { used: true, cards: []}};
+      const expected = { ...initial, opsMoveAbility: { used: false, cards: []}, player: '1', actionsLeft: 4 };
+      expect(reducer(initial, action)).to.deep.equal(expected);
     });
   });
 });

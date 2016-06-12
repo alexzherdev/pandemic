@@ -42,7 +42,7 @@ export default {
     0: {
       id: '0',
       name: 'P1',
-      role: 'medic',
+      role: 'ops_expert',
       hand: [
         { cardType: 'event', id: 'forecast' },
         { cardType: 'event', id: 'airlift' },
@@ -128,14 +128,18 @@ export default {
       complete: [],
       pending: []
     },
-    playerOverHandLimit: null,
+    playerToDiscard: null,
     curingDisease: {},
     skipInfectionsStep: false,
     govGrantCities: [],
     resPopChooseCard: false,
     resPopSuggestOwner: null,
     forecastCards: [],
-    airlift: {}
+    airlift: {},
+    opsMoveAbility: {
+      used: false,
+      cards: []
+    }
   },
 
   stationsLeft: 5,

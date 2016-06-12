@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 import { getCitiesInHand, hasCurrentCityInHand } from './hand';
 import { isAtStation } from './map';
-import { getCurrentPlayer, getPlayerRole } from './gameplay';
+import { getCurrentPlayer, getPlayerRole, getCurrentRole, hasOpsUsedMoveAbility } from './gameplay';
 
 
 export function getCurrentCityId(state) {
@@ -17,7 +17,9 @@ export function getAvailableCities(state) {
   const neighbors = reduceWithAttrs(getNeighborCities(state, cityId), { source: 'drive' });
   const charters = hasCurrentCityInHand(state) ? reduceWithAttrs(state.cities, { source: 'charter' }) : {};
   const stations = isAtStation(state) ? reduceWithAttrs(getStationCities(state), { source: 'shuttle' }) : {};
-  const cities = _.assign({}, charters, direct, neighbors, stations);
+  const opsCities = isAtStation(state) && getCurrentRole(state) === 'ops_expert' && !hasOpsUsedMoveAbility(state)
+    ? reduceWithAttrs(_.values(state.cities), { source: 'ops' }) : {};
+  const cities = _.assign({}, opsCities, charters, direct, neighbors, stations);
   delete cities[cityId];
   return cities;
 }

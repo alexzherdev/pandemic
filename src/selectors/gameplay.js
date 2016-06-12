@@ -26,7 +26,8 @@ export function getNextPlayer(state) {
 }
 
 export function canBuildStation(state) {
-  return !isAtStation(state) && hasCurrentCityInHand(state);
+  return !isAtStation(state) && (hasCurrentCityInHand(state)
+    || getCurrentRole(state) === 'ops_expert' && !hasOpsUsedMoveAbility(state));
 }
 
 export function getActionsLeft(state) {
@@ -53,8 +54,8 @@ export function isOutOfCubes(state, countNeeded, color) {
   return state.cubesLeft[color] < countNeeded;
 }
 
-export function getPlayerOverHandLimit(state) {
-  return state.currentMove.playerOverHandLimit;
+export function getPlayerToDiscard(state) {
+  return state.currentMove.playerToDiscard;
 }
 
 export function isPlaying(state) {
@@ -82,4 +83,8 @@ export function getShareCandidates(state) {
 
 export function shouldSkipInfectionsStep(state) {
   return state.currentMove.skipInfectionsStep;
+}
+
+export function hasOpsUsedMoveAbility(state) {
+  return state.currentMove.opsMoveAbility.used;
 }

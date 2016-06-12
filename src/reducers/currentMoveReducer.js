@@ -75,7 +75,7 @@ function outbreak(state, action) {
   }
 }
 
-function playerOverHandLimit(state, action) {
+function playerToDiscard(state, action) {
   switch (action.type) {
     case types.CARD_OVER_LIMIT_DISCARD_INIT:
       return action.playerId;
@@ -184,6 +184,33 @@ function airlift(state, action) {
   }
 }
 
+function opsMoveAbility(state, action) {
+  switch (action.type) {
+    case types.OPS_SHOW_CARDS_TO_DISCARD:
+      return {
+        ...state,
+        cards: action.cards
+      };
+    case types.CARD_DISCARD_FROM_HAND:
+      if (state.cards.length > 0) {
+        return {
+          ...state,
+          cards: [],
+          used: true
+        };
+      } else {
+        return state;
+      }
+    case types.PASS_TURN:
+      return {
+        ...state,
+        used: false
+      };
+    default:
+      return state;
+  }
+}
+
 export default function currentMoveReducer(state = initialState.currentMove, action) {
   return {
     ...state,
@@ -192,7 +219,7 @@ export default function currentMoveReducer(state = initialState.currentMove, act
     actionsLeft: actionsLeft(state.actionsLeft, action),
     cardsDrawn: cardsDrawn(state.cardsDrawn, action),
     outbreak: outbreak(state.outbreak, action),
-    playerOverHandLimit: playerOverHandLimit(state.playerOverHandLimit, action),
+    playerToDiscard: playerToDiscard(state.playerToDiscard, action),
     player: player(state.player, action),
     curingDisease: curingDisease(state.curingDisease, action),
     skipInfectionsStep: skipInfectionsStep(state.skipInfectionsStep, action),
@@ -200,6 +227,7 @@ export default function currentMoveReducer(state = initialState.currentMove, act
     resPopChooseCard: resPopChooseCard(state.resPopChooseCard, action),
     resPopSuggestOwner: resPopSuggestOwner(state.resPopSuggestOwner, action),
     forecastCards: forecastCards(state.forecastCards, action),
-    airlift: airlift(state.airlift, action)
+    airlift: airlift(state.airlift, action),
+    opsMoveAbility: opsMoveAbility(state.opsMoveAbility, action)
   };
 }

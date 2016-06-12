@@ -113,4 +113,10 @@ describe('Hand selector', () => {
       { cardType: 'event', id: '1', name: 'Event 2', playerId: '1' }
     ]);
   });
+
+  it('selects the cities a player has in hand', () => {
+    expect(sel.getCitiesInPlayersHand(getState(), '0')).to.deep.equal([
+      { id: '0', name: 'London', color: 'red' }
+    ]);
+  });
 });

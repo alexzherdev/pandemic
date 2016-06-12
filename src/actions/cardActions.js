@@ -79,3 +79,7 @@ export function forecastShowCards(cards) {
 export function forecastShuffle(cards) {
   return { type: types.EVENT_FORECAST_SHUFFLE, cards };
 }
+
+export function opsShowCardsToDiscard(cards) {
+  return { type: types.OPS_SHOW_CARDS_TO_DISCARD, cards };
+}

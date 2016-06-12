@@ -2,6 +2,7 @@ import { takeEvery } from 'redux-saga';
 import { put, select } from 'redux-saga/effects';
 
 import { medicTreatCuredDiseases } from '../actions/diseaseActions';
+import { opsShowCardsToDiscard } from '../actions/cardActions';
 import * as types from '../constants/actionTypes';
 import * as sel from '../selectors';
 
@@ -11,6 +12,11 @@ export function* treatCuredDiseasesOnMedicMove(action) {
     const curedDiseases = yield select(sel.getCuredDiseases);
     yield put(medicTreatCuredDiseases(action.destinationId, curedDiseases));
   }
+}
+
+export function* opsChooseCardToDiscard(playerId) {
+  const cards = yield select(sel.getCitiesInPlayersHand, playerId);
+  yield put(opsShowCardsToDiscard(cards));
 }
 
 export function* watchMedicMove() {
