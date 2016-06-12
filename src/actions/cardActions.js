@@ -60,8 +60,8 @@ export function playEventInit(playerId, id) {
   return { type: types.PLAYER_PLAY_EVENT_INIT, playerId, id };
 }
 
-export function playEventComplete(playerId, id) {
-  return { type: types.PLAYER_PLAY_EVENT_COMPLETE, playerId, id };
+export function playEventComplete(playerId, id, needToDiscard) {
+  return { type: types.PLAYER_PLAY_EVENT_COMPLETE, playerId, id, needToDiscard };
 }
 
 export function resPopRemoveCard(cityId) {
@@ -82,4 +82,20 @@ export function forecastShuffle(cards) {
 
 export function opsShowCardsToDiscard(cards) {
   return { type: types.OPS_SHOW_CARDS_TO_DISCARD, cards };
+}
+
+export function contPlannerInit() {
+  return { type: types.CONT_PLANNER_INIT };
+}
+
+export function contPlannerShowEventsFromDiscard(cards) {
+  return { type: types.CONT_PLANNER_SHOW_EVENTS_FROM_DISCARD, cards };
+}
+
+export function contPlannerChooseEvent(playerId, eventId) {
+  return { type: types.CONT_PLANNER_CHOOSE_EVENT, playerId, eventId };
+}
+
+export function contPlannerEventComplete(playerId) {
+  return { type: types.CONT_PLANNER_EVENT_COMPLETE, playerId };
 }

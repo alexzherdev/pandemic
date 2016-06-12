@@ -7,7 +7,9 @@ export default {
       { cardType: 'epidemic', name: 'Epidemic' },
       { cardType: 'city', id: '6' }
     ],
-    discard: []
+    discard: [{ cardType: 'event', id: 'one_quiet_night' },
+    { cardType: 'event', id: 'gov_grant' },
+    { cardType: 'event', id: 'res_pop' }]
   },
 
   infectionCards: {
@@ -42,7 +44,8 @@ export default {
     0: {
       id: '0',
       name: 'P1',
-      role: 'ops_expert',
+      role: 'cont_planner',
+      specialEvent: null,
       hand: [
         { cardType: 'event', id: 'forecast' },
         { cardType: 'event', id: 'airlift' },
@@ -139,7 +142,8 @@ export default {
     opsMoveAbility: {
       used: false,
       cards: []
-    }
+    },
+    contPlannerEvents: []
   },
 
   stationsLeft: 5,

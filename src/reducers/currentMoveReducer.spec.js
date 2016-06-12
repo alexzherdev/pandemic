@@ -27,7 +27,8 @@ describe('CurrentMoveReducer', () => {
     opsMoveAbility: {
       cards: [],
       used: false
-    }
+    },
+    contPlannerEvents: []
   });
 
   it('resets move counter and switches players on PASS_TURN', () => {
@@ -341,6 +342,25 @@ describe('CurrentMoveReducer', () => {
       const action = { type: types.PASS_TURN, playerId: '1' };
       const initial = { ...getInitialState(), opsMoveAbility: { used: true, cards: []}};
       const expected = { ...initial, opsMoveAbility: { used: false, cards: []}, player: '1', actionsLeft: 4 };
+      expect(reducer(initial, action)).to.deep.equal(expected);
+    });
+  });
+
+  describe('contPlannerEvents', () => {
+    it('stores events to choose from on CONT_PLANNER_SHOW_EVENTS_FROM_DISCARD', () => {
+      const action = { type: types.CONT_PLANNER_SHOW_EVENTS_FROM_DISCARD,
+        cards: [{ id: 'one_quiet_night', name: 'One Quiet Night' }]};
+      const initial = getInitialState();
+      const expected = { ...initial, contPlannerEvents: [{ id: 'one_quiet_night', name: 'One Quiet Night' }]};
+      expect(reducer(initial, action)).to.deep.equal(expected);
+    });
+
+    it('cleans up events and decrements move counter on CONT_PLANNER_CHOOSE_EVENT', () => {
+      const action = { type: types.CONT_PLANNER_CHOOSE_EVENT,
+        cards: [{ id: 'one_quiet_night', name: 'One Quiet Night' }]};
+      const initial = { ...getInitialState(),
+        contPlannerEvents: [{ id: 'one_quiet_night', name: 'One Quiet Night' }]};
+      const expected = { ...getInitialState(), actionsLeft: 2 };
       expect(reducer(initial, action)).to.deep.equal(expected);
     });
   });

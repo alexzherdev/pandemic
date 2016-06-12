@@ -49,6 +49,26 @@ export default function playersReducer(state = initialState.players, action) {
         }
       };
     }
+    case types.CONT_PLANNER_CHOOSE_EVENT: {
+      const { playerId, eventId } = action;
+      return {
+        ...state,
+        [playerId]: {
+          ...state[playerId],
+          specialEvent: eventId
+        }
+      };
+    }
+    case types.CONT_PLANNER_EVENT_COMPLETE: {
+      const { playerId } = action;
+      return {
+        ...state,
+        [playerId]: {
+          ...state[playerId],
+          specialEvent: null
+        }
+      };
+    }
     default:
       return state;
   }

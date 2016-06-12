@@ -2,7 +2,7 @@ import { watchActionsLeft, watchMoveInit, watchShareInit, watchCureInit, watchBu
 import { watchTreatEradication, watchCureEradication } from './diseaseSagas';
 import { watchVictory, watchInfectionRateDefeat, watchOutbreaksDefeat } from './globalSagas';
 import { watchEvents } from './eventSagas';
-import { watchMedicMove } from './roleSagas';
+import { watchMedicMove, watchContPlannerInit } from './roleSagas';
 
 
 export default function* rootSaga() {
@@ -18,6 +18,7 @@ export default function* rootSaga() {
     watchInfectionRateDefeat(),
     watchOutbreaksDefeat(),
     watchEvents(),
-    watchMedicMove()
+    watchMedicMove(),
+    watchContPlannerInit()
   ];
 }

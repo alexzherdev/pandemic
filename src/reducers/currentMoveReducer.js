@@ -211,6 +211,17 @@ function opsMoveAbility(state, action) {
   }
 }
 
+function contPlannerEvents(state, action) {
+  switch (action.type) {
+    case types.CONT_PLANNER_SHOW_EVENTS_FROM_DISCARD:
+      return action.cards;
+    case types.CONT_PLANNER_CHOOSE_EVENT:
+      return [];
+    default:
+      return state;
+  }
+}
+
 export default function currentMoveReducer(state = initialState.currentMove, action) {
   return {
     ...state,
@@ -228,6 +239,7 @@ export default function currentMoveReducer(state = initialState.currentMove, act
     resPopSuggestOwner: resPopSuggestOwner(state.resPopSuggestOwner, action),
     forecastCards: forecastCards(state.forecastCards, action),
     airlift: airlift(state.airlift, action),
-    opsMoveAbility: opsMoveAbility(state.opsMoveAbility, action)
+    opsMoveAbility: opsMoveAbility(state.opsMoveAbility, action),
+    contPlannerEvents: contPlannerEvents(state.contPlannerEvents, action)
   };
 }
