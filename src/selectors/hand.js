@@ -3,6 +3,12 @@ import _ from 'lodash';
 import { getCurrentPlayer } from './gameplay';
 import { getCurrentCityId, getCityColor } from './cities';
 
+
+export function getCitiesInPlayersHand(state, playerId) {
+  const hand = getPlayerHand(state, playerId);
+  return getCitiesInHand(state, hand);
+}
+
 export function getCitiesInHand(state, hand) {
   return _.chain(hand)
     .filter({ cardType: 'city' })

@@ -8,11 +8,11 @@ import * as diseaseActions from '../actions/diseaseActions';
 import * as cardActions from '../actions/cardActions';
 import * as globalActions from '../actions/globalActions';
 import { getCurrentCityId, canBuildStation, canTreatColor, canTreatAllOfColor, canCureDisease,
-  getPlayerHand, getPlayerOverHandLimit, getCurrentPlayer, canShareCards, cardsNeededToCure,
+  getPlayerHand, getPlayerToDiscard, getCurrentPlayer, canShareCards, cardsNeededToCure,
   getInfectionDiscard, getPlayers } from '../selectors';
 
 import CityPicker from '../components/CityPicker';
-import DiscardOverLimitPicker from '../components/DiscardOverLimitPicker';
+import SingleCardPicker from '../components/SingleCardPicker';
 import PlayerPicker from '../components/PlayerPicker';
 import MultiCardPicker from '../components/MultiCardPicker';
 
@@ -32,6 +32,7 @@ class Actions extends React.Component {
     this.onForecastShuffled = this.onForecastShuffled.bind(this);
     this.onAirliftPlayerPicked = this.onAirliftPlayerPicked.bind(this);
     this.onAirliftCityPicked = this.onAirliftCityPicked.bind(this);
+    this.onOpsCardPicked = this.onOpsCardPicked.bind(this);
   }
 
   onDiscardCardPicked(cardType, id) {
@@ -55,11 +56,12 @@ class Actions extends React.Component {
   }
 
   onMoveCityPicked(id) {
+    const { source } = this.props.currentMove.availableCities[id];
     this.props.actions.moveToCity(
       this.props.currentPlayer.id,
       this.props.currentCityId,
       id,
-      this.props.currentMove.availableCities[id].source);
+      source);
   }
 
   onGovGrantCityPicked(id) {
@@ -90,16 +92,19 @@ class Actions extends React.Component {
     this.props.actions.airliftMoveToCity(this.props.currentMove.airlift.playerId, id);
   }
 
+  onOpsCardPicked(cardType, id) {
+    this.props.actions.discardFromHand('city', this.props.currentPlayer.id, id);
+  }
+
   render() {
     const { availableCities, shareCandidates, curingDisease, govGrantCities, resPopChooseCard,
-      resPopSuggestOwner, forecastCards, airlift } = this.props.currentMove;
+      resPopSuggestOwner, forecastCards, airlift, opsMoveAbility } = this.props.currentMove;
     const { playerToDiscard, currentPlayer, infectionDiscard, players } = this.props;
     return (
       <div className="actions">
         {!isNull(playerToDiscard) &&
-          <DiscardOverLimitPicker
+          <SingleCardPicker
             hand={this.props.getPlayerHand(playerToDiscard)}
-            playerId={playerToDiscard}
             onCardPicked={this.onDiscardCardPicked} />}
         <button
           onClick={partial(this.props.actions.moveInit, currentPlayer.id)}
@@ -172,6 +177,11 @@ class Actions extends React.Component {
             cities={airlift.cities}
             onSubmit={this.onAirliftCityPicked} />
         }
+        {!isEmpty(opsMoveAbility.cards) &&
+          <SingleCardPicker
+            hand={opsMoveAbility.cards}
+            onCardPicked={this.onOpsCardPicked} />
+        }
       </div>
     );
   }
@@ -181,7 +191,7 @@ const mapStateToProps = (state) => {
   return { currentMove: state.currentMove, currentCityId: getCurrentCityId(state), canBuildStation: canBuildStation(state),
     canTreatColor: partial(canTreatColor, state), canTreatAllOfColor: partial(canTreatAllOfColor, state),
     canCureDisease: partial(canCureDisease, state), getPlayerHand: partial(getPlayerHand, state),
-    playerToDiscard: getPlayerOverHandLimit(state), currentPlayer: getCurrentPlayer(state),
+    playerToDiscard: getPlayerToDiscard(state), currentPlayer: getCurrentPlayer(state),
     canShareCards: canShareCards(state), cardsNeededToCure: cardsNeededToCure(state),
     infectionDiscard: getInfectionDiscard(state), players: getPlayers(state) };
 };

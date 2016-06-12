@@ -10,6 +10,7 @@ import * as sel from '../selectors';
 import * as types from '../constants/actionTypes';
 import { infections, yieldEpidemic } from './diseaseSagas';
 import { yieldDefeat } from './globalSagas';
+import { opsChooseCardToDiscard } from './roleSagas';
 
 
 export function* showAvailableCities() {
@@ -24,6 +25,9 @@ export function* showAvailableCities() {
         break;
       case 'charter':
         yield put(discardFromHand('city', currentPlayer.id, action.originId));
+        break;
+      case 'ops':
+        yield call(opsChooseCardToDiscard, currentPlayer.id);
         break;
     }
   }
@@ -67,7 +71,7 @@ export function* drawIfNoActionsLeft() {
 }
 
 function* checkIfHandWentUnderLimit() {
-  const player = yield select(sel.getPlayerOverHandLimit);
+  const player = yield select(sel.getPlayerToDiscard);
   if (player && !(yield select(sel.isOverHandLimit, player))) {
     yield put(cardOverLimitComplete());
   }
@@ -119,6 +123,13 @@ export function* showCardsToCure({ color }) {
   }
 }
 
+export function* maybeDiscardStationCity(action) {
+  if ((yield select(sel.getCurrentRole)) !== 'ops_expert') {
+    const currentPlayer = yield select(sel.getCurrentPlayer);
+    yield put(discardFromHand('city', currentPlayer.id, action.cityId));
+  }
+}
+
 export function* watchMoveInit() {
   yield* takeEvery(types.PLAYER_MOVE_INIT, showAvailableCities);
 }
@@ -129,6 +140,10 @@ export function* watchShareInit() {
 
 export function* watchActionsLeft() {
   yield* takeEvery(types.ACTIONS, drawIfNoActionsLeft);
+}
+
+export function* watchBuildStation() {
+  yield* takeEvery(types.PLAYER_BUILD_STATION, maybeDiscardStationCity);
 }
 
 export function* watchCureInit() {
