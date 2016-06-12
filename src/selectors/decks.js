@@ -22,3 +22,8 @@ export function getInfectionDiscard(state) {
 export function getCardsForForecast(state) {
   return getInfectionDeck(state).slice(0, 6);
 }
+
+export function getCardsForContPlanner(state) {
+  return state.playerCards.discard.filter((c) => c.cardType === 'event')
+    .map((c) => ({ ...c, name: state.events[c.id].name }));
+}

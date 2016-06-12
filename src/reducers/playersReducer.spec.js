@@ -103,4 +103,24 @@ describe('PlayersReducer', () => {
       }
     });
   });
+
+  it('stores contingency planner\'s special event on CONT_PLANNER_CHOOSE_EVENT', () => {
+    const action = { type: types.CONT_PLANNER_CHOOSE_EVENT, eventId: '0', playerId: '0' };
+    const initial = getInitialState();
+    const expected = { ...initial,
+      0: { ...initial[0], specialEvent: '0' }
+    };
+    expect(reducer(initial, action)).to.deep.equal(expected);
+  });
+
+  it('cleans up contingency planner\'s special event on CONT_PLANNER_EVENT_COMPLETE', () => {
+    const action = { type: types.CONT_PLANNER_EVENT_COMPLETE, eventId: '0', playerId: '0' };
+    const initial = { ...getInitialState(),
+      0: { ...getInitialState()[0], specialEvent: '0' }
+    };
+    const expected = { ...initial,
+      0: { ...initial[0], specialEvent: null }
+    };
+    expect(reducer(initial, action)).to.deep.equal(expected);
+  });
 });

@@ -10,10 +10,23 @@ export default function playerCardsReducer(state = initialState.playerCards, act
         deck: state.deck.slice(2)
       };
     case types.CARD_DISCARD_FROM_HAND:
-    case types.PLAYER_PLAY_EVENT_COMPLETE:
       return {
         ...state,
         discard: [{ cardType: action.cardType, id: action.id }, ...state.discard]
+      };
+    case types.PLAYER_PLAY_EVENT_COMPLETE:
+      if (action.needToDiscard) {
+        return {
+          ...state,
+          discard: [{ cardType: 'event', id: action.id }, ...state.discard]
+        };
+      } else {
+        return state;
+      }
+    case types.CONT_PLANNER_CHOOSE_EVENT:
+      return {
+        ...state,
+        discard: state.discard.filter((c) => !(c.cardType == 'event' && c.id === action.eventId))
       };
     default:
       return state;

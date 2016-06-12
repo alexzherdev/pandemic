@@ -88,3 +88,16 @@ export function shouldSkipInfectionsStep(state) {
 export function hasOpsUsedMoveAbility(state) {
   return state.currentMove.opsMoveAbility.used;
 }
+
+export function isContingencyPlanner(state) {
+  return getCurrentRole(state) === 'cont_planner';
+}
+
+export function isContingencyPlannerAbilityAvailable(state) {
+  return isContingencyPlanner(state) && !getContPlannerEvent(state);
+}
+
+export function getContPlannerEvent(state) {
+  const id = getCurrentPlayer(state).specialEvent;
+  return state.events[id];
+}
