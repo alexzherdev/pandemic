@@ -61,13 +61,13 @@ describe('Map selector', () => {
   });
 
   it('shows if the current player is at a station', () => {
-    expect(sel.isAtStation(getState())).to.equal(true);
+    expect(sel.isAtStation(getState())).to.be.true;
 
-    expect(sel.isAtStation({ ...getState(), currentMove: { player: 1 }})).to.equal(false);
+    expect(sel.isAtStation({ ...getState(), currentMove: { player: 1 }})).to.be.false;
   });
 
   it('gets the current map location', () => {
-    expect(sel.getCurrentMapLocation(getState())).to.deep.equal({
+    expect(sel.getCurrentMapLocation(getState())).to.eql({
       coords: [200, 100],
       station: true,
       yellow: 2,
@@ -75,5 +75,10 @@ describe('Map selector', () => {
       black: 2,
       blue: 1
     });
+  });
+
+  it('shows if a city has a station', () => {
+    expect(sel.isStation(getState(), '0')).to.be.true;
+    expect(sel.isStation(getState(), '1')).to.be.false;
   });
 });

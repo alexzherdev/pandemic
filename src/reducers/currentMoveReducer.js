@@ -86,6 +86,17 @@ function playerToDiscard(state, action) {
   }
 }
 
+function playerToMove(state, action) {
+  switch (action.type) {
+    case types.DISPATCHER_CHOOSE_PLAYER:
+      return action.playerId;
+    case types.PLAYER_MOVE_TO_CITY:
+      return null;
+    default:
+      return state;
+  }
+}
+
 function player(state, action) {
   switch (action.type) {
     case types.PASS_TURN:
@@ -231,6 +242,7 @@ export default function currentMoveReducer(state = initialState.currentMove, act
     cardsDrawn: cardsDrawn(state.cardsDrawn, action),
     outbreak: outbreak(state.outbreak, action),
     playerToDiscard: playerToDiscard(state.playerToDiscard, action),
+    playerToMove: playerToMove(state.playerToMove, action),
     player: player(state.player, action),
     curingDisease: curingDisease(state.curingDisease, action),
     skipInfectionsStep: skipInfectionsStep(state.skipInfectionsStep, action),

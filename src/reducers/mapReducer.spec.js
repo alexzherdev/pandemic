@@ -52,7 +52,7 @@ describe('MapReducer', () => {
         [cityId]: newLocation
       }
     };
-    expect(actual).to.deep.equal(expected);
+    expect(actual).to.eql(expected);
   };
 
   it('moves a player to a location on PLAYER_MOVE_TO_CITY', () => {
@@ -64,7 +64,7 @@ describe('MapReducer', () => {
       0: '1',
       1: '1'
     }};
-    expect(actual).to.deep.equal(expected);
+    expect(actual).to.eql(expected);
   });
 
   it('moves a player to a location on EVENT_AIRLIFT_MOVE_TO_CITY', () => {
@@ -76,7 +76,7 @@ describe('MapReducer', () => {
       0: '1',
       1: '1'
     }};
-    expect(actual).to.deep.equal(expected);
+    expect(actual).to.eql(expected);
   });
 
   it('builds a station on PLAYER_BUILD_STATION', () => {

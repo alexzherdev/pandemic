@@ -15,7 +15,7 @@ describe('PlayerCardsReducer', () => {
 
     const initial = getInitialState();
     const expected = { ...initial, deck: [{ cardType: 'city', id: '1' }]};
-    expect(reducer(initial, action)).to.deep.equal(expected);
+    expect(reducer(initial, action)).to.eql(expected);
   });
 
   it('puts cards on top of the discard pile on CARD_DISCARD_FROM_HAND', () => {
@@ -23,7 +23,7 @@ describe('PlayerCardsReducer', () => {
 
     const initial = getInitialState();
     const expected = { ...initial, discard: [{ cardType: 'city', id: '4' }, ...initial.discard]};
-    expect(reducer(initial, action)).to.deep.equal(expected);
+    expect(reducer(initial, action)).to.eql(expected);
   });
 
   it('discards an event card when flag is on on PLAYER_PLAY_EVENT_COMPLETE', () => {
@@ -32,7 +32,7 @@ describe('PlayerCardsReducer', () => {
 
     const initial = getInitialState();
     const expected = { ...initial, discard: [{ cardType: 'event', id: '2' }, ...initial.discard]};
-    expect(reducer(initial, action)).to.deep.equal(expected);
+    expect(reducer(initial, action)).to.eql(expected);
   });
 
   it('does not discard an event card when flag is off on PLAYER_PLAY_EVENT_COMPLETE', () => {
@@ -41,7 +41,7 @@ describe('PlayerCardsReducer', () => {
 
     const initial = getInitialState();
     const expected = initial;
-    expect(reducer(initial, action)).to.deep.equal(expected);
+    expect(reducer(initial, action)).to.eql(expected);
   });
 
   it('fetches an event card from the discard pile on CONT_PLANNER_CHOOSE_EVENT', () => {
@@ -49,6 +49,6 @@ describe('PlayerCardsReducer', () => {
 
     const initial = getInitialState();
     const expected = { ...initial, discard: [{ cardType: 'city', id: '2' }]};
-    expect(reducer(initial, action)).to.deep.equal(expected);
+    expect(reducer(initial, action)).to.eql(expected);
   });
 });

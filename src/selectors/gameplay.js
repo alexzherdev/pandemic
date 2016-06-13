@@ -1,4 +1,4 @@
-import { chain, values } from 'lodash';
+import { chain, values, compact } from 'lodash';
 
 import { isAtStation } from './map';
 import { getCurrentCityId } from './cities';
@@ -18,11 +18,11 @@ export function getPlayerRole(state, playerId) {
 }
 
 export function getPlayers(state) {
-  return values(state.players);
+  return values(state.players).map((p) => ({ ...p, cityId: state.map.playersLocations[p.id] }));
 }
 
 export function getNextPlayer(state) {
-  return state.currentMove.player === Object.keys(state.players).length - 1 ? 0 : state.currentMove.player + 1;
+  return state.currentMove.player === (Object.keys(state.players).length - 1) + '' ? '0' : (+state.currentMove.player + 1) + '';
 }
 
 export function canBuildStation(state) {
@@ -76,9 +76,11 @@ export function getShareCandidates(state) {
   const receivers = hasCurrentCityInHand(state)
     ? sameCityPlayers.map((id) => ({ ...state.players[id], share: 'receiver' }))
     : [];
-  const givers = sameCityPlayers.filter((id) => hasCurrentCityInHand(state, id))
-    .map((id) => ({ ...state.players[id], share: 'giver' }));
-  return [...receivers, ...givers];
+  const giver = chain(sameCityPlayers)
+    .find((id) => hasCurrentCityInHand(state, id))
+    .thru((id) => (id && { ...state.players[id], share: 'giver' }))
+    .value();
+  return compact([...receivers, giver]);
 }
 
 export function shouldSkipInfectionsStep(state) {
@@ -91,6 +93,10 @@ export function hasOpsUsedMoveAbility(state) {
 
 export function isContingencyPlanner(state) {
   return getCurrentRole(state) === 'cont_planner';
+}
+
+export function isDispatcher(state) {
+  return getCurrentRole(state) === 'dispatcher';
 }
 
 export function isContingencyPlannerAbilityAvailable(state) {
