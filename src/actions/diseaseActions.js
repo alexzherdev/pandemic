@@ -67,3 +67,7 @@ export function medicTreatCuredDiseases(cityId, colors) {
 export function medicPreventInfection(playerId, cityId, color, count) {
   return { type: types.MEDIC_PREVENT_INFECTION, playerId, cityId, color, count };
 }
+
+export function quarSpecPreventInfection(playerId, cityId, color, count) {
+  return { type: types.QUAR_SPEC_PREVENT_INFECTION, playerId, cityId, color, count };
+}

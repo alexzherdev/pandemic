@@ -4,7 +4,7 @@ import { put, select, call, take } from 'redux-saga/effects';
 import { epidemicIncrease, epidemicInfect, epidemicIntensify, discardBottomInfectionCard,
   discardTopInfectionCard, resPopSuggest } from '../actions/cardActions';
 import { infectCities, initOutbreak, queueOutbreak, completeOutbreak, infectCity,
-  useDiseaseCubes, eradicateDisease, medicPreventInfection } from '../actions/diseaseActions';
+  useDiseaseCubes, eradicateDisease, medicPreventInfection, quarSpecPreventInfection } from '../actions/diseaseActions';
 import { yieldEpidemic, infectOrOutbreak, infections, yieldOutbreak, useCubes,
   checkForEradication } from './diseaseSagas';
 import { yieldDefeat } from './globalSagas';
@@ -119,8 +119,10 @@ describe('DiseaseSagas', function() {
       expect(this.next.value).to.deep.equal(select(sel.getMedicInCity, '0'));
     });
 
-    context('no medic', () => {
+    context('no medic or quar spec', () => {
       it('queues an outbreak in a neighbor with 3 cubes', () => {
+        this.generator.next(null);
+        this.generator.next(1);
         this.next = this.generator.next(null);
         expect(this.next.value).to.deep.equal(select(sel.getCubesInCity, '0', 'blue'));
         this.generator.next(3);
@@ -130,6 +132,8 @@ describe('DiseaseSagas', function() {
       });
 
       it('completes a single outbreak', () => {
+        this.generator.next(null);
+        this.generator.next(1);
         this.next = this.generator.next(null);
         expect(this.next.value).to.deep.equal(select(sel.getCubesInCity, '0', 'blue'));
         this.generator.next(1);
@@ -143,6 +147,8 @@ describe('DiseaseSagas', function() {
       });
 
       it('yields next outbreak in the queue', () => {
+        this.generator.next(null);
+        this.generator.next(1);
         this.next = this.generator.next(null);
         expect(this.next.value).to.deep.equal(select(sel.getCubesInCity, '0', 'blue'));
         this.generator.next(3);
@@ -163,18 +169,31 @@ describe('DiseaseSagas', function() {
     context('with medic', () => {
       beforeEach(() => {
         this.next = this.generator.next('0');
+        this.next = this.generator.next(2);
         expect(this.next.value).to.deep.equal(select(sel.getDiseaseStatus, 'blue'));
       });
 
-      it('does not prevent infection is the disease is not cured', () => {
+      it('looks for a quar spec if the disease is not cured', () => {
         this.next = this.generator.next('active');
-        expect(this.next.value).to.deep.equal(select(sel.getCubesInCity, '0', 'blue'));
+        expect(this.next.value).to.deep.equal(select(sel.getQuarSpecInProximity, '0'));
       });
 
-      it('prevents infection is the disease is cured', () => {
-        this.generator.next('cured');
-        this.next = this.generator.next(2);
+      it('prevents infection if the disease is cured', () => {
+        this.next = this.generator.next('cured');
         expect(this.next.value).to.deep.equal(put(medicPreventInfection('0', '0', 'blue', 2)));
+      });
+    });
+
+    context('with no medic and a quar spec', () => {
+      beforeEach(() => {
+        this.next = this.generator.next(null);
+        this.next = this.generator.next(2);
+        expect(this.next.value).to.deep.equal(select(sel.getQuarSpecInProximity, '0'));
+        this.next = this.generator.next('1');
+      });
+
+      it('prevents infection', () => {
+        expect(this.next.value).to.deep.equal(put(quarSpecPreventInfection('1', '0', 'blue', 2)));
       });
     });
   });
@@ -186,10 +205,12 @@ describe('DiseaseSagas', function() {
       expect(this.next.value).to.deep.equal(select(sel.getCubesInCity, '0', 'blue'));
     });
 
-    context('no medic', () => {
+    context('no medic or quar spec', () => {
       it('yields outbreak if infected city is over 3 cubes', () => {
         this.next = this.generator.next(3);
         expect(this.next.value).to.deep.equal(select(sel.getMedicInCity, '0'));
+        this.generator.next(null);
+        this.generator.next(0);
         this.next = this.generator.next(null);
         expect(this.next.value).to.deep.equal(call(useCubes, '0', 'blue', 1));
         this.next = this.generator.next();
@@ -204,6 +225,8 @@ describe('DiseaseSagas', function() {
         this.next = this.generator.next(2);
         expect(this.next.value).to.deep.equal(select(sel.getMedicInCity, '0'));
         this.next = this.generator.next(null);
+        this.generator.next(1);
+        this.next = this.generator.next(null);
         expect(this.next.value).to.deep.equal(call(useCubes, '0', 'blue', 1));
         this.next = this.generator.next();
         expect(this.next.value).to.deep.equal(put(infectCity('0', 'blue', 1)));
@@ -216,19 +239,33 @@ describe('DiseaseSagas', function() {
       beforeEach(() => {
         this.next = this.generator.next(2);
         expect(this.next.value).to.deep.equal(select(sel.getMedicInCity, '0'));
-        this.next = this.generator.next('0');
+        this.generator.next('0');
+        this.next = this.generator.next(2);
         expect(this.next.value).to.deep.equal(select(sel.getDiseaseStatus, 'blue'));
       });
 
-      it('puts cubes if the disease is not cured', () => {
+      it('looks for a quar spec if the disease is not cured', () => {
         this.next = this.generator.next('active');
-        expect(this.next.value).to.deep.equal(call(useCubes, '0', 'blue', 1));
+        expect(this.next.value).to.deep.equal(select(sel.getQuarSpecInProximity, '0'));
       });
 
       it('prevents infection if the disease is cured', () => {
-        this.generator.next('cured');
-        this.next = this.generator.next(2);
+        this.next = this.generator.next('cured');
         expect(this.next.value).to.deep.equal(put(medicPreventInfection('0', '0', 'blue', 2)));
+      });
+    });
+
+    context('with no medic and a quar spec', () => {
+      beforeEach(() => {
+        this.generator.next(2);
+        this.generator.next(null);
+        this.next = this.generator.next(2);
+        expect(this.next.value).to.deep.equal(select(sel.getQuarSpecInProximity, '0'));
+        this.next = this.generator.next('1');
+      });
+
+      it('prevents infection', () => {
+        expect(this.next.value).to.deep.equal(put(quarSpecPreventInfection('1', '0', 'blue', 2)));
       });
     });
   });
