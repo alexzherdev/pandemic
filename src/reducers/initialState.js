@@ -7,9 +7,11 @@ export default {
       { cardType: 'epidemic', name: 'Epidemic' },
       { cardType: 'city', id: '6' }
     ],
-    discard: [{ cardType: 'event', id: 'one_quiet_night' },
-    { cardType: 'event', id: 'gov_grant' },
-    { cardType: 'event', id: 'res_pop' }]
+    discard: [
+      { cardType: 'event', id: 'one_quiet_night' },
+      { cardType: 'event', id: 'gov_grant' },
+      { cardType: 'event', id: 'res_pop' }
+    ]
   },
 
   infectionCards: {
@@ -44,7 +46,7 @@ export default {
     0: {
       id: '0',
       name: 'P1',
-      role: 'cont_planner',
+      role: 'quar_spec',
       specialEvent: null,
       hand: [
         { cardType: 'event', id: 'forecast' },
@@ -115,7 +117,7 @@ export default {
 
   diseases: {
     red: 'active',
-    blue: 'cured',
+    blue: 'active',
     yellow: 'cured',
     black: 'eradicated'
   },

@@ -2,7 +2,7 @@ import { takeEvery } from 'redux-saga';
 import { put, select, call, take } from 'redux-saga/effects';
 
 import { initOutbreak, infectCities, infectCity, infectNeighbor, queueOutbreak,
-  completeOutbreak, useDiseaseCubes, eradicateDisease, medicPreventInfection } from '../actions/diseaseActions';
+  completeOutbreak, useDiseaseCubes, eradicateDisease, medicPreventInfection, quarSpecPreventInfection } from '../actions/diseaseActions';
 import { discardTopInfectionCard, discardBottomInfectionCard, epidemicIncrease,
   epidemicInfect, epidemicIntensify, resPopSuggest } from '../actions/cardActions';
 import * as sel from '../selectors';
@@ -17,15 +17,20 @@ export function* yieldOutbreak(cityId, color) {
   for (let i = 0; i < neighbors.length; i++) {
     const id = neighbors[i].id;
     const medic = yield select(sel.getMedicInCity, id);
+    const actualCubesToUse = yield call(getActualCubesToUse, id, color, 1);
     if (medic && (yield select(sel.getDiseaseStatus, color)) === 'cured') {
-      const actualCubesToUse = yield call(getActualCubesToUse, id, color, 1);
       yield put(medicPreventInfection(medic, id, color, actualCubesToUse));
     } else {
-      const cubesInNeighbor = yield select(sel.getCubesInCity, id, color);
-      yield call(useCubes, id, color, 1);
-      yield put(infectNeighbor(id, cityId, color));
-      if (cubesInNeighbor === 3) {
-        yield put(queueOutbreak(id, color));
+      const quarSpec = yield select(sel.getQuarSpecInProximity, id);
+      if (quarSpec) {
+        yield put(quarSpecPreventInfection(quarSpec, id, color, actualCubesToUse));
+      } else {
+        const cubesInNeighbor = yield select(sel.getCubesInCity, id, color);
+        yield call(useCubes, id, color, 1);
+        yield put(infectNeighbor(id, cityId, color));
+        if (cubesInNeighbor === 3) {
+          yield put(queueOutbreak(id, color));
+        }
       }
     }
   }
@@ -44,15 +49,21 @@ function* getActualCubesToUse(cityId, color, count) {
 export function* infectOrOutbreak(cityId, color, count) {
   const cubesInCity = yield select(sel.getCubesInCity, cityId, color);
   const medic = yield select(sel.getMedicInCity, cityId);
+  const actualCubesToUse = yield call(getActualCubesToUse, cityId, color, count);
   if (medic && (yield select(sel.getDiseaseStatus, color)) === 'cured') {
-    const actualCubesToUse = yield call(getActualCubesToUse, cityId, color, count);
     yield put(medicPreventInfection(medic, cityId, color, actualCubesToUse));
     return;
-  }
-  yield call(useCubes, cityId, color, count);
-  yield put(infectCity(cityId, color, count));
-  if (cubesInCity + count > 3) {
-    yield call(yieldOutbreak, cityId, color);
+  } else {
+    const quarSpec = yield select(sel.getQuarSpecInProximity, cityId);
+    if (quarSpec) {
+      yield put(quarSpecPreventInfection(quarSpec, cityId, color, actualCubesToUse));
+    } else {
+      yield call(useCubes, cityId, color, count);
+      yield put(infectCity(cityId, color, count));
+      if (cubesInCity + count > 3) {
+        yield call(yieldOutbreak, cityId, color);
+      }
+    }
   }
 }
 

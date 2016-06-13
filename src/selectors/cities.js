@@ -25,8 +25,7 @@ export function getAvailableCities(state) {
 }
 
 export function getMedicInCity(state, cityId) {
-  return _.findKey(state.map.playersLocations,
-    (loc, playerId) => loc === cityId && getPlayerRole(state, playerId) === 'medic');
+  return getRoleInCity(state, cityId, 'medic');
 }
 
 export function getCitiesForGovGrant(state) {
@@ -53,6 +52,20 @@ export function getNeighborCities(state, cityId) {
     }
   });
   return cities;
+}
+
+export function getQuarSpecInProximity(state, cityId) {
+  const cities = [state.cities[cityId], ...getNeighborCities(state, cityId)];
+  return _.find(cities, (c) => getQuarSpecInCity(state, c.id));
+}
+
+function getQuarSpecInCity(state, cityId) {
+  return getRoleInCity(state, cityId, 'quar_spec');
+}
+
+function getRoleInCity(state, cityId, role) {
+  return _.findKey(state.map.playersLocations,
+    (loc, playerId) => loc === cityId && getPlayerRole(state, playerId) === role);
 }
 
 function getStationCities(state) {
