@@ -17,6 +17,6 @@ describe('CubesLeftReducer', () => {
 
     const initial = getInitialState();
     const expected = { ...initial, red: 9 };
-    expect(reducer(initial, action)).to.deep.equal(expected);
+    expect(reducer(initial, action)).to.eql(expected);
   });
 });

@@ -11,7 +11,7 @@ describe('GlobalSagas', () => {
     it('does not yield victory when there are more diseases to cure', () => {
       const generator = checkForVictory();
       let next = generator.next();
-      expect(next.value).to.deep.equal(select(sel.areAllDiseasesCured));
+      expect(next.value).to.eql(select(sel.areAllDiseasesCured));
       next = generator.next(false);
       expect(next.done).to.be.true;
     });
@@ -19,9 +19,9 @@ describe('GlobalSagas', () => {
     it('yields victory when there are no more diseases to cure', () => {
       const generator = checkForVictory();
       let next = generator.next();
-      expect(next.value).to.deep.equal(select(sel.areAllDiseasesCured));
+      expect(next.value).to.eql(select(sel.areAllDiseasesCured));
       next = generator.next(true);
-      expect(next.value).to.deep.equal(call(yieldVictory));
+      expect(next.value).to.eql(call(yieldVictory));
     });
   });
 
@@ -29,7 +29,7 @@ describe('GlobalSagas', () => {
     it('does not yield defeat when infection rate has not reached limit', () => {
       const generator = checkForInfectionRateDefeat();
       let next = generator.next();
-      expect(next.value).to.deep.equal(select(sel.isInfectionRateOutOfBounds));
+      expect(next.value).to.eql(select(sel.isInfectionRateOutOfBounds));
       next = generator.next(false);
       expect(next.done).to.be.true;
     });
@@ -37,9 +37,9 @@ describe('GlobalSagas', () => {
     it('yields defeat when infection rate has reached limit', () => {
       const generator = checkForInfectionRateDefeat();
       let next = generator.next();
-      expect(next.value).to.deep.equal(select(sel.isInfectionRateOutOfBounds));
+      expect(next.value).to.eql(select(sel.isInfectionRateOutOfBounds));
       next = generator.next(true);
-      expect(next.value).to.deep.equal(call(yieldDefeat));
+      expect(next.value).to.eql(call(yieldDefeat));
     });
   });
 
@@ -47,7 +47,7 @@ describe('GlobalSagas', () => {
     it('does not yield defeat when outbreak count has not reached limit', () => {
       const generator = checkForOutbreaksDefeat();
       let next = generator.next();
-      expect(next.value).to.deep.equal(select(sel.isOutbreaksCountOutOfBounds));
+      expect(next.value).to.eql(select(sel.isOutbreaksCountOutOfBounds));
       next = generator.next(false);
       expect(next.done).to.be.true;
     });
@@ -55,9 +55,9 @@ describe('GlobalSagas', () => {
     it('yields defeat when outbreak count has reached limit', () => {
       const generator = checkForOutbreaksDefeat();
       let next = generator.next();
-      expect(next.value).to.deep.equal(select(sel.isOutbreaksCountOutOfBounds));
+      expect(next.value).to.eql(select(sel.isOutbreaksCountOutOfBounds));
       next = generator.next(true);
-      expect(next.value).to.deep.equal(call(yieldDefeat));
+      expect(next.value).to.eql(call(yieldDefeat));
     });
   });
 });

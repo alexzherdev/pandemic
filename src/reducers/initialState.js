@@ -46,7 +46,7 @@ export default {
     0: {
       id: '0',
       name: 'P1',
-      role: 'quar_spec',
+      role: 'medic',
       specialEvent: null,
       hand: [
         { cardType: 'event', id: 'forecast' },
@@ -54,16 +54,21 @@ export default {
         { cardType: 'city', id: '0' },
         { cardType: 'city', id: '3' },
         { cardType: 'city', id: '2' },
-        { cardType: 'city', id: '5' },
-        { cardType: 'city', id: '1' }
+        { cardType: 'city', id: '5' }
       ]
     },
     1: {
       id: '1',
       name: 'P2',
+      role: 'medic',
       hand: [
         { cardType: 'city', id: '4' }
       ]
+    },
+    2: {
+      id: '2',
+      name: 'P3',
+      hand: []
     }
   },
 
@@ -134,6 +139,7 @@ export default {
       pending: []
     },
     playerToDiscard: null,
+    playerToMove: null,
     curingDisease: {},
     skipInfectionsStep: false,
     govGrantCities: [],
@@ -179,7 +185,8 @@ export default {
 
     playersLocations: {
       0: '0',
-      1: '1'
+      1: '1',
+      2: '8'
     },
 
     locations: {

@@ -17,7 +17,7 @@ describe('DiseasesReducer', () => {
 
     const initial = getInitialState();
     const expected = { ...initial, red: 'cured' };
-    expect(reducer(initial, action)).to.deep.equal(expected);
+    expect(reducer(initial, action)).to.eql(expected);
   });
 
   it('eradicates a cured disease on ERADICATE_DISEASE', () => {
@@ -25,6 +25,6 @@ describe('DiseasesReducer', () => {
 
     const initial = getInitialState();
     const expected = { ...initial, blue: 'eradicated' };
-    expect(reducer(initial, action)).to.deep.equal(expected);
+    expect(reducer(initial, action)).to.eql(expected);
   });
 });

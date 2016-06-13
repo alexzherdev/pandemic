@@ -92,41 +92,63 @@ describe('Diseases selector', () => {
     }
   });
 
-  it('shows if the treat action is available', () => {
-    expect(sel.canTreatColor(getState(), 'red')).to.equal(true);
-    expect(sel.canTreatColor(getState(), 'blue')).to.equal(false);
+  describe('canTreatColor', () => {
+    it('shows if the treat action is available', () => {
+      expect(sel.canTreatColor(getState(), 'red')).to.be.true;
+      expect(sel.canTreatColor(getState(), 'blue')).to.be.false;
+    });
+
+    it('returns false for a medic', () => {
+      let state = getState();
+      state = { ...state, players: { 0: { ...state.players[0], role: 'medic' }}};
+      expect(sel.canTreatColor(state, 'red')).to.be.false;
+    });
   });
 
-  it('shows if the treat all action is available', () => {
-    expect(sel.canTreatAllOfColor(getState(), 'yellow')).to.equal(true);
-    expect(sel.canTreatAllOfColor(getState(), 'red')).to.equal(false);
+  describe('canTreatAllOfColor', () => {
+    it('shows if the treat all action is available', () => {
+      expect(sel.canTreatAllOfColor(getState(), 'yellow')).to.be.true;
+      expect(sel.canTreatAllOfColor(getState(), 'red')).to.be.false;
+    });
   });
 
-  it('shows if all diseases have been cured', () => {
-    expect(sel.areAllDiseasesCured(getState())).to.equal(false);
-    expect(sel.areAllDiseasesCured({
-      diseases: { red: 'cured', yellow: 'cured', black: 'cured', blue: 'eradicated' }
-    })).to.equal(true);
+  describe('areAllDiseasesCured', () => {
+    it('shows if all diseases have been cured', () => {
+      expect(sel.areAllDiseasesCured(getState())).to.be.false;
+      expect(sel.areAllDiseasesCured({
+        diseases: { red: 'cured', yellow: 'cured', black: 'cured', blue: 'eradicated' }
+      })).to.be.true;
+    });
   });
 
-  it('shows if a disease can be cured', () => {
-    const state = getState();
-    // at a station, but not enough player cards in hand
-    expect(sel.canCureDisease(state, 'red')).to.equal(false);
-    // at a station with 5 player cards in hand
-    expect(sel.canCureDisease(state, 'blue')).to.equal(true);
-    // scientist needs 4 player cards
-    expect(sel.canCureDisease({ ...state, currentMove: { player: '1' }}, 'blue')).to.equal(true);
-    // not at a station
-    expect(sel.canCureDisease({ ...state, map: { ...state.map, playersLocations: { 0: '1', 1: '1' }}},
-      'blue')).to.equal(false);
-    // a disease that is not active
-    expect(sel.canCureDisease({ ...state, diseases: { blue: 'cured' }}, 'blue')).to.equal(false);
+  describe('canCureDisease', () => {
+    it('shows if a disease can be cured', () => {
+      const state = getState();
+      // at a station, but not enough player cards in hand
+      expect(sel.canCureDisease(state, 'red')).to.be.false;
+      // at a station with 5 player cards in hand
+      expect(sel.canCureDisease(state, 'blue')).to.be.true;
+      // scientist needs 4 player cards
+      expect(sel.canCureDisease({ ...state, currentMove: { player: '1' }}, 'blue')).to.be.true;
+      // not at a station
+      expect(sel.canCureDisease({ ...state, map: { ...state.map, playersLocations: { 0: '1', 1: '1' }}},
+        'blue')).to.be.false;
+      // a disease that is not active
+      expect(sel.canCureDisease({ ...state, diseases: { blue: 'cured' }}, 'blue')).to.be.false;
+    });
   });
 
-  it('shows if a disease has no cubes on the map', () => {
-    const state = getState();
-    expect(sel.treatedAllOfColor(state, 'black')).to.equal(true);
-    expect(sel.treatedAllOfColor(state, 'red')).to.equal(false);
+  describe('treatedAllOfColor', () => {
+    it('shows if a disease has no cubes on the map', () => {
+      const state = getState();
+      expect(sel.treatedAllOfColor(state, 'black')).to.be.true;
+      expect(sel.treatedAllOfColor(state, 'red')).to.be.false;
+    });
+  });
+
+  describe('getCuredDiseases', () => {
+    it('returns all diseases that have been cured', () => {
+      expect(sel.getCuredDiseases(getState())).to.eql(['yellow']);
+    });
   });
 });

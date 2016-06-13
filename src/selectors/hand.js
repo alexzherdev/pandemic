@@ -30,8 +30,13 @@ export function isOverHandLimit(state, playerId) {
 }
 
 export function hasCurrentCityInHand(state, playerId = null) {
+  const cityId = getCurrentCityId(state);
+  return hasCityInHand(state, cityId, playerId);
+}
+
+export function hasCityInHand(state, cityId = null, playerId = null) {
   const hand = playerId ? getPlayerHand(state, playerId) : getCurrentPlayerHand(state);
-  return !!_.find(hand, { cardType: 'city', id: getCurrentCityId(state) });
+  return !!_.find(hand, { cardType: 'city', id: cityId || getCurrentCityId(state) });
 }
 
 export function getCardsOfColorInCurrentHand(state, color) {

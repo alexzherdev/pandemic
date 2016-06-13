@@ -40,3 +40,11 @@ export function airliftShowCities(cities) {
 export function airliftMoveToCity(playerId, destinationId) {
   return { type: types.EVENT_AIRLIFT_MOVE_TO_CITY, playerId, destinationId };
 }
+
+export function dispatcherChoosePlayer(playerId) {
+  return { type: types.DISPATCHER_CHOOSE_PLAYER, playerId };
+}
+
+export function dispatcherShowCities(cities) {
+  return { type: types.DISPATCHER_SHOW_CITIES, cities };
+}

@@ -13,8 +13,7 @@ import { yieldDefeat } from './globalSagas';
 import { opsChooseCardToDiscard } from './roleSagas';
 
 
-export function* showAvailableCities() {
-  const cities = yield select(sel.getAvailableCities);
+export function* showCitiesAndMove(cities) {
   yield put(moveShowCities(cities));
   const action = yield take([types.PLAYER_MOVE_TO_CITY, types.PLAYER_MOVE_CANCEL]);
   if (action.type === types.PLAYER_MOVE_TO_CITY) {
@@ -31,6 +30,11 @@ export function* showAvailableCities() {
         break;
     }
   }
+}
+
+export function* showAvailableCities() {
+  const cities = yield select(sel.getAvailableCities);
+  yield call(showCitiesAndMove, cities);
 }
 
 export function* showShareCandidates() {

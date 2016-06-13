@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { partial, isEmpty, isNull, values, shuffle } from 'lodash';
+import { partial, isEmpty, isNull, values, shuffle, find } from 'lodash';
 
 import * as mapActions from '../actions/mapActions';
 import * as diseaseActions from '../actions/diseaseActions';
@@ -9,7 +9,8 @@ import * as cardActions from '../actions/cardActions';
 import * as globalActions from '../actions/globalActions';
 import { getCurrentCityId, canBuildStation, canTreatColor, canTreatAllOfColor, canCureDisease,
   getPlayerHand, getPlayerToDiscard, getCurrentPlayer, canShareCards, cardsNeededToCure,
-  getInfectionDiscard, getPlayers, getContPlannerEvent, isContingencyPlannerAbilityAvailable } from '../selectors';
+  getInfectionDiscard, getPlayers, getContPlannerEvent, isContingencyPlannerAbilityAvailable,
+  isDispatcher } from '../selectors';
 
 import CityPicker from '../components/CityPicker';
 import SingleCardPicker from '../components/SingleCardPicker';
@@ -24,6 +25,7 @@ class Actions extends React.Component {
     this.onDiscardCardPicked = this.onDiscardCardPicked.bind(this);
     this.onShareCandidatePicked = this.onShareCandidatePicked.bind(this);
     this.onCureCardsPicked = this.onCureCardsPicked.bind(this);
+    this.onMoveInit = this.onMoveInit.bind(this);
     this.onMoveCityPicked = this.onMoveCityPicked.bind(this);
     this.onGovGrantCityPicked = this.onGovGrantCityPicked.bind(this);
     this.onResPopCardPicked = this.onResPopCardPicked.bind(this);
@@ -34,6 +36,10 @@ class Actions extends React.Component {
     this.onAirliftCityPicked = this.onAirliftCityPicked.bind(this);
     this.onOpsCardPicked = this.onOpsCardPicked.bind(this);
     this.onContPlannerCardPicked = this.onContPlannerCardPicked.bind(this);
+    this.onDispatcherCancel = this.onDispatcherCancel.bind(this);
+    this.onDispatcherPlayerPicked = this.onDispatcherPlayerPicked.bind(this);
+
+    this.state = { dispatcherPlayers: [] };
   }
 
   onDiscardCardPicked(cardType, id) {
@@ -56,13 +62,36 @@ class Actions extends React.Component {
     this.props.actions.cureDiseaseComplete(ids, this.props.currentMove.curingDisease.color);
   }
 
+  onMoveInit() {
+    if (this.props.isDispatcher) {
+      this.setState({ dispatcherPlayers: this.props.players });
+    } else {
+      this.props.actions.moveInit(this.props.currentPlayer.id);
+    }
+  }
+
   onMoveCityPicked(id) {
     const { source } = this.props.currentMove.availableCities[id];
+    const playerId = this.props.currentMove.playerToMove || this.props.currentPlayer.id;
+    const originId = find(this.state.dispatcherPlayers, { id: playerId }).cityId;
     this.props.actions.moveToCity(
-      this.props.currentPlayer.id,
-      this.props.currentCityId,
+      playerId,
+      originId,
       id,
       source);
+    this.setState({ dispatcherPlayers: [] });
+  }
+
+  onDispatcherPlayerPicked(id) {
+    if (id === this.props.currentPlayer.id) {
+      this.props.actions.moveInit(this.props.currentPlayer.id);
+    } else {
+      this.props.actions.dispatcherChoosePlayer(id);
+    }
+  }
+
+  onDispatcherCancel() {
+    this.setState({ dispatcherPlayers: [] });
   }
 
   onGovGrantCityPicked(id) {
@@ -104,7 +133,7 @@ class Actions extends React.Component {
   render() {
     const { availableCities, shareCandidates, curingDisease, govGrantCities, resPopChooseCard,
       resPopSuggestOwner, forecastCards, airlift, opsMoveAbility, contPlannerEvents } = this.props.currentMove;
-    const { playerToDiscard, currentPlayer, infectionDiscard, players, isContingencyPlannerAbilityAvailable,
+    const { playerToDiscard, infectionDiscard, players, isContingencyPlannerAbilityAvailable,
       contPlannerEvent } = this.props;
     return (
       <div className="actions">
@@ -113,8 +142,14 @@ class Actions extends React.Component {
             hand={this.props.getPlayerHand(playerToDiscard)}
             onCardPicked={this.onDiscardCardPicked} />}
         <button
-          onClick={partial(this.props.actions.moveInit, currentPlayer.id)}
-          disabled={!isEmpty(availableCities)}>Move</button>
+          onClick={this.onMoveInit}
+          disabled={!isEmpty(availableCities) || !isEmpty(this.state.dispatcherPlayers)}>Move</button>
+        {!isEmpty(this.state.dispatcherPlayers) &&
+          <PlayerPicker
+            players={this.state.dispatcherPlayers}
+            onPlayerPicked={this.onDispatcherPlayerPicked}
+            onCancel={this.onDispatcherCancel} />
+        }
         {!isEmpty(availableCities) &&
           <CityPicker
             cities={values(availableCities)}
@@ -214,7 +249,8 @@ const mapStateToProps = (state) => {
     playerToDiscard: getPlayerToDiscard(state), currentPlayer: getCurrentPlayer(state),
     canShareCards: canShareCards(state), cardsNeededToCure: cardsNeededToCure(state),
     infectionDiscard: getInfectionDiscard(state), players: getPlayers(state), contPlannerEvent: getContPlannerEvent(state),
-    isContingencyPlannerAbilityAvailable: isContingencyPlannerAbilityAvailable(state) };
+    isContingencyPlannerAbilityAvailable: isContingencyPlannerAbilityAvailable(state),
+    isDispatcher: isDispatcher(state) };
 };
 
 const mapDispatchToProps = (dispatch) => {

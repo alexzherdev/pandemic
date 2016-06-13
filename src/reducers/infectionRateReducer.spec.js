@@ -12,7 +12,7 @@ describe('InfectionRateReducer', () => {
       values: [2, 3, 4]
     };
     const expected = { ...initial, index: 1 };
-    expect(reducer(initial, action)).to.deep.equal(expected);
+    expect(reducer(initial, action)).to.eql(expected);
   });
 
   it('does not go over bounds on EPIDEMIC_INCREASE', () => {
@@ -22,6 +22,6 @@ describe('InfectionRateReducer', () => {
       values: [2, 3, 4]
     };
     const expected = { ...initial, index: 2 };
-    expect(reducer(initial, action)).to.deep.equal(expected);
+    expect(reducer(initial, action)).to.eql(expected);
   });
 });
