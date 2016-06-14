@@ -1,7 +1,7 @@
 import _ from 'lodash';
 
 import { isAtStation, getCurrentMapLocation } from './map';
-import { getCitiesInHand } from './hand';
+import { getCitiesInPlayersHand } from './hand';
 import { getCurrentPlayer, getCurrentRole } from './gameplay';
 
 
@@ -31,8 +31,7 @@ export function cardsNeededToCure(state) {
 }
 
 export function canCureDisease(state, color) {
-  const hand = getCurrentPlayer(state).hand;
-  return cardsNeededToCure(state) <= _.filter(getCitiesInHand(state, hand), { color }).length
+  return cardsNeededToCure(state) <= _.filter(getCitiesInPlayersHand(state, getCurrentPlayer(state).id), { color }).length
     && getDiseaseStatus(state, color) === 'active'
     && isAtStation(state);
 }

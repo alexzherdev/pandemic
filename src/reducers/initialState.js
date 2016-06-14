@@ -19,29 +19,6 @@ export default {
     discard: ['4', '2']
   },
 
-  events: {
-    forecast: {
-      id: 'forecast',
-      name: 'Forecast'
-    },
-    one_quiet_night: {
-      id: 'one_quiet_night',
-      name: 'One Quiet Night'
-    },
-    gov_grant: {
-      id: 'gov_grant',
-      name: 'Government Grant'
-    },
-    res_pop: {
-      id: 'res_pop',
-      name: 'Resilient Population'
-    },
-    airlift: {
-      id: 'airlift',
-      name: 'Airlift'
-    }
-  },
-
   players: {
     0: {
       id: '0',
@@ -69,54 +46,6 @@ export default {
       id: '2',
       name: 'P3',
       hand: []
-    }
-  },
-
-  cities: {
-    0: {
-      id: '0',
-      name: 'Atlanta',
-      color: 'red'
-    },
-    1: {
-      id: '1',
-      name: 'Chicago',
-      color: 'yellow'
-    },
-    2: {
-      id: '2',
-      name: 'Montreal',
-      color: 'black'
-    },
-    3: {
-      id: '3',
-      name: 'Washington',
-      color: 'blue'
-    },
-    4: {
-      id: '4',
-      name: 'New York',
-      color: 'blue'
-    },
-    5: {
-      id: '5',
-      name: 'San Francisco',
-      color: 'red'
-    },
-    6: {
-      id: '6',
-      name: 'Miami',
-      color: 'red'
-    },
-    7: {
-      id: '7',
-      name: 'Los Angeles',
-      color: 'yellow'
-    },
-    8: {
-      id: '8',
-      name: 'Mexico City',
-      color: 'yellow'
     }
   },
 

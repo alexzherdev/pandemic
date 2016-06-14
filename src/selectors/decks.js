@@ -1,3 +1,7 @@
+import cities from '../constants/cities';
+import events from '../constants/events';
+
+
 export function getPlayerCardsToDraw(state) {
   return state.playerCards.deck.slice(0, 2);
 }
@@ -16,7 +20,7 @@ function getInfectionDeck(state) {
 }
 
 export function getInfectionDiscard(state) {
-  return state.infectionCards.discard.map((id) => ({ id, name: state.cities[id].name }));
+  return state.infectionCards.discard.map((id) => ({ id, name: cities[id].name }));
 }
 
 export function getCardsForForecast(state) {
@@ -25,5 +29,5 @@ export function getCardsForForecast(state) {
 
 export function getCardsForContPlanner(state) {
   return state.playerCards.discard.filter((c) => c.cardType === 'event')
-    .map((c) => ({ ...c, name: state.events[c.id].name }));
+    .map((c) => ({ ...c, name: events[c.id].name }));
 }

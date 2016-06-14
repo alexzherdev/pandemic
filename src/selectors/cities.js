@@ -1,8 +1,9 @@
 import _ from 'lodash';
 
-import { getCitiesInHand, hasCityInHand } from './hand';
+import { getCitiesInPlayersHand, hasCityInHand } from './hand';
 import { isAtStation, isStation } from './map';
 import { getCurrentPlayer, getPlayerRole, getCurrentRole, hasOpsUsedMoveAbility } from './gameplay';
+import cities from '../constants/cities';
 
 
 export function getCurrentCityId(state) {
@@ -15,15 +16,15 @@ export function getAvailableCities(state, cityId = undefined) {
     cityId = getCurrentCityId(state);
   }
 
-  const direct = reduceWithAttrs(getCitiesInHand(state, player.hand), { source: 'direct' });
+  const direct = reduceWithAttrs(getCitiesInPlayersHand(state, player.id), { source: 'direct' });
   const neighbors = reduceWithAttrs(getNeighborCities(state, cityId), { source: 'drive' });
-  const charters = hasCityInHand(state, cityId) ? reduceWithAttrs(state.cities, { source: 'charter' }) : {};
+  const charters = hasCityInHand(state, cityId) ? reduceWithAttrs(cities, { source: 'charter' }) : {};
   const stations = isStation(state, cityId) ? reduceWithAttrs(getStationCities(state), { source: 'shuttle' }) : {};
   const opsCities = isAtStation(state) && getCurrentRole(state) === 'ops_expert' && !hasOpsUsedMoveAbility(state)
-    ? reduceWithAttrs(_.values(state.cities), { source: 'ops' }) : {};
-  const cities = _.assign({}, opsCities, charters, direct, neighbors, stations);
-  delete cities[cityId];
-  return cities;
+    ? reduceWithAttrs(_.values(cities), { source: 'ops' }) : {};
+  const result = _.assign({}, opsCities, charters, direct, neighbors, stations);
+  delete result[cityId];
+  return result;
 }
 
 export function getMedicInCity(state, cityId) {
@@ -31,17 +32,17 @@ export function getMedicInCity(state, cityId) {
 }
 
 export function getCitiesForGovGrant(state) {
-  return _.values(state.cities).filter((c) => !state.map.locations[c.id].station);
+  return _.values(cities).filter((c) => !state.map.locations[c.id].station);
 }
 
 export function getCitiesForAirlift(state, playerId) {
-  return _.values(state.cities).filter((c) => c.id !== state.map.playersLocations[playerId]);
+  return _.values(cities).filter((c) => c.id !== state.map.playersLocations[playerId]);
 }
 
 export function getCitiesForDispatcher(state, playerId) {
   const locs = state.map.playersLocations;
   const otherLocs = _.omit(locs, playerId);
-  const otherPlayersCities = reduceWithAttrs(_.values(otherLocs).map((id) => state.cities[id]), { source: 'dispatcher' });
+  const otherPlayersCities = reduceWithAttrs(_.values(otherLocs).map((id) => cities[id]), { source: 'dispatcher' });
   return { ...getAvailableCities(state, locs[playerId]), ...otherPlayersCities };
 }
 
@@ -50,22 +51,22 @@ export function getCubesInCity(state, cityId, color) {
 }
 
 export function getCityColor(state, cityId) {
-  return state.cities[cityId].color;
+  return cities[cityId].color;
 }
 
 export function getNeighborCities(state, cityId) {
-  const cities = [];
+  const result = [];
   state.map.matrix[cityId].forEach((item, i) => {
     if (item === 1) {
-      cities.push(state.cities[i]);
+      result.push(cities[i]);
     }
   });
-  return cities;
+  return result;
 }
 
 export function getQuarSpecInProximity(state, cityId) {
-  const cities = [state.cities[cityId], ...getNeighborCities(state, cityId)];
-  return _.find(cities, (c) => getQuarSpecInCity(state, c.id));
+  const result = [cities[cityId], ...getNeighborCities(state, cityId)];
+  return _.find(result, (c) => getQuarSpecInCity(state, c.id));
 }
 
 function getQuarSpecInCity(state, cityId) {
@@ -83,7 +84,7 @@ function getStationCities(state) {
       return id;
     }
   }).compact().value();
-  return cityIds.map((c) => state.cities[c]);
+  return cityIds.map((c) => cities[c]);
 }
 
 function reduceWithAttrs(array, attrs = {}) {

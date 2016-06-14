@@ -3,6 +3,7 @@ import { chain, values, compact } from 'lodash';
 import { isAtStation } from './map';
 import { getCurrentCityId } from './cities';
 import { hasCurrentCityInHand } from './hand';
+import events from '../constants/events';
 
 
 export function getCurrentPlayer(state) {
@@ -105,5 +106,5 @@ export function isContingencyPlannerAbilityAvailable(state) {
 
 export function getContPlannerEvent(state) {
   const id = getCurrentPlayer(state).specialEvent;
-  return state.events[id];
+  return events[id];
 }
