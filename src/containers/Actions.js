@@ -72,8 +72,16 @@ class Actions extends React.Component {
 
   onMoveCityPicked(id) {
     const { source } = this.props.currentMove.availableCities[id];
-    const playerId = this.props.currentMove.playerToMove || this.props.currentPlayer.id;
-    const originId = find(this.state.dispatcherPlayers, { id: playerId }).cityId;
+    const { playerToMove } = this.props.currentMove;
+    let playerId, originId;
+    if (playerToMove) {
+      playerId = playerToMove;
+      originId = find(this.state.dispatcherPlayers, { id: playerId });
+    } else {
+      playerId = this.props.currentPlayer.id;
+      originId = this.props.currentCityId;
+    }
+
     this.props.actions.moveToCity(
       playerId,
       originId,

@@ -5,13 +5,6 @@ import * as sel from './diseases';
 
 describe('Diseases selector', () => {
   const getState = () => ({
-    cities: {
-      0: { id: '0', name: 'C1', color: 'blue' },
-      1: { id: '1', name: 'C2', color: 'blue' },
-      2: { id: '2', name: 'C3', color: 'blue' },
-      3: { id: '3', name: 'C4', color: 'blue' },
-      4: { id: '4', name: 'C5', color: 'blue' }
-    },
     players: {
       0: {
         id: '0',

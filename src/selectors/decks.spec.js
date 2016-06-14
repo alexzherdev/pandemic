@@ -5,42 +5,21 @@ import * as sel from './decks';
 
 describe('Decks selector', () => {
   const getState = () => ({
-    cities: {
-      1: {
-        id: '1',
-        name: 'London'
-      },
-      3: {
-        id: '3',
-        name: 'Paris'
-      }
-    },
     infectionCards: {
       deck: ['0', '2'],
       discard: ['1', '3']
     },
 
-    events: {
-      0: {
-        id: '0',
-        name: 'Event 1'
-      },
-      1: {
-        id: '1',
-        name: 'Event 2'
-      }
-    },
-
     playerCards: {
-      deck: [{ cardType: 'city', id: '1' }, { cardType: 'event', id: '0' }, { cardType: 'epidemic' }],
-      discard: [{ cardType: 'city', id: '2' }, { cardType: 'event', id: '1' }]
+      deck: [{ cardType: 'city', id: '1' }, { cardType: 'event', id: 'airlift' }, { cardType: 'epidemic' }],
+      discard: [{ cardType: 'city', id: '2' }, { cardType: 'event', id: 'forecast' }]
     }
   });
 
   describe('getPlayerCardsToDraw', () => {
     it('gets top two player cards to draw', () => {
       expect(sel.getPlayerCardsToDraw(getState())).to.eql(
-        [{ cardType: 'city', id: '1' }, { cardType: 'event', id: '0' }]
+        [{ cardType: 'city', id: '1' }, { cardType: 'event', id: 'airlift' }]
       );
     });
   });
@@ -60,8 +39,8 @@ describe('Decks selector', () => {
   describe('getInfectionDiscard', () => {
     it('gets ids from the infection discard together with the names', () => {
       expect(sel.getInfectionDiscard(getState())).to.eql([
-        { id: '1', name: 'London' },
-        { id: '3', name: 'Paris' }
+        { id: '1', name: 'Chicago' },
+        { id: '3', name: 'Washington' }
       ]);
     });
   });
@@ -81,7 +60,7 @@ describe('Decks selector', () => {
   describe('getCardsForContPlanner', () => {
     it('returns events from the player discard together with the names', () => {
       expect(sel.getCardsForContPlanner(getState())).to.eql([
-        { cardType: 'event', id: '1', name: 'Event 2' }
+        { cardType: 'event', id: 'forecast', name: 'Forecast' }
       ]);
     });
   });

@@ -11,7 +11,7 @@ import diseases from './diseasesReducer';
 import status from './statusReducer';
 import playerCards from './playerCardsReducer';
 import infectionCards from './infectionCardsReducer';
-import initialState from './initialState';
+
 
 export default combineReducers({
   status,
@@ -22,8 +22,6 @@ export default combineReducers({
   diseases,
   outbreaks,
   currentMove,
-  cities: () => initialState.cities,
-  events: () => initialState.events,
   stationsLeft,
   cubesLeft,
   infectionRate

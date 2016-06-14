@@ -2,6 +2,8 @@ import _ from 'lodash';
 
 import { getCurrentPlayer } from './gameplay';
 import { getCurrentCityId, getCityColor } from './cities';
+import cities from '../constants/cities';
+import events from '../constants/events';
 
 
 export function getCitiesInPlayersHand(state, playerId) {
@@ -9,10 +11,10 @@ export function getCitiesInPlayersHand(state, playerId) {
   return getCitiesInHand(state, hand);
 }
 
-export function getCitiesInHand(state, hand) {
+function getCitiesInHand(state, hand) {
   return _.chain(hand)
     .filter({ cardType: 'city' })
-    .map((c) => state.cities[c.id])
+    .map((c) => cities[c.id])
     .value();
 }
 
@@ -22,7 +24,7 @@ export function getCurrentPlayerHand(state) {
 
 export function getPlayerHand(state, playerId) {
   return state.players[playerId].hand.map((card) =>
-    ({...card, name: card.cardType === 'city' ? state.cities[card.id].name : state.events[card.id].name }));
+    ({...card, name: card.cardType === 'city' ? cities[card.id].name : events[card.id].name }));
 }
 
 export function isOverHandLimit(state, playerId) {
@@ -45,13 +47,13 @@ export function getCardsOfColorInCurrentHand(state, color) {
 }
 
 export function getEventsInHands(state) {
-  const events = [];
+  const result = [];
   _.forOwn(state.players, (player, id) => {
 
-    events.push(..._.filter(player.hand, { cardType: 'event' })
-      .map((c) => ({ ...c, name: state.events[c.id].name, playerId: id})));
+    result.push(..._.filter(player.hand, { cardType: 'event' })
+      .map((c) => ({ ...c, name: events[c.id].name, playerId: id})));
   });
-  return events;
+  return result;
 }
 
 export function getResPopOwner(state) {

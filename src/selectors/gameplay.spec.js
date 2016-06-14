@@ -1,26 +1,11 @@
 import { expect } from 'chai';
 
 import * as sel from './gameplay';
+import events from '../constants/events';
 
 
 describe('Gameplay selector', function() {
   const getState = () => ({
-    cities: {
-      0: {
-        id: '0',
-        name: 'London'
-      },
-      1: {
-        id: '1',
-        name: 'Paris'
-      }
-    },
-    events: {
-      res_pop: {
-        id: 'res_pop',
-        name: 'res_pop'
-      }
-    },
     players: {
       0: {
         id: '0',
@@ -346,7 +331,7 @@ describe('Gameplay selector', function() {
     it('returns the event data if there is an event', () => {
       let state = getState();
       state = { ...state, players: { 0: { role: 'cont_planner', specialEvent: 'res_pop' }}};
-      expect(sel.getContPlannerEvent(state)).to.eql(state.events.res_pop);
+      expect(sel.getContPlannerEvent(state)).to.eql(events.res_pop);
     });
   });
 });

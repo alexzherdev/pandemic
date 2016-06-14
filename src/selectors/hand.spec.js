@@ -11,7 +11,8 @@ describe('Hand selector', () => {
         name: 'P1',
         hand: [
           { cardType: 'city', id: '0' },
-          { cardType: 'event', id: '0' }
+          { cardType: 'event', id: 'airlift' },
+          { cardType: 'city', id: '5' }
         ]
       },
       1: {
@@ -19,27 +20,11 @@ describe('Hand selector', () => {
         name: 'P2',
         hand: [
           { cardType: 'city', id: '1' },
-          { cardType: 'event', id: '1' }
+          { cardType: 'event', id: 'forecast' }
         ]
       }
     },
-    events: {
-      0: { id: '0', name: 'Event 1' },
-      1: { id: '1', name: 'Event 2' },
-      res_pop: { id: 'res_pop', name: 'res_pop' }
-    },
-    cities: {
-      0: {
-        id: '0',
-        name: 'London',
-        color: 'red'
-      },
-      1: {
-        id: '1',
-        name: 'Paris',
-        color: 'blue'
-      }
-    },
+
     map: {
       playersLocations: {
         0: '0'
@@ -50,22 +35,12 @@ describe('Hand selector', () => {
     }
   });
 
-  it('returns cities in hand', () => {
-    const hand = [
-      { cardType: 'city', id: '0' },
-      { cardType: 'event', id: '0' },
-      { cardType: 'epidemic' }
-    ];
-    expect(sel.getCitiesInHand(getState(), hand)).to.eql(
-      [{ id: '0', name: 'London', color: 'red' }]
-    );
-  });
-
   it('returns the current player\'s hand', () => {
     expect(sel.getCurrentPlayerHand(getState())).to.eql(
       [
-        { cardType: 'city', id: '0', name: 'London' },
-        { cardType: 'event', id: '0', name: 'Event 1' }
+        { cardType: 'city', id: '0', name: 'Atlanta' },
+        { cardType: 'event', id: 'airlift', name: 'Airlift' },
+        { cardType: 'city', id: '5', name: 'San Francisco' }
       ]
     );
   });
@@ -73,8 +48,8 @@ describe('Hand selector', () => {
   it('gets a hand by player id', () => {
     expect(sel.getPlayerHand(getState(), '1')).to.eql(
       [
-        { cardType: 'city', id: '1', name: 'Paris' },
-        { cardType: 'event', id: '1', name: 'Event 2' }
+        { cardType: 'city', id: '1', name: 'Chicago' },
+        { cardType: 'event', id: 'forecast', name: 'Forecast' }
       ]
     );
   });
@@ -104,20 +79,21 @@ describe('Hand selector', () => {
 
   it('selects cards of a given color from the current player\'s hand', () => {
     expect(sel.getCardsOfColorInCurrentHand(getState(), 'red')).to.eql(
-      [{ cardType: 'city', id: '0', name: 'London' }]
+      [{ cardType: 'city', id: '5', name: 'San Francisco' }]
     );
   });
 
   it('selects all events the players have in hand', () => {
     expect(sel.getEventsInHands(getState())).to.eql([
-      { cardType: 'event', id: '0', name: 'Event 1', playerId: '0' },
-      { cardType: 'event', id: '1', name: 'Event 2', playerId: '1' }
+      { cardType: 'event', id: 'airlift', name: 'Airlift', playerId: '0' },
+      { cardType: 'event', id: 'forecast', name: 'Forecast', playerId: '1' }
     ]);
   });
 
   it('selects the cities a player has in hand', () => {
     expect(sel.getCitiesInPlayersHand(getState(), '0')).to.eql([
-      { id: '0', name: 'London', color: 'red' }
+      { id: '0', name: 'Atlanta', color: 'blue' },
+      { id: '5', name: 'San Francisco', color: 'red' }
     ]);
   });
 
