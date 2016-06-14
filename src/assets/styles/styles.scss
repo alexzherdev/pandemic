@@ -1,0 +1,292 @@
+$citySize: 32px;
+$stationSize: 24px;
+$selSize: 40px;
+$cubeSize: 24px;
+$outbrSize: 40px;
+$playerSize: 40px;
+
+
+body {
+  margin: 0;
+}
+
+@font-face {
+  font-family: Phage;
+  src: url(../fonts/Phage.otf) format("opentype");
+}
+
+@-webkit-keyframes rotate {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@-webkit-keyframes cube {
+  0% {
+    -webkit-transform: rotate(0deg)
+               translate(14px)
+               rotate(0deg);
+  }
+
+  100% {
+    -webkit-transform: rotate(360deg)
+               translate(14px)
+               rotate(-720deg);
+  }
+}
+
+@-webkit-keyframes outbreak-warning {
+  0% {
+    opacity: 0.3;
+  }
+
+  100% {
+    opacity: 0.8;
+  }
+}
+
+@-webkit-keyframes cur-player {
+  0% {
+    -webkit-transform: translate(-50%, -15px);
+  }
+
+  100% {
+    -webkit-transform: translate(-50%, -10px);
+  }
+}
+
+.hide {
+  display: none;
+}
+
+.game {
+  .actions {
+    bottom: 0;
+    margin-bottom: 0;
+    position: fixed;
+    width: 100%;
+    z-index: 10000;
+
+    .panel-body {
+      text-align: center;
+
+      .btn {
+        font-size: 1.2em;
+      }
+    }
+  }
+
+  .map {
+    position: relative;
+    width: 1024px;
+    height: 768px;
+    background: url(../images/map.jpg);
+    background-size: cover;
+
+    .city, .player, .station {
+      position: absolute;
+    }
+
+    .city {
+      .icon {
+        position: relative;
+        z-index: 50;
+        display: block;
+        background: no-repeat center;
+        background-size: $citySize $citySize;
+        width: $citySize;
+        height: $citySize;
+        cursor: pointer;
+
+        &.yellow {
+          background-image: url(../images/city_yellow.png);
+        }
+
+        &.red {
+          background-image: url(../images/city_red.png);
+        }
+
+        &.blue {
+          background-image: url(../images/city_blue.png);
+        }
+
+        &.black {
+          background-image: url(../images/city_black.png);
+        }
+      }
+
+      .name {
+        position: absolute;
+        left: $citySize / 2;
+        transform: translate(-50%, 0);
+        font-family: 'Phage';
+        font-size: 12px;
+        color: white;
+        text-shadow: 1px 1px 1px black;
+        white-space: nowrap;
+        -webkit-user-select: none;
+        cursor: default;
+      }
+
+      .selection-container {
+        width: $selSize;
+        height: $selSize;
+        position: absolute;
+        left: ($citySize - $selSize) / 2;
+        top: ($citySize - $selSize) / 2;;
+
+        .selection {
+          width: 100%;
+          height: 100%;
+          display: block;
+          float: left;
+          background: url(../images/city_sel.png);
+          background-size: $selSize $selSize;
+          -webkit-animation-name: rotate;
+          -webkit-animation-duration: 5s;
+          -webkit-animation-iteration-count: infinite;
+          -webkit-animation-timing-function: linear;
+        }
+
+        .selection-bg {
+          width: 100%;
+          height: 100%;
+          display: none;
+          background: lightblue;
+          opacity: 0.5;
+          border-radius: $selSize / 2;
+        }
+      }
+
+      &:hover .selection-container .selection-bg {
+        display: block;
+      }
+
+      .outbreak-warning {
+        width: $outbrSize;
+        height: $outbrSize;
+        display: block;
+        position: absolute;
+        left: ($citySize - $outbrSize) / 2;
+        top: ($citySize - $outbrSize) / 2;
+        border-radius: $outbrSize / 2;
+        background: darkred;
+        -webkit-animation-name: outbreak-warning;
+        -webkit-animation-duration: 0.5s;
+        -webkit-animation-iteration-count: infinite;
+        -webkit-animation-timing-function: linear;
+        -webkit-animation-direction: alternate;
+      }
+    }
+
+    .station {
+      background: url(../images/station.png);
+      background-size: $stationSize $stationSize;
+      width: $stationSize;
+      height: $stationSize;
+      top: 10px;
+      left: ($citySize - $stationSize) / 2;
+      z-index: 100;
+      cursor: pointer;
+    }
+
+    .player {
+      width: $playerSize;
+      height: $playerSize;
+      background-size: cover;
+      text-align: center;
+      transform: translate(-50%, -($citySize));
+      z-index: 50;
+
+      &.cont_planner {
+        background-image: url(../images/cont_planner.png);
+      }
+
+      &.dispatcher {
+        background-image: url(../images/dispatcher.png);
+      }
+
+      &.medic {
+        background-image: url(../images/medic.png);
+      }
+
+      &.ops_expert {
+        background-image: url(../images/ops.png);
+      }
+
+      &.quar_spec {
+        background-image: url(../images/quar_spec.png);
+      }
+
+      &.researcher {
+        background-image: url(../images/researcher.png);
+      }
+
+      &.scientist {
+        background-image: url(../images/scientist.png);
+      }
+
+      .cur-player {
+        position: absolute;
+        -webkit-animation-name: cur-player;
+        -webkit-animation-duration: 0.6s;
+        -webkit-animation-iteration-count: infinite;
+        -webkit-animation-timing-function: ease;
+        -webkit-animation-direction: alternate;
+      }
+    }
+
+    .path {
+      position: absolute;
+      height: 1px;
+      box-shadow: 0px 0px 2px 1px #ccffff;
+      transform-origin: 0 100%;
+      background: #ccffff;
+    }
+
+    .cube {
+      position: absolute;
+      width: $cubeSize;
+      height: $cubeSize;
+      background-size: $cubeSize $cubeSize;
+      top: 5px;
+      left: 5px;
+
+      animation-name: cube;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+
+      &.red {
+        background-image: url('../images/cube_red.png');
+      }
+
+      &.yellow {
+        background-image: url('../images/cube_yellow.png');
+      }
+
+      &.blue {
+        background-image: url('../images/cube_blue.png');
+      }
+
+      &.black {
+        background-image: url('../images/cube_black.png');
+      }
+
+      &.cubes-1 {
+        animation-duration: 9s;
+      }
+
+      &.cubes-2 {
+        animation-duration: 6s;
+      }
+
+      &.cubes-3 {
+        animation-duration: 3s;
+      }
+    }
+  }
+}

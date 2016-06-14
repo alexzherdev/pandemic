@@ -5,12 +5,18 @@ import { getCitiesInPlayersHand } from './hand';
 import { getCurrentPlayer, getCurrentRole } from './gameplay';
 
 
+const DISEASES = ['blue', 'red', 'yellow', 'black'];
+
 export function canTreatColor(state, color) {
   if (getCurrentRole(state) === 'medic') {
     return false;
   }
   const loc = getCurrentMapLocation(state);
   return loc[color] > 0;
+}
+
+export function canTreatAll(state) {
+  return getCurrentRole(state) === 'medic';
 }
 
 export function canTreatAllOfColor(state, color) {
@@ -23,11 +29,15 @@ export function getDiseaseStatus(state, color) {
 }
 
 export function areAllDiseasesCured(state) {
-  return _.every(['blue', 'red', 'yellow', 'black'], (c) => getDiseaseStatus(state, c) !== 'active');
+  return _.every(DISEASES, (c) => getDiseaseStatus(state, c) !== 'active');
 }
 
 export function cardsNeededToCure(state) {
   return getCurrentRole(state) === 'scientist' ? 4 : 1;
+}
+
+export function getCurableDisease(state) {
+  return _.find(DISEASES, (c) => canCureDisease(state, c));
 }
 
 export function canCureDisease(state, color) {
@@ -41,5 +51,5 @@ export function treatedAllOfColor(state, color) {
 }
 
 export function getCuredDiseases(state) {
-  return ['blue', 'red', 'yellow', 'black'].filter((c) => getDiseaseStatus(state, c) === 'cured');
+  return DISEASES.filter((c) => getDiseaseStatus(state, c) === 'cured');
 }

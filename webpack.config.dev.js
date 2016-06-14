@@ -1,4 +1,5 @@
 import webpack from 'webpack';
+import ProvidePlugin from 'webpack/lib/ProvidePlugin';
 import path from 'path';
 
 const GLOBALS = {
@@ -24,12 +25,17 @@ export default {
   plugins: [
     new webpack.DefinePlugin(GLOBALS), // Tells React to build in prod mode. https://facebook.github.io/react/downloads.htmlnew webpack.HotModuleReplacementPlugin());
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin()
+    new webpack.NoErrorsPlugin(),
+    new ProvidePlugin({
+      jQuery: 'jquery',
+      $: 'jquery',
+      jquery: 'jquery'
+    })
   ],
   module: {
     loaders: [
       {test: /\.js$/, include: path.join(__dirname, 'src'), loaders: ['babel']},
-      {test: /\.eot(\?v=\d+.\d+.\d+)?$/, loader: 'file'},
+      {test: /\.(eot|otf)(\?v=\d+.\d+.\d+)?$/, loader: 'file'},
       {test: /\.(woff|woff2)$/, loader: 'file-loader?prefix=font/&limit=5000'},
       {test: /\.ttf(\?v=\d+.\d+.\d+)?$/, loader: 'file-loader?limit=10000&mimetype=application/octet-stream'},
       {test: /\.svg(\?v=\d+.\d+.\d+)?$/, loader: 'file-loader?limit=10000&mimetype=image/svg+xml'},
