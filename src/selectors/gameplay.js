@@ -1,6 +1,6 @@
 import { chain, values, compact } from 'lodash';
 
-import { isAtStation } from './map';
+import { isAtStation, getPlayerCityId } from './map';
 import { getCurrentCityId } from './cities';
 import { hasCurrentCityInHand } from './hand';
 import events from '../constants/events';
@@ -19,7 +19,7 @@ export function getPlayerRole(state, playerId) {
 }
 
 export function getPlayers(state) {
-  return values(state.players).map((p) => ({ ...p, cityId: state.map.playersLocations[p.id] }));
+  return values(state.players).map((p) => ({ ...p, cityId: getPlayerCityId(state, p.id) }));
 }
 
 export function getNextPlayer(state) {

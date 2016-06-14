@@ -32,6 +32,14 @@ export function* contPlannerSpecial() {
   }
 }
 
+export function* clearCubesNearMedic(action) {
+  const medic = yield select(sel.getMedicInTeam);
+  if (medic) {
+    const cityId = yield select(sel.getPlayerCityId, medic.id);
+    yield put(medicTreatCuredDiseases(cityId, [action.color]));
+  }
+}
+
 export function* dispatcherMove(action) {
   const cities = yield select(sel.getCitiesForDispatcher, action.playerId);
   yield call(showCitiesAndMove, cities);
@@ -47,4 +55,8 @@ export function* watchContPlannerInit() {
 
 export function* watchDispatcherMove() {
   yield* takeEvery(types.DISPATCHER_CHOOSE_PLAYER, dispatcherMove);
+}
+
+export function* watchCureDisease() {
+  yield* takeEvery(types.PLAYER_CURE_DISEASE_COMPLETE, clearCubesNearMedic);
 }
