@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import { select, put, take, call } from 'redux-saga/effects';
 
 import { showCitiesAndMove } from './actionSagas';
-import { treatCuredDiseasesOnMedicMove, contPlannerSpecial, dispatcherMove } from './roleSagas';
+import { treatCuredDiseasesOnMedicMove, contPlannerSpecial, dispatcherMove, clearCubesNearMedic } from './roleSagas';
 import { medicTreatCuredDiseases } from '../actions/diseaseActions';
 import { contPlannerShowEventsFromDiscard, contPlannerEventComplete } from '../actions/cardActions';
 import * as sel from '../selectors';
@@ -69,6 +69,26 @@ describe('RoleSagas', function() {
       expect(next.value).to.eql(select(sel.getCitiesForDispatcher, '0'));
       next = this.generator.next({ 0: { id: '0', name: 'London', source: 'dispatcher' }});
       expect(next.value).to.eql(call(showCitiesAndMove, { 0: { id: '0', name: 'London', source: 'dispatcher' }}));
+    });
+  });
+
+  describe('clearCubesNearMedic', () => {
+    beforeEach(() => {
+      this.generator = clearCubesNearMedic({ color: 'red' });
+      this.next = this.generator.next();
+      expect(this.next.value).to.eql(select(sel.getMedicInTeam));
+    });
+
+    it('does not do anything if there is no medic on the team', () => {
+      this.next = this.generator.next(null);
+      expect(this.next.done).to.be.true;
+    });
+
+    it('treats the cured disease where the medic is', () => {
+      this.next = this.generator.next({ id: '0' });
+      expect(this.next.value).to.eql(select(sel.getPlayerCityId, '0'));
+      this.next = this.generator.next('1');
+      expect(this.next.value).to.eql(put(medicTreatCuredDiseases('1', ['red'])));
     });
   });
 });

@@ -1,13 +1,13 @@
 import _ from 'lodash';
 
 import { getCitiesInPlayersHand, hasCityInHand } from './hand';
-import { isAtStation, isStation } from './map';
+import { isAtStation, isStation, getPlayerCityId } from './map';
 import { getCurrentPlayer, getPlayerRole, getCurrentRole, hasOpsUsedMoveAbility } from './gameplay';
 import cities from '../constants/cities';
 
 
 export function getCurrentCityId(state) {
-  return state.map.playersLocations[getCurrentPlayer(state).id];
+  return getPlayerCityId(state, getCurrentPlayer(state).id);
 }
 
 export function getAvailableCities(state, cityId = undefined) {
@@ -31,12 +31,16 @@ export function getMedicInCity(state, cityId) {
   return getRoleInCity(state, cityId, 'medic');
 }
 
+export function getMedicInTeam(state) {
+  return _.find(state.players, (p) => getPlayerRole(state, p.id) === 'medic');
+}
+
 export function getCitiesForGovGrant(state) {
   return _.values(cities).filter((c) => !state.map.locations[c.id].station);
 }
 
 export function getCitiesForAirlift(state, playerId) {
-  return _.values(cities).filter((c) => c.id !== state.map.playersLocations[playerId]);
+  return _.values(cities).filter((c) => c.id !== getPlayerCityId(state, playerId));
 }
 
 export function getCitiesForDispatcher(state, playerId) {

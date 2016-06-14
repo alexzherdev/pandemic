@@ -81,4 +81,9 @@ describe('Map selector', () => {
     expect(sel.isStation(getState(), '0')).to.be.true;
     expect(sel.isStation(getState(), '1')).to.be.false;
   });
+
+  it('gets the player\'s current city id', () => {
+    expect(sel.getPlayerCityId(getState(), '0')).to.equal('0');
+    expect(sel.getPlayerCityId(getState(), '1')).to.equal('1');
+  });
 });

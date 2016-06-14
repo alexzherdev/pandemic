@@ -13,3 +13,7 @@ export function getCurrentMapLocation(state) {
   const cityId = getCurrentCityId(state);
   return state.map.locations[cityId];
 }
+
+export function getPlayerCityId(state, playerId) {
+  return state.map.playersLocations[playerId];
+}

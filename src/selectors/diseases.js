@@ -27,7 +27,7 @@ export function areAllDiseasesCured(state) {
 }
 
 export function cardsNeededToCure(state) {
-  return getCurrentRole(state) === 'scientist' ? 4 : 5;
+  return getCurrentRole(state) === 'scientist' ? 4 : 1;
 }
 
 export function canCureDisease(state, color) {
