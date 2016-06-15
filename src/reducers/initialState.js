@@ -37,7 +37,7 @@ export default {
     1: {
       id: '1',
       name: 'P2',
-      role: 'medic',
+      role: 'ops_expert',
       hand: [
         { cardType: 'city', id: '4' }
       ]
@@ -45,6 +45,7 @@ export default {
     2: {
       id: '2',
       name: 'P3',
+      role: 'dispatcher',
       hand: []
     }
   },
@@ -101,26 +102,26 @@ export default {
 
   map: {
     matrix: [
-      [0, 1, 0, 1, 0, 0, 0, 0, 0],
-      [1, 0, 1, 0, 0, 0, 0, 0, 0],
+      [0, 1, 0, 1, 0, 0, 1, 0, 0],
+      [1, 0, 1, 0, 0, 1, 0, 1, 1],
       [0, 1, 0, 1, 1, 0, 0, 0, 0],
-      [1, 0, 1, 0, 1, 0, 0, 0, 0],
+      [1, 0, 1, 0, 1, 0, 1, 0, 0],
       [0, 0, 1, 1, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0]
+      [0, 1, 0, 0, 0, 0, 0, 1, 0],
+      [1, 0, 0, 1, 0, 0, 0, 0, 1],
+      [0, 1, 0, 0, 0, 1, 0, 0, 1],
+      [0, 1, 0, 0, 0, 0, 1, 1, 0]
     ],
 
     playersLocations: {
       0: '0',
-      1: '1',
-      2: '8'
+      1: '0',
+      2: '0'
     },
 
     locations: {
       0: {
-        coords: [200, 100],
+        coords: [335, 240],
         station: true,
         yellow: 2,
         red: 1,
@@ -128,28 +129,28 @@ export default {
         blue: 1
       },
       1: {
-        coords: [100, 100],
+        coords: [285, 225],
         yellow: 1,
         red: 0,
         black: 0,
         blue: 1
       },
       2: {
-        coords: [100, 200],
+        coords: [280, 290],
         yellow: 1,
         red: 0,
         black: 0,
         blue: 1
       },
       3: {
-        coords: [200, 200],
+        coords: [325, 315],
         yellow: 1,
         red: 1,
         black: 0,
         blue: 3
       },
       4: {
-        coords: [150, 300],
+        coords: [295, 345],
         yellow: 0,
         red: 0,
         black: 0,
@@ -157,28 +158,28 @@ export default {
         station: true
       },
       5: {
-        coords: [300, 200],
+        coords: [315, 145],
         yellow: 1,
         red: 1,
         black: 0,
         blue: 2
       },
       6: {
-        coords: [300, 300],
+        coords: [370, 300],
         yellow: 1,
         red: 1,
         black: 0,
         blue: 1
       },
       7: {
-        coords: [200, 300],
-        yellow: 1,
-        red: 1,
-        black: 1,
-        blue: 1
+        coords: [370, 145],
+        yellow: 3,
+        red: 3,
+        black: 3,
+        blue: 3
       },
       8: {
-        coords: [400, 200],
+        coords: [405, 220],
         yellow: 1,
         red: 1,
         black: 1,

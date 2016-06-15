@@ -17,7 +17,7 @@ describe('Diseases selector', () => {
         name: 'P2',
         role: 'scientist',
         hand: [{ cardType: 'city', id: '0' }, { cardType: 'city', id: '2' },
-          { cardType: 'city', id: '1' }, { cardType: 'city', id: '3' }]
+          { cardType: 'city', id: '4' }, { cardType: 'city', id: '3' }]
       }
     },
     currentMove: {

@@ -7,7 +7,7 @@ export default {
   1: {
     id: '1',
     name: 'Chicago',
-    color: 'blue'
+    color: 'black'
   },
   2: {
     id: '2',
@@ -32,7 +32,7 @@ export default {
   6: {
     id: '6',
     name: 'Miami',
-    color: 'red'
+    color: 'yellow'
   },
   7: {
     id: '7',

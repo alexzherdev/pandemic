@@ -1,31 +1,50 @@
 import React from 'react';
-import { forOwn, find } from 'lodash';
+import { forOwn, find, partial, isEmpty } from 'lodash';
+
+import Cubes from './Cubes';
 
 
-const LocationsLayer = ({ cities, locations, availableCities }) => {
+const LocationsLayer = ({ cities, locations, availableCities, onCityClicked, onCityDoubleClicked }) => {
   const items = [];
+
   forOwn(cities, (c, id) => {
     const isAvailable = !!find(availableCities, { id });
     const loc = locations[id];
+    const coords = { top: loc.coords[0] - 16, left: loc.coords[1] - 16 };
+
+    const onClick = !isEmpty(availableCities) && partial(onCityClicked, id);
+    const onDoubleClick = isEmpty(availableCities) && partial(onCityDoubleClicked, id);
     items.push(
       <span
         className="city"
         key={id}
-        style={{top: loc.coords[0], left: loc.coords[1], backgroundColor: c.color, fontWeight: isAvailable ? 'bold' : 'normal' }}>
-          {c.name} {loc.station && '(S)'}
-      </span>
-    );
-    items.push(
-      <span
-        className="city"
-        key={`cubes-${id}`}
-        style={{top: loc.coords[0] - 15, left: loc.coords[1]}}>
-        r: {loc.red},b: {loc.blue},y: {loc.yellow},blk: {loc.black}
+        style={{...coords, fontWeight: isAvailable ? 'bold' : 'normal' }}
+        onClick={onClick}
+        onDoubleClick={onDoubleClick}>
+
+        <span className={`icon ${c.color}`} />
+
+        <Cubes location={loc} />
+        {isAvailable &&
+          <span className="selection-container">
+            <span className="selection" />
+            <span className="selection-bg" />
+          </span>
+        }
+        <span className="name">{c.name}</span>
+        {loc.station &&
+          <span
+            className="station"
+            onClick={onClick}
+            onDoubleClick={onDoubleClick} />
+        }
       </span>
     );
   });
   return (
-    <div>{items}</div>
+    <div>
+      {items}
+    </div>
   );
 };
 
