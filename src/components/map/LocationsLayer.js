@@ -4,7 +4,8 @@ import { forOwn, find, partial, isEmpty } from 'lodash';
 import Cubes from './Cubes';
 
 
-const LocationsLayer = ({ cities, locations, availableCities, onCityClicked, onCityDoubleClicked }) => {
+const LocationsLayer = ({ cities, locations, availableCities, onCityClicked, onCityDoubleClicked,
+  isDriveAvailable }) => {
   const items = [];
 
   forOwn(cities, (c, id) => {
@@ -13,7 +14,7 @@ const LocationsLayer = ({ cities, locations, availableCities, onCityClicked, onC
     const coords = { top: loc.coords[0] - 16, left: loc.coords[1] - 16 };
 
     const onClick = !isEmpty(availableCities) && partial(onCityClicked, id);
-    const onDoubleClick = isEmpty(availableCities) && partial(onCityDoubleClicked, id);
+    const onDoubleClick = isEmpty(availableCities) && isDriveAvailable(id) && partial(onCityDoubleClicked, id);
     items.push(
       <span
         className="city"

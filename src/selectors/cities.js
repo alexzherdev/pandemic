@@ -27,6 +27,11 @@ export function getAvailableCities(state, cityId = undefined) {
   return result;
 }
 
+export function isDriveAvailable(state, destinationId) {
+  const cityId = getCurrentCityId(state);
+  return !!_.find(getNeighborCities(state, cityId), { id: destinationId });
+}
+
 export function getMedicInCity(state, cityId) {
   return getRoleInCity(state, cityId, 'medic');
 }

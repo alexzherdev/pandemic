@@ -1,13 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { invertBy, reduce } from 'lodash';
+import { invertBy, reduce, partial } from 'lodash';
 
 import cities from '../constants/cities';
 import PlayersLayer from '../containers/PlayersLayer';
 import LocationsLayer from '../components/map/LocationsLayer';
 import PathsLayer from '../components/map/PathsLayer';
 import * as mapActions from '../actions/mapActions';
+import { isDriveAvailable } from '../selectors';
 
 
 class Map extends React.Component {
@@ -74,7 +75,7 @@ class Map extends React.Component {
   }
 
   onCityClicked(id) {
-    const { source } = this.props.currentMove.availableCities[id];
+    const { source } = this.props.availableCities[id];
     this.doMovePlayer(id, source);
   }
 
@@ -83,7 +84,7 @@ class Map extends React.Component {
   }
 
   render() {
-    const { map, availableCities, players, currentPlayerId } = this.props;
+    const { map, availableCities, players, currentPlayerId, isDriveAvailable } = this.props;
     const playersPositions = this.calculatePlayersPositions();
     const paths = this.calculatePaths();
 
@@ -91,7 +92,8 @@ class Map extends React.Component {
       <div className="map">
         <PathsLayer paths={paths} />
         <LocationsLayer locations={map.locations} cities={cities} availableCities={availableCities}
-          onCityClicked={this.onCityClicked} onCityDoubleClicked={this.onCityDoubleClicked} />
+          onCityClicked={this.onCityClicked} onCityDoubleClicked={this.onCityDoubleClicked}
+          isDriveAvailable={isDriveAvailable} />
         <PlayersLayer ref="players" players={players} playersPositions={playersPositions}
           currentPlayerId={currentPlayerId} />
       </div>
@@ -99,8 +101,10 @@ class Map extends React.Component {
   }
 }
 
-const mapStateToProps = ({ map, players, currentMove }) => {
-  return { map, players, currentMove, availableCities: currentMove.availableCities, currentPlayerId: currentMove.player };
+const mapStateToProps = (state) => {
+  return { map: state.map, players: state.players, currentMove: state.currentMove,
+    availableCities: state.currentMove.availableCities, currentPlayerId: state.currentMove.player,
+    isDriveAvailable: partial(isDriveAvailable, state) };
 };
 
 const mapDispatchToProps = (dispatch) => {
