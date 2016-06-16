@@ -69,7 +69,7 @@ body {
     margin-bottom: 0;
     position: fixed;
     width: 100%;
-    min-height: 100px;
+    min-height: 140px;
   }
 
   .actions {
@@ -82,6 +82,10 @@ body {
       .btn {
         font-size: 1.2em;
       }
+    }
+
+    .panel-footer {
+      text-align: center;
     }
   }
 

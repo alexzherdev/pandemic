@@ -29,6 +29,7 @@
     "jquery": "^3.0.0",
     "lodash": "^4.13.1",
     "object-assign": "4.1.0",
+    "pluralize": "^2.0.0",
     "react": "^15.1.0",
     "react-bootstrap": "^0.29.4",
     "react-dom": "^15.1.0",
