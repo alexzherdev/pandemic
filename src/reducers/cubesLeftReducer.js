@@ -1,3 +1,5 @@
+import { assignWith } from 'lodash';
+
 import initialState from './initialState';
 import * as types from '../constants/actionTypes';
 
@@ -9,6 +11,14 @@ export default function cubesLeftReducer(state = initialState.cubesLeft, action)
         ...state,
         [action.color]: state[action.color] - action.count
       };
+    case types.PLAYER_TREAT_DISEASE:
+    case types.PLAYER_TREAT_ALL_DISEASE:
+      return {
+        ...state,
+        [action.color]: state[action.color] + action.count
+      };
+    case types.MEDIC_TREAT_CURED_DISEASES:
+      return assignWith({}, state, action.cubes, (obj, src) => (obj || 0) + src);
     default:
       return state;
   }

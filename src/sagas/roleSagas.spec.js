@@ -25,9 +25,9 @@ describe('RoleSagas', function() {
 
     it('treats cured diseases in the city if the player is a medic', () => {
       this.next = this.generator.next('medic');
-      expect(this.next.value).to.eql(select(sel.getCuredDiseases));
-      this.next = this.generator.next(['red', 'yellow']);
-      expect(this.next.value).to.eql(put(medicTreatCuredDiseases('0', ['red', 'yellow'])));
+      expect(this.next.value).to.eql(select(sel.getCuredDiseaseCubes));
+      this.next = this.generator.next({ red: 2, yellow: 3 });
+      expect(this.next.value).to.eql(put(medicTreatCuredDiseases('0', { red: 2, yellow: 3 })));
       this.next = this.generator.next();
       expect(this.next.done).to.be.true;
     });
@@ -88,7 +88,9 @@ describe('RoleSagas', function() {
       this.next = this.generator.next({ id: '0' });
       expect(this.next.value).to.eql(select(sel.getPlayerCityId, '0'));
       this.next = this.generator.next('1');
-      expect(this.next.value).to.eql(put(medicTreatCuredDiseases('1', ['red'])));
+      expect(this.next.value).to.eql(select(sel.getCubesInCity, '1', 'red'));
+      this.next = this.generator.next(2);
+      expect(this.next.value).to.eql(put(medicTreatCuredDiseases('1', { red: 2 })));
     });
   });
 });

@@ -37,7 +37,12 @@ export function getCurableDisease(state) {
 
 export function getTreatableDiseases(state) {
   const loc = getCurrentMapLocation(state);
-  return DISEASES.filter((c) => loc[c] > 0);
+  return DISEASES.reduce((acc, c) => {
+    if (loc[c] > 0) {
+      acc[c] = loc[c];
+    }
+    return acc;
+  }, {});
 }
 
 export function canCureDisease(state, color) {
@@ -50,6 +55,12 @@ export function treatedAllOfColor(state, color) {
   return _.chain(state.map.locations).values().every({ [color]: 0 }).value();
 }
 
-export function getCuredDiseases(state) {
-  return DISEASES.filter((c) => getDiseaseStatus(state, c) === 'cured');
+export function getCuredDiseaseCubes(state) {
+  const loc = getCurrentMapLocation(state);
+  return DISEASES.reduce((acc, c) => {
+    if (getDiseaseStatus(state, c) === 'cured') {
+      acc[c] = loc[c];
+    }
+    return acc;
+  }, {});
 }

@@ -24,7 +24,7 @@ function cityReducer(state, action) {
         [action.color]: 0
       };
     case types.MEDIC_TREAT_CURED_DISEASES: {
-      const colors = reduce(action.colors, (acc, c) => { acc[c] = 0; return acc; }, {});
+      const colors = reduce(Object.keys(action.cubes), (acc, c) => { acc[c] = 0; return acc; }, {});
       return {
         ...state,
         ...colors
