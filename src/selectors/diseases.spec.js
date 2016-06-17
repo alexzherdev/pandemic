@@ -85,19 +85,6 @@ describe('Diseases selector', () => {
     }
   });
 
-  describe('canTreatColor', () => {
-    it('shows if the treat action is available', () => {
-      expect(sel.canTreatColor(getState(), 'red')).to.be.true;
-      expect(sel.canTreatColor(getState(), 'blue')).to.be.false;
-    });
-
-    it('returns false for a medic', () => {
-      let state = getState();
-      state = { ...state, players: { 0: { ...state.players[0], role: 'medic' }}};
-      expect(sel.canTreatColor(state, 'red')).to.be.false;
-    });
-  });
-
   describe('canTreatAllOfColor', () => {
     it('shows if the treat all action is available', () => {
       expect(sel.canTreatAllOfColor(getState(), 'yellow')).to.be.true;

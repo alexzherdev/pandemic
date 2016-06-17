@@ -2,21 +2,22 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { partial, isEmpty, isNull, values, shuffle, find } from 'lodash';
-import { Button, Panel } from 'react-bootstrap';
+import { Button, Panel, Glyphicon } from 'react-bootstrap';
 
 import * as mapActions from '../actions/mapActions';
 import * as diseaseActions from '../actions/diseaseActions';
 import * as cardActions from '../actions/cardActions';
 import * as globalActions from '../actions/globalActions';
-import { getCurrentCityId, canBuildStation, canTreatColor, canTreatAll,
+import { getCurrentCityId, canBuildStation, canTreatAll, canTreatAllOfColor,
   getPlayerHand, getPlayerToDiscard, getCurrentPlayer, canShareCards, cardsNeededToCure,
   getInfectionDiscard, getPlayers, getContPlannerEvent, isContingencyPlannerAbilityAvailable,
-  isDispatcher, getCurableDisease } from '../selectors';
+  isDispatcher, getCurableDisease, getTreatableDiseases } from '../selectors';
 
 import CityPicker from '../components/CityPicker';
 import SingleCardPicker from '../components/SingleCardPicker';
 import PlayerPicker from '../components/PlayerPicker';
 import MultiCardPicker from '../components/MultiCardPicker';
+import DiseasePicker from '../components/DiseasePicker';
 
 
 class Actions extends React.Component {
@@ -39,8 +40,13 @@ class Actions extends React.Component {
     this.onContPlannerCardPicked = this.onContPlannerCardPicked.bind(this);
     this.onDispatcherCancel = this.onDispatcherCancel.bind(this);
     this.onDispatcherPlayerPicked = this.onDispatcherPlayerPicked.bind(this);
+    this.onTreatColorPicked = this.onTreatColorPicked.bind(this);
+    this.onTreatClicked = this.onTreatClicked.bind(this);
 
-    this.state = { dispatcherPlayers: [] };
+    this.state = {
+      dispatcherPlayers: [],
+      showTreatColors: false
+    };
   }
 
   onDiscardCardPicked(cardType, id) {
@@ -90,6 +96,22 @@ class Actions extends React.Component {
       id,
       source);
     this.setState({ dispatcherPlayers: [] });
+  }
+
+  onTreatClicked() {
+    const { treatableDiseases, canTreatAll, canTreatAllOfColor, currentCityId } = this.props;
+    if (treatableDiseases.length > 1) {
+      this.setState({ showTreatColors: true });
+    } else {
+      const color = treatableDiseases[0];
+      this.props.actions[canTreatAll || canTreatAllOfColor(color) ? 'treatAllDisease' : 'treatDisease'](currentCityId, color);
+    }
+  }
+
+  onTreatColorPicked(color) {
+    const { canTreatAll, currentCityId, canTreatAllOfColor } = this.props;
+    this.props.actions[canTreatAll || canTreatAllOfColor(color) ? 'treatAllDisease' : 'treatDisease'](currentCityId, color);
+    this.setState({ showTreatColors: false });
   }
 
   onDispatcherPlayerPicked(id) {
@@ -144,7 +166,7 @@ class Actions extends React.Component {
     const { availableCities, shareCandidates, curingDisease, govGrantCities, resPopChooseCard,
       resPopSuggestOwner, forecastCards, airlift, opsMoveAbility, contPlannerEvents } = this.props.currentMove;
     const { playerToDiscard, infectionDiscard, players, isContingencyPlannerAbilityAvailable,
-      contPlannerEvent } = this.props;
+      contPlannerEvent, treatableDiseases, canTreatAll } = this.props;
     return (
       <Panel className="actions">
         {!isNull(playerToDiscard) &&
@@ -154,7 +176,7 @@ class Actions extends React.Component {
         <Button
           onClick={this.onMoveInit}
           disabled={!isEmpty(availableCities) || !isEmpty(this.state.dispatcherPlayers)}>
-            <span className="glyphicon glyphicon-arrow-right"></span><div>Move</div></Button>
+            <Glyphicon glyph="arrow-right" /><div>Move</div></Button>
         {!isEmpty(this.state.dispatcherPlayers) &&
           <PlayerPicker
             players={this.state.dispatcherPlayers}
@@ -169,41 +191,31 @@ class Actions extends React.Component {
         <Button
           onClick={partial(this.props.actions.buildStation, this.props.currentCityId)}
           disabled={!this.props.canBuildStation}>
-          <span className="glyphicon glyphicon-home"></span><div>Build</div></Button>
+          <Glyphicon glyph="home" /><div>Build</div></Button>
         <Button
           onClick={this.props.actions.shareCardsInit}
           disabled={!this.props.canShareCards || !isEmpty(shareCandidates)}>
-          <span className="glyphicon glyphicon-book"></span><div>Share</div></Button>
+          <Glyphicon glyph="book" /><div>Share</div></Button>
         {!isEmpty(shareCandidates) &&
           <PlayerPicker
             players={shareCandidates}
             onPlayerPicked={this.onShareCandidatePicked}
             onCancel={this.props.actions.shareCardsCancel} />}
-        {canTreatAll &&
-          <Button
-            onClick={partial(this.props.actions.treatAllDisease, this.props.currentCityId)}>
-            <span className="glyphicon glyphicon-plus"></span>
-            <div>Treat All</div>
-          </Button>
+        <Button
+          onClick={this.onTreatClicked}
+          disabled={isEmpty(treatableDiseases)}>
+          <Glyphicon glyph="plus" />
+          <div>{canTreatAll ? 'Treat All' : 'Treat'}</div>
+        </Button>
+        {this.state.showTreatColors &&
+          <DiseasePicker
+            diseases={treatableDiseases}
+            onDiseasePicked={this.onTreatColorPicked} />
         }
-        {false && ['red', 'blue', 'yellow', 'black'].map((color) =>
-          <span key={color}>
-            <Button
-              onClick={partial(this.props.canTreatAllOfColor(color)
-                ? this.props.actions.treatAllDisease
-                : this.props.actions.treatDisease, this.props.currentCityId, color)}
-              disabled={this.props.canTreatAllOfColor(color)
-                ? false
-                : !this.props.canTreatColor(color)}>
-              <span className="glyphicon glyphicon-plus"></span>
-              <div>Treat {this.props.canTreatAllOfColor(color) ? 'all ' : ''}{color}</div>
-            </Button>
-          </span>
-        )}
         <Button
           onClick={partial(this.props.actions.cureDiseaseInit, this.props.curableDisease)}
           disabled={!this.props.curableDisease}>
-          <span className="glyphicon glyphicon-ok"></span>
+          <Glyphicon glyph="ok" />
           <div>Cure</div>
         </Button>
         {!isEmpty(curingDisease) &&
@@ -268,8 +280,8 @@ class Actions extends React.Component {
 
 const mapStateToProps = (state) => {
   return { currentMove: state.currentMove, currentCityId: getCurrentCityId(state), canBuildStation: canBuildStation(state),
-    canTreatColor: partial(canTreatColor, state), canTreatAll: canTreatAll(state),
-    curableDisease: getCurableDisease(state), getPlayerHand: partial(getPlayerHand, state),
+    canTreatAll: canTreatAll(state), canTreatAllOfColor: partial(canTreatAllOfColor, state),
+    curableDisease: getCurableDisease(state), treatableDiseases: getTreatableDiseases(state), getPlayerHand: partial(getPlayerHand, state),
     playerToDiscard: getPlayerToDiscard(state), currentPlayer: getCurrentPlayer(state),
     canShareCards: canShareCards(state), cardsNeededToCure: cardsNeededToCure(state),
     infectionDiscard: getInfectionDiscard(state), players: getPlayers(state), contPlannerEvent: getContPlannerEvent(state),

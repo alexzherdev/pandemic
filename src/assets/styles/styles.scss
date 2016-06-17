@@ -64,11 +64,16 @@ body {
 }
 
 .game {
-  .actions {
+  .bottom-bar {
     bottom: 0;
     margin-bottom: 0;
     position: fixed;
     width: 100%;
+    min-height: 100px;
+  }
+
+  .actions {
+    @extend .bottom-bar;
     z-index: 10000;
 
     .panel-body {
@@ -78,6 +83,11 @@ body {
         font-size: 1.2em;
       }
     }
+  }
+
+  .disease-picker {
+    @extend .bottom-bar;
+    z-index: 10001;
   }
 
   .map {
