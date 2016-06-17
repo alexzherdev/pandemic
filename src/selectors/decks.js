@@ -31,3 +31,7 @@ export function getCardsForContPlanner(state) {
   return state.playerCards.discard.filter((c) => c.cardType === 'event')
     .map((c) => ({ ...c, name: events[c.id].name }));
 }
+
+export function getPlayerDeckCount(state) {
+  return state.playerCards.deck.length;
+}

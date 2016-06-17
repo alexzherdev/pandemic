@@ -4,9 +4,17 @@ $selSize: 40px;
 $cubeSize: 24px;
 $outbrSize: 40px;
 $playerSize: 40px;
+$topIconSize: 20px;
 
+
+html {
+  overflow: hidden;
+  height: 100%;
+}
 
 body {
+  height: 100%;
+  overflow: auto;
   margin: 0;
 }
 
@@ -64,19 +72,104 @@ body {
 }
 
 .game {
+  .top-bar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    width: 500px;
+    top: 0;
+    margin: 0 auto;
+    z-index: 10000;
+
+    .panel-body {
+      padding: 2px;
+      font-size: 0.8em;
+      display: flex;
+      justify-content: center;
+
+      > span {
+        padding: 0 3px;
+      }
+
+      span {
+        vertical-align: middle;
+      }
+
+      .top-icon {
+        background-size: $topIconSize $topIconSize;
+        width: $topIconSize;
+        height: $topIconSize;
+        display: inline-block;
+        margin-right: 2px;
+      }
+
+      .cube-icon-red {
+        background-image: url(../images/cube_red.png);
+      }
+
+      .cube-icon-yellow {
+        background-image: url(../images/cube_yellow.png);
+      }
+
+      .cube-icon-blue {
+        background-image: url(../images/cube_blue.png);
+      }
+
+      .cube-icon-black {
+        background-image: url(../images/cube_black.png);
+      }
+
+      .stations-icon {
+        background-image: url(../images/station.png);
+      }
+
+      .infection-rate-icon {
+        background-image: url(../images/infection_rate.png);
+      }
+
+      .outbreaks-icon {
+        background-image: url(../images/outbreaks.png);
+      }
+
+      .player-deck {
+        position: relative;
+
+        .player-deck-icon {
+          width: 25px;
+          height: 35px;
+          background-size: 25px 35px;
+          background-image: url(../images/player_card.png);
+          position: absolute;
+          right: 12px;
+        }
+      }
+
+
+      .infection-deck-icon {
+        width: 25px;
+        height: 35px;
+        background-size: 25px 35px;
+        background-image: url(../images/infection_card.png);
+        position: absolute;
+      }
+    }
+  }
+
   .bottom-bar {
     bottom: 0;
     margin-bottom: 0;
     position: fixed;
     width: 100%;
-    min-height: 140px;
+    min-height: 110px;
   }
 
   .actions {
     @extend .bottom-bar;
+    border-top: 3px solid #485563;
     z-index: 10000;
 
     .panel-body {
+      padding: 0;
       text-align: center;
 
       .btn {
@@ -100,6 +193,7 @@ body {
     height: 768px;
     background: url(../images/map.jpg);
     background-size: cover;
+    margin: 0 auto;
 
     .city, .player, .station {
       position: absolute;
@@ -247,7 +341,7 @@ body {
       .cur-player {
         position: absolute;
         -webkit-animation-name: cur-player;
-        -webkit-animation-duration: 0.6s;
+        -webkit-animation-duration: 0.8s;
         -webkit-animation-iteration-count: infinite;
         -webkit-animation-timing-function: ease;
         -webkit-animation-direction: alternate;
