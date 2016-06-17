@@ -7,12 +7,8 @@ import { getCurrentPlayer, getCurrentRole } from './gameplay';
 
 const DISEASES = ['blue', 'red', 'yellow', 'black'];
 
-export function canTreatColor(state, color) {
-  if (getCurrentRole(state) === 'medic') {
-    return false;
-  }
-  const loc = getCurrentMapLocation(state);
-  return loc[color] > 0;
+export function allDiseases() {
+  return DISEASES;
 }
 
 export function canTreatAll(state) {
@@ -20,8 +16,7 @@ export function canTreatAll(state) {
 }
 
 export function canTreatAllOfColor(state, color) {
-  return getCurrentRole(state) === 'medic'
-    || canTreatColor(state, color) && getDiseaseStatus(state, color) === 'cured';
+  return getDiseaseStatus(state, color) === 'cured';
 }
 
 export function getDiseaseStatus(state, color) {
@@ -38,6 +33,11 @@ export function cardsNeededToCure(state) {
 
 export function getCurableDisease(state) {
   return _.find(DISEASES, (c) => canCureDisease(state, c));
+}
+
+export function getTreatableDiseases(state) {
+  const loc = getCurrentMapLocation(state);
+  return DISEASES.filter((c) => loc[c] > 0);
 }
 
 export function canCureDisease(state, color) {

@@ -24,7 +24,7 @@ export default class PlayersLayer extends React.Component {
           key={pos.id}
           className={`player ${players[pos.id].role}`}
           style={{top: loc[0], left: loc[1]}}>
-          {+pos.id === currentPlayerId &&
+          {pos.id === currentPlayerId &&
             <span className="cur-player glyphicon glyphicon-triangle-bottom" />
           }
         </span>
