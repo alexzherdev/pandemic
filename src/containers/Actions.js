@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { partial, isEmpty, isNull, values, shuffle, find } from 'lodash';
 import { Button, Panel, Glyphicon } from 'react-bootstrap';
+import pluralize from 'pluralize';
 
 import * as mapActions from '../actions/mapActions';
 import * as diseaseActions from '../actions/diseaseActions';
@@ -170,11 +171,13 @@ class Actions extends React.Component {
 
   render() {
     const { availableCities, shareCandidates, curingDisease, govGrantCities, resPopChooseCard,
-      resPopSuggestOwner, forecastCards, airlift, opsMoveAbility, contPlannerEvents } = this.props.currentMove;
+      resPopSuggestOwner, forecastCards, airlift, opsMoveAbility, contPlannerEvents, actionsLeft } = this.props.currentMove;
     const { playerToDiscard, infectionDiscard, players, isContingencyPlannerAbilityAvailable,
-      contPlannerEvent, treatableDiseases, canTreatAll } = this.props;
+      contPlannerEvent, treatableDiseases, canTreatAll, currentPlayer } = this.props;
     return (
-      <Panel className="actions">
+      <Panel
+        className="actions"
+        footer={`${currentPlayer.name}'s turn, ${pluralize('action', actionsLeft, true)} left`}>
         {!isNull(playerToDiscard) &&
           <SingleCardPicker
             hand={this.props.getPlayerHand(playerToDiscard)}
