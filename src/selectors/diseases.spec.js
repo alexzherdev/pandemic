@@ -126,9 +126,9 @@ describe('Diseases selector', () => {
     });
   });
 
-  describe('getCuredDiseases', () => {
-    it('returns all diseases that have been cured', () => {
-      expect(sel.getCuredDiseases(getState())).to.eql(['yellow']);
+  describe('getCuredDiseaseCubes', () => {
+    it('returns all cubes in the current city for diseases that have been cured', () => {
+      expect(sel.getCuredDiseaseCubes(getState())).to.eql({ yellow: 2 });
     });
   });
 });

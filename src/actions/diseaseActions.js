@@ -1,11 +1,11 @@
 import * as types from '../constants/actionTypes';
 
-export function treatDisease(cityId, color) {
-  return { type: types.PLAYER_TREAT_DISEASE, cityId, color };
+export function treatDisease(cityId, color, count) {
+  return { type: types.PLAYER_TREAT_DISEASE, cityId, color, count };
 }
 
-export function treatAllDisease(cityId, color) {
-  return { type: types.PLAYER_TREAT_ALL_DISEASE, cityId, color };
+export function treatAllDisease(cityId, color, count) {
+  return { type: types.PLAYER_TREAT_ALL_DISEASE, cityId, color, count };
 }
 
 export function cureDiseaseInit(color) {
@@ -60,8 +60,8 @@ export function oneQuietNightSkip() {
   return { type: types.EVENT_ONE_QUIET_NIGHT_SKIP };
 }
 
-export function medicTreatCuredDiseases(cityId, colors) {
-  return { type: types.MEDIC_TREAT_CURED_DISEASES, cityId, colors };
+export function medicTreatCuredDiseases(cityId, cubes) {
+  return { type: types.MEDIC_TREAT_CURED_DISEASES, cityId, cubes };
 }
 
 export function medicPreventInfection(playerId, cityId, color, count) {

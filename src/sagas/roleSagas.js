@@ -10,8 +10,8 @@ import * as sel from '../selectors';
 
 export function* treatCuredDiseasesOnMedicMove(action) {
   if ((yield select(sel.getPlayerRole, action.playerId)) === 'medic') {
-    const curedDiseases = yield select(sel.getCuredDiseases);
-    yield put(medicTreatCuredDiseases(action.destinationId, curedDiseases));
+    const curedDiseaseCubes = yield select(sel.getCuredDiseaseCubes);
+    yield put(medicTreatCuredDiseases(action.destinationId, curedDiseaseCubes));
   }
 }
 
@@ -36,7 +36,8 @@ export function* clearCubesNearMedic(action) {
   const medic = yield select(sel.getMedicInTeam);
   if (medic) {
     const cityId = yield select(sel.getPlayerCityId, medic.id);
-    yield put(medicTreatCuredDiseases(cityId, [action.color]));
+    const cubes = yield select(sel.getCubesInCity, cityId, action.color);
+    yield put(medicTreatCuredDiseases(cityId, { [action.color]: cubes }));
   }
 }
 

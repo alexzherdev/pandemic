@@ -98,19 +98,25 @@ class Actions extends React.Component {
     this.setState({ dispatcherPlayers: [] });
   }
 
-  onTreatClicked() {
+  doTreat(color) {
     const { treatableDiseases, canTreatAll, canTreatAllOfColor, currentCityId } = this.props;
-    if (treatableDiseases.length > 1) {
+    const shouldTreatAll = canTreatAll || canTreatAllOfColor(color);
+    const count = shouldTreatAll ? treatableDiseases[color] : 1;
+    this.props.actions[shouldTreatAll ? 'treatAllDisease' : 'treatDisease'](currentCityId, color, count);
+  }
+
+  onTreatClicked() {
+    const { treatableDiseases } = this.props;
+    if (Object.keys(treatableDiseases).length > 1) {
       this.setState({ showTreatColors: true });
     } else {
-      const color = treatableDiseases[0];
-      this.props.actions[canTreatAll || canTreatAllOfColor(color) ? 'treatAllDisease' : 'treatDisease'](currentCityId, color);
+      const color = Object.keys(treatableDiseases)[0];
+      this.doTreat(color);
     }
   }
 
   onTreatColorPicked(color) {
-    const { canTreatAll, currentCityId, canTreatAllOfColor } = this.props;
-    this.props.actions[canTreatAll || canTreatAllOfColor(color) ? 'treatAllDisease' : 'treatDisease'](currentCityId, color);
+    this.doTreat(color);
     this.setState({ showTreatColors: false });
   }
 
@@ -209,7 +215,7 @@ class Actions extends React.Component {
         </Button>
         {this.state.showTreatColors &&
           <DiseasePicker
-            diseases={treatableDiseases}
+            diseases={Object.keys(treatableDiseases)}
             onDiseasePicked={this.onTreatColorPicked} />
         }
         <Button
