@@ -1,8 +1,7 @@
 import React from 'react';
 
+import TopBar from '../containers/TopBar';
 import Map from '../containers/Map';
-import Hand from '../containers/Hand';
-import Events from '../containers/Events';
 import Actions from '../containers/Actions';
 
 
@@ -19,9 +18,8 @@ export default class Game extends React.Component {
   render() {
     return (
       <div className="game">
+        <TopBar />
         <Actions onPlayerMoved={this.onPlayerMoved} />
-        <Hand />
-        <Events />
         <Map ref="map"/>
       </div>
     );
