@@ -2,6 +2,7 @@ import React from 'react';
 
 import TopBar from '../containers/TopBar';
 import Map from '../containers/Map';
+import TeamPanel from '../containers/TeamPanel';
 import Actions from '../containers/Actions';
 
 
@@ -19,6 +20,7 @@ export default class Game extends React.Component {
     return (
       <div className="game">
         <TopBar />
+        <TeamPanel />
         <Actions onPlayerMoved={this.onPlayerMoved} />
         <Map ref="map"/>
       </div>

@@ -22,7 +22,7 @@ export default {
   players: {
     0: {
       id: '0',
-      name: 'P1',
+      name: 'Stephen',
       role: 'medic',
       specialEvent: null,
       hand: [
@@ -36,17 +36,39 @@ export default {
     },
     1: {
       id: '1',
-      name: 'P2',
+      name: 'Rima',
       role: 'ops_expert',
       hand: [
-        { cardType: 'city', id: '4' }
+        { cardType: 'city', id: '4' },
+        { cardType: 'city', id: '1' },
+        { cardType: 'city', id: '6' },
+        { cardType: 'city', id: '8' },
+        { cardType: 'city', id: '7' }
       ]
     },
     2: {
       id: '2',
-      name: 'P3',
-      role: 'dispatcher',
-      hand: []
+      name: 'Thomas',
+      role: 'quar_spec',
+      hand: [
+        { cardType: 'city', id: '4' },
+        { cardType: 'city', id: '0' },
+        { cardType: 'city', id: '3' },
+        { cardType: 'city', id: '2' },
+        { cardType: 'city', id: '5' }
+      ]
+    },
+    3: {
+      id: '3',
+      name: 'Paul',
+      role: 'cont_planner',
+      hand: [
+        { cardType: 'city', id: '4' },
+        { cardType: 'city', id: '0' },
+        { cardType: 'city', id: '3' },
+        { cardType: 'city', id: '2' },
+        { cardType: 'city', id: '5' }
+      ]
     }
   },
 

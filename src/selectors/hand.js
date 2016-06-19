@@ -23,8 +23,13 @@ export function getCurrentPlayerHand(state) {
 }
 
 export function getPlayerHand(state, playerId) {
-  return state.players[playerId].hand.map((card) =>
-    ({...card, name: card.cardType === 'city' ? cities[card.id].name : events[card.id].name }));
+  return state.players[playerId].hand.map((card) => {
+    const res = { ...card, name: card.cardType === 'city' ? cities[card.id].name : events[card.id].name };
+    if (card.cardType === 'city') {
+      res.color = getCityColor(state, card.id);
+    }
+    return res;
+  });
 }
 
 export function isOverHandLimit(state, playerId) {
