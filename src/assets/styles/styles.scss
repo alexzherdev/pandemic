@@ -187,6 +187,100 @@ body {
     z-index: 10001;
   }
 
+  .team-panel {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 110px;
+    margin-bottom: 0;
+    min-width: 150px;
+
+    overflow-y: scroll;
+
+    > .panel-body {
+      padding: 0;
+    }
+
+
+    .team-player {
+      margin-bottom: 0;
+
+      .event {
+        color: darkorange;
+      }
+
+      .panel-heading {
+        padding-top: 1px;
+        padding-bottom: 1px;
+        color: black;
+
+        h5 {
+          font-weight: bold;
+        }
+
+        h5, h6 {
+          margin-top: 2px;
+          margin-bottom: 2px;
+        }
+      }
+
+      .list-group {
+        padding-top: 5px;
+        padding-bottom: 5px;
+        border-left: 3px solid #485563;
+
+        .list-group-item {
+          padding: 0 5px;
+          font-size: 0.9em;
+        }
+      }
+
+
+      &.team-player-cont_planner {
+        .panel-heading {
+          background: #35acb3;
+        }
+      }
+
+      &.team-player-dispatcher {
+        .panel-heading {
+          background: #b86291;
+        }
+      }
+
+      &.team-player-medic {
+        .panel-heading {
+          background: darkorange;
+        }
+      }
+
+      &.team-player-ops_expert {
+        .panel-heading {
+          background: #5fa73f;
+        }
+      }
+
+      &.team-player-quar_spec {
+        .panel-heading {
+          background: #26734f;
+        }
+      }
+
+      &.team-player-researcher {
+        .panel-heading {
+          background: #ad7457;
+        }
+      }
+
+      &.team-player-scientist {
+        .panel-heading {
+          background: #c7c7c7;
+        }
+      }
+    }
+
+  }
+
   .map {
     position: relative;
     width: 1024px;
