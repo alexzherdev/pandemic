@@ -8,7 +8,7 @@ import Map from './Map';
 import TeamPanel from './TeamPanel';
 import BottomBar from './BottomBar';
 import * as mapActions from '../actions/mapActions';
-import { getPlayers, getCurrentCityId, getCitiesForGovGrant } from '../selectors';
+import { getPlayers, getCurrentCityId } from '../selectors';
 
 
 class Game extends React.Component {
@@ -40,11 +40,15 @@ class Game extends React.Component {
   }
 
   onCityClicked(id) {
-    if (!isEmpty(this.props.currentMove.availableCities)) {
-      const { source } = this.props.currentMove.availableCities[id];
+    const { availableCities, airlift, govGrantCities } = this.props.currentMove;
+    if (!isEmpty(availableCities)) {
+      const { source } = availableCities[id];
       this.doMovePlayer(id, source);
-    } else if (!isEmpty(this.props.govGrantCities)) {
+    } else if (!isEmpty(govGrantCities)) {
       this.props.actions.govGrantBuildStation(id);
+    } else if (!isEmpty(airlift) && !isEmpty(airlift.cities)) {
+      this.refs.map.getWrappedInstance().transitionPlayerMove(airlift.playerId, id);
+      this.props.actions.airliftMoveToCity(airlift.playerId, id);
     }
   }
 
@@ -72,8 +76,7 @@ const mapStateToProps = (state) => ({
   currentMove: state.currentMove,
   players: getPlayers(state),
   currentPlayerId: state.currentMove.player,
-  currentCityId: getCurrentCityId(state),
-  govGrantCities: getCitiesForGovGrant(state)
+  currentCityId: getCurrentCityId(state)
 });
 
 const mapDispatchToProps = (dispatch) => ({
