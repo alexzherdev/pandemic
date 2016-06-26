@@ -11,7 +11,7 @@ import MultiCardPicker from '../components/MultiCardPicker';
 import PlayerPicker from '../components/PlayerPicker';
 import DiseasePicker from '../components/DiseasePicker';
 import { getPlayerToDiscard, getPlayerHand, getTreatableDiseases, canTreatAllOfColor, canTreatAll,
-  getCurrentCityId, getCurrentPlayer, isDispatcher, getPlayers } from '../selectors';
+  getCurrentCityId, getCurrentPlayer, isDispatcher, getPlayers, getEventsInHands } from '../selectors';
 import * as mapActions from '../actions/mapActions';
 import * as cardActions from '../actions/cardActions';
 import * as diseaseActions from '../actions/diseaseActions';
@@ -23,13 +23,14 @@ class BottomBar extends React.Component {
 
     ['onShowTreatColors', 'onTreatColorPicked', 'onDiscardCardPicked', 'onShareCandidatePicked',
       'onCureCardsPicked', 'onAirliftPlayerPicked', 'onOpsCardPicked', 'onContPlannerCardPicked',
-      'onMoveInit', 'onDispatcherPlayerPicked', 'onDispatcherCancel'].forEach((meth) => {
+      'onMoveInit', 'onDispatcherPlayerPicked', 'onDispatcherCancel', 'chooseEvent', 'onEventPicked'].forEach((meth) => {
       this[meth] = this[meth].bind(this);
     });
 
     this.state = {
       showTreatColors: false,
-      dispatcherPlayers: []
+      dispatcherPlayers: [],
+      events: []
     };
   }
 
@@ -102,10 +103,19 @@ class BottomBar extends React.Component {
     this.setState({ dispatcherPlayers: [] });
   }
 
+  chooseEvent() {
+    this.setState({ events: this.props.events });
+  }
+
+  onEventPicked(cardType, id, playerId) {
+    this.setState({ events: [] });
+    this.props.actions.playEventInit(playerId, id);
+  }
+
   render() {
     const { playerToDiscard, players, treatableDiseases } = this.props;
     const { shareCandidates, curingDisease, airlift, opsMoveAbility, contPlannerEvents,
-      availableCities } = this.props.currentMove;
+      availableCities, govGrantCities } = this.props.currentMove;
     let content;
     if (playerToDiscard !== null) {
       content = (
@@ -159,16 +169,23 @@ class BottomBar extends React.Component {
           onPlayerPicked={this.onDispatcherPlayerPicked}
           onCancel={this.onDispatcherCancel} />
       );
+    } else if (!isEmpty(this.state.events)) {
+      content = (
+        <SingleCardPicker
+          hand={this.state.events}
+          onCardPicked={this.onEventPicked} />
+      );
     } else {
       content = (
         <Actions
           onShowTreatColors={this.onShowTreatColors}
           onTreatColorPicked={this.onTreatColorPicked}
-          onMoveInit={this.onMoveInit} />
+          onMoveInit={this.onMoveInit}
+          onPlayEventClicked={this.chooseEvent} />
       );
     }
 
-    const classes = classnames(['bottom-bar', { 'hide': !isEmpty(availableCities) }]);
+    const classes = classnames(['bottom-bar', { 'hide': !isEmpty(availableCities) || !isEmpty(govGrantCities) }]);
     return (
       <Panel className={classes}>
         {content}
@@ -187,7 +204,8 @@ const mapStateToProps = (state) => ({
   canTreatAll: canTreatAll(state),
   canTreatAllOfColor: partial(canTreatAllOfColor, state),
   isDispatcher: isDispatcher(state),
-  players: getPlayers(state)
+  players: getPlayers(state),
+  events: getEventsInHands(state)
 });
 
 const mapDispatchToProps = (dispatch) => ({
