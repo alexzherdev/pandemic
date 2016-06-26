@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { invertBy, reduce, partial } from 'lodash';
+import { invertBy, reduce, partial, find, isEmpty } from 'lodash';
 
 import cities from '../constants/cities';
 import PlayersLayer from '../containers/PlayersLayer';
@@ -14,8 +14,6 @@ import { isDriveAvailable } from '../selectors';
 class Map extends React.Component {
   constructor(props) {
     super(props);
-    this.onCityClicked = this.onCityClicked.bind(this);
-    this.onCityDoubleClicked = this.onCityDoubleClicked.bind(this);
   }
 
   transitionPlayerMove(playerId, destinationId) {
@@ -54,44 +52,19 @@ class Map extends React.Component {
     }, []);
   }
 
-  doMovePlayer(destinationId, source) {
-    const { playerToMove } = this.props.currentMove;
-    let playerId, originId;
-    if (playerToMove) {
-      playerId = playerToMove;
-      originId = find(this.props.players, { id: playerId });
-    } else {
-      playerId = this.props.currentPlayerId;
-      originId = this.props.currentCityId;
-    }
-
-    this.transitionPlayerMove(playerId, destinationId);
-    this.props.actions.moveToCity(
-      playerId,
-      originId,
-      destinationId,
-      source);
-  }
-
-  onCityClicked(id) {
-    const { source } = this.props.availableCities[id];
-    this.doMovePlayer(id, source);
-  }
-
-  onCityDoubleClicked(id) {
-    this.doMovePlayer(id, 'drive');
-  }
-
   render() {
     const { map, availableCities, players, currentPlayerId, isDriveAvailable } = this.props;
+    const { govGrantCities } = this.props.currentMove;
+
     const playersPositions = this.calculatePlayersPositions();
     const paths = this.calculatePaths();
+    const citiesToSelect = find([availableCities, govGrantCities], (c) => !isEmpty(c));
 
     return (
       <div className="map">
         <PathsLayer paths={paths} />
-        <LocationsLayer locations={map.locations} cities={cities} availableCities={availableCities}
-          onCityClicked={this.onCityClicked} onCityDoubleClicked={this.onCityDoubleClicked}
+        <LocationsLayer locations={map.locations} cities={cities} availableCities={citiesToSelect}
+          onCityClicked={this.props.onCityClicked} onCityDoubleClicked={this.props.onCityDoubleClicked}
           isDriveAvailable={isDriveAvailable} />
         <PlayersLayer ref="players" players={players} playersPositions={playersPositions}
           currentPlayerId={currentPlayerId} />

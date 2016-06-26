@@ -12,7 +12,7 @@ import * as globalActions from '../actions/globalActions';
 import { getCurrentCityId, canBuildStation, canTreatAll,
   getCurrentPlayer, canShareCards,
   getInfectionDiscard, getContPlannerEvent, isContingencyPlannerAbilityAvailable,
-  getCurableDisease, getTreatableDiseases } from '../selectors';
+  getCurableDisease, getTreatableDiseases, getEventsInHands } from '../selectors';
 
 import CityPicker from '../components/CityPicker';
 
@@ -66,10 +66,10 @@ class Actions extends React.Component {
 
 
   render() {
-    const { shareCandidates, govGrantCities, resPopChooseCard,
-      resPopSuggestOwner, forecastCards, airlift, actionsLeft } = this.props.currentMove;
+    const { shareCandidates, resPopChooseCard, resPopSuggestOwner, forecastCards,
+      airlift, actionsLeft } = this.props.currentMove;
     const { infectionDiscard, isContingencyPlannerAbilityAvailable,
-      contPlannerEvent, treatableDiseases, canTreatAll, currentPlayer } = this.props;
+      contPlannerEvent, treatableDiseases, canTreatAll, currentPlayer, events } = this.props;
     return (
       <Panel
         className="actions"
@@ -98,11 +98,6 @@ class Actions extends React.Component {
           <div>Cure</div>
         </Button>
 
-        {!isEmpty(govGrantCities) &&
-          <CityPicker
-            cities={govGrantCities}
-            onSubmit={this.onGovGrantCityPicked} />
-        }
         {resPopChooseCard &&
           <CityPicker
             cities={infectionDiscard}
@@ -130,6 +125,13 @@ class Actions extends React.Component {
           <Button onClick={partial(this.props.actions.playEventInit, this.props.currentPlayer.id,
             contPlannerEvent.id)}>{contPlannerEvent.name}</Button>
         }
+        {!isEmpty(events) &&
+          <Button
+            onClick={this.props.onPlayEventClicked}
+            className="play-event">
+            Play Event
+          </Button>
+        }
       </Panel>
     );
   }
@@ -141,7 +143,8 @@ const mapStateToProps = (state) => {
     curableDisease: getCurableDisease(state), treatableDiseases: getTreatableDiseases(state),
     currentPlayer: getCurrentPlayer(state), canShareCards: canShareCards(state),
     infectionDiscard: getInfectionDiscard(state), contPlannerEvent: getContPlannerEvent(state),
-    isContingencyPlannerAbilityAvailable: isContingencyPlannerAbilityAvailable(state)
+    isContingencyPlannerAbilityAvailable: isContingencyPlannerAbilityAvailable(state),
+    events: getEventsInHands(state)
   };
 };
 
