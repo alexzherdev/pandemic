@@ -54,11 +54,11 @@ class Map extends React.Component {
 
   render() {
     const { map, availableCities, players, currentPlayerId, isDriveAvailable } = this.props;
-    const { govGrantCities } = this.props.currentMove;
+    const { govGrantCities, airlift } = this.props.currentMove;
 
     const playersPositions = this.calculatePlayersPositions();
     const paths = this.calculatePaths();
-    const citiesToSelect = find([availableCities, govGrantCities], (c) => !isEmpty(c));
+    const citiesToSelect = find([availableCities, govGrantCities, airlift && airlift.cities], (c) => !isEmpty(c));
 
     return (
       <div className="map">

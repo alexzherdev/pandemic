@@ -26,7 +26,6 @@ class Actions extends React.Component {
     this.onResPopUsed = this.onResPopUsed.bind(this);
     this.onContinueTurn = this.onContinueTurn.bind(this);
     this.onForecastShuffled = this.onForecastShuffled.bind(this);
-    this.onAirliftCityPicked = this.onAirliftCityPicked.bind(this);
     this.onTreatClicked = this.onTreatClicked.bind(this);
   }
 
@@ -60,14 +59,10 @@ class Actions extends React.Component {
     this.props.actions.forecastShuffle(shuffle([...this.props.currentMove.forecastCards]));
   }
 
-  onAirliftCityPicked(id) {
-    this.props.actions.airliftMoveToCity(this.props.currentMove.airlift.playerId, id);
-  }
-
 
   render() {
     const { shareCandidates, resPopChooseCard, resPopSuggestOwner, forecastCards,
-      airlift, actionsLeft } = this.props.currentMove;
+      actionsLeft } = this.props.currentMove;
     const { infectionDiscard, isContingencyPlannerAbilityAvailable,
       contPlannerEvent, treatableDiseases, canTreatAll, currentPlayer, events } = this.props;
     return (
@@ -112,11 +107,7 @@ class Actions extends React.Component {
         {!isEmpty(forecastCards) &&
           <Button onClick={this.onForecastShuffled}>Shuffle</Button>
         }
-        {!isEmpty(airlift) && !isEmpty(airlift.cities) &&
-          <CityPicker
-            cities={airlift.cities}
-            onSubmit={this.onAirliftCityPicked} />
-        }
+
         {isContingencyPlannerAbilityAvailable &&
           <Button
             onClick={partial(this.props.actions.contPlannerInit, this.props.currentPlayer.id)}>Planner Special</Button>
