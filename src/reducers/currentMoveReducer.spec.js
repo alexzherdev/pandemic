@@ -21,8 +21,7 @@ describe('CurrentMoveReducer', () => {
     curingDisease: {},
     skipInfectionsStep: false,
     govGrantCities: [],
-    resPopChooseCard: false,
-    resPopSuggestOwner: null,
+    resPop: {},
     forecastCards: [],
     airlift: {},
     opsMoveAbility: {
@@ -269,17 +268,17 @@ describe('CurrentMoveReducer', () => {
     });
   });
 
-  describe('resPopChooseCard', () => {
+  describe('resPop', () => {
     it('stores a flag on PLAYER_PLAY_EVENT_INIT', () => {
       const action = { type: types.PLAYER_PLAY_EVENT_INIT, id: 'res_pop' };
       const initial = getInitialState();
-      const expected = { ...getInitialState(), resPopChooseCard: true };
+      const expected = { ...getInitialState(), resPop: { chooseCard: true }};
       expect(reducer(initial, action)).to.eql(expected);
     });
 
     it('resets flag on EVENT_RES_POP_REMOVE_CARD', () => {
       const action = { type: types.EVENT_RES_POP_REMOVE_CARD, cityId: '0' };
-      const initial = { ...getInitialState(), resPopChooseCard: true };
+      const initial = { ...getInitialState(), resPop: { chooseCard: true }};
       const expected = getInitialState();
       expect(reducer(initial, action)).to.eql(expected);
     });

@@ -21,10 +21,6 @@ class Actions extends React.Component {
   constructor(props) {
     super(props);
 
-    this.onGovGrantCityPicked = this.onGovGrantCityPicked.bind(this);
-    this.onResPopCardPicked = this.onResPopCardPicked.bind(this);
-    this.onResPopUsed = this.onResPopUsed.bind(this);
-    this.onContinueTurn = this.onContinueTurn.bind(this);
     this.onForecastShuffled = this.onForecastShuffled.bind(this);
     this.onTreatClicked = this.onTreatClicked.bind(this);
   }
@@ -39,30 +35,13 @@ class Actions extends React.Component {
     }
   }
 
-  onGovGrantCityPicked(id) {
-    this.props.actions.govGrantBuildStation(id);
-  }
-
-  onResPopCardPicked(id) {
-    this.props.actions.resPopRemoveCard(id);
-  }
-
-  onResPopUsed() {
-    this.props.actions.playEventInit(this.props.currentMove.resPopSuggestOwner, 'res_pop');
-  }
-
-  onContinueTurn() {
-    this.props.actions.continueTurn();
-  }
-
   onForecastShuffled() {
     this.props.actions.forecastShuffle(shuffle([...this.props.currentMove.forecastCards]));
   }
 
 
   render() {
-    const { shareCandidates, resPopChooseCard, resPopSuggestOwner, forecastCards,
-      actionsLeft } = this.props.currentMove;
+    const { shareCandidates, forecastCards, actionsLeft } = this.props.currentMove;
     const { infectionDiscard, isContingencyPlannerAbilityAvailable,
       contPlannerEvent, treatableDiseases, canTreatAll, currentPlayer, events } = this.props;
     return (
@@ -93,17 +72,6 @@ class Actions extends React.Component {
           <div>Cure</div>
         </Button>
 
-        {resPopChooseCard &&
-          <CityPicker
-            cities={infectionDiscard}
-            onSubmit={this.onResPopCardPicked} />
-        }
-        {resPopSuggestOwner &&
-          <div>
-            <Button onClick={this.onResPopUsed}>Use res pop</Button>
-            <Button onClick={this.onContinueTurn}>Continue</Button>
-          </div>
-        }
         {!isEmpty(forecastCards) &&
           <Button onClick={this.onForecastShuffled}>Shuffle</Button>
         }

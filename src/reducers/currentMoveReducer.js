@@ -140,27 +140,24 @@ function govGrantCities(state, action) {
   }
 }
 
-function resPopChooseCard(state, action) {
+function resPop(state, action) {
   switch (action.type) {
     case types.PLAYER_PLAY_EVENT_INIT:
       if (action.id === 'res_pop') {
-        return true;
+        return {
+          ...state,
+          chooseCard: true
+        };
       }
       return state;
     case types.EVENT_RES_POP_REMOVE_CARD:
-      return false;
-    default:
-      return state;
-  }
-}
-
-function resPopSuggestOwner(state, action) {
-  switch (action.type) {
-    case types.EVENT_RES_POP_SUGGEST:
-      return action.playerId;
     case types.CONTINUE:
-    case types.PLAYER_PLAY_EVENT_INIT:
-      return null;
+      return {};
+    case types.EVENT_RES_POP_SUGGEST:
+      return {
+        ...state,
+        suggestOwner: action.playerId
+      };
     default:
       return state;
   }
@@ -247,8 +244,7 @@ export default function currentMoveReducer(state = initialState.currentMove, act
     curingDisease: curingDisease(state.curingDisease, action),
     skipInfectionsStep: skipInfectionsStep(state.skipInfectionsStep, action),
     govGrantCities: govGrantCities(state.govGrantCities, action),
-    resPopChooseCard: resPopChooseCard(state.resPopChooseCard, action),
-    resPopSuggestOwner: resPopSuggestOwner(state.resPopSuggestOwner, action),
+    resPop: resPop(state.resPop, action),
     forecastCards: forecastCards(state.forecastCards, action),
     airlift: airlift(state.airlift, action),
     opsMoveAbility: opsMoveAbility(state.opsMoveAbility, action),
