@@ -4,8 +4,8 @@ export default {
   playerCards: {
     deck: [
       { cardType: 'city', id: '8' },
-      { cardType: 'epidemic', name: 'Epidemic' },
-      { cardType: 'city', id: '6' }
+      { cardType: 'city', id: '6' },
+      { cardType: 'epidemic', name: 'Epidemic' }
     ],
     discard: [
       { cardType: 'event', id: 'one_quiet_night' },
@@ -23,7 +23,7 @@ export default {
     0: {
       id: '0',
       name: 'Stephen',
-      role: 'medic',
+      role: 'dispatcher',
       specialEvent: null,
       hand: [
         { cardType: 'event', id: 'forecast' },

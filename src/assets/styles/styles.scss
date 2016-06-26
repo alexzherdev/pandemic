@@ -67,10 +67,6 @@ body {
   }
 }
 
-.hide {
-  display: none;
-}
-
 .game {
   .top-bar {
     position: fixed;
@@ -159,19 +155,21 @@ body {
     bottom: 0;
     margin-bottom: 0;
     position: fixed;
+    text-align: center;
     width: 100%;
     min-height: 110px;
-  }
-
-  .actions {
-    @extend .bottom-bar;
     border-top: 3px solid #485563;
     z-index: 10000;
 
     .panel-body {
       padding: 0;
-      text-align: center;
+    }
+  }
 
+  .actions {
+    @extend .bottom-bar;
+
+    .panel-body {
       .btn {
         font-size: 1.2em;
       }

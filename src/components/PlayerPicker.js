@@ -1,12 +1,13 @@
 import React from 'react';
+import { Button } from 'react-bootstrap';
 import { partial } from 'lodash';
 
 const PlayerPicker = ({ players, onPlayerPicked, onCancel }) =>
   <div>
     {players.map((o) =>
-      <button key={o.id} onClick={partial(onPlayerPicked, o.id, o.share)}>{o.name}</button>
+      <Button id={o.id} key={o.id} onClick={partial(onPlayerPicked, o.id, o.share)}>{o.name}</Button>
     )}
-    <button onClick={onCancel}>Cancel</button>
+    <Button onClick={onCancel}>Cancel</Button>
   </div>;
 
 export default PlayerPicker;

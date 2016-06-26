@@ -19,7 +19,7 @@ const LocationsLayer = ({ cities, locations, availableCities, onCityClicked, onC
       <span
         className="city"
         key={id}
-        style={{...coords, fontWeight: isAvailable ? 'bold' : 'normal' }}
+        style={coords}
         onClick={onClick}
         onDoubleClick={onDoubleClick}>
 
