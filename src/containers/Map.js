@@ -59,7 +59,7 @@ class Map extends React.Component {
     let playerId, originId;
     if (playerToMove) {
       playerId = playerToMove;
-      originId = find(this.state.dispatcherPlayers, { id: playerId });
+      originId = find(this.props.players, { id: playerId });
     } else {
       playerId = this.props.currentPlayerId;
       originId = this.props.currentCityId;
@@ -71,7 +71,6 @@ class Map extends React.Component {
       originId,
       destinationId,
       source);
-    this.setState({ dispatcherPlayers: [] });
   }
 
   onCityClicked(id) {

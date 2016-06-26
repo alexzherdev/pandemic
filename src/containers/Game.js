@@ -1,9 +1,9 @@
 import React from 'react';
 
-import TopBar from '../containers/TopBar';
-import Map from '../containers/Map';
-import TeamPanel from '../containers/TeamPanel';
-import Actions from '../containers/Actions';
+import TopBar from './TopBar';
+import Map from './Map';
+import TeamPanel from './TeamPanel';
+import BottomBar from './BottomBar';
 
 
 export default class Game extends React.Component {
@@ -21,7 +21,7 @@ export default class Game extends React.Component {
       <div className="game">
         <TopBar />
         <TeamPanel />
-        <Actions onPlayerMoved={this.onPlayerMoved} />
+        <BottomBar onPlayerMoved={this.onPlayerMoved} />
         <Map ref="map"/>
       </div>
     );

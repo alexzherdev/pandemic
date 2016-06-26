@@ -50,7 +50,9 @@ export function getCitiesForAirlift(state, playerId) {
 
 export function getCitiesForDispatcher(state, playerId) {
   const locs = state.map.playersLocations;
-  const otherLocs = _.omit(locs, playerId);
+  const otherLocs = _.omitBy(locs, (loc, id) => {
+    return id === playerId || loc === locs[playerId];
+  });
   const otherPlayersCities = reduceWithAttrs(_.values(otherLocs).map((id) => cities[id]), { source: 'dispatcher' });
   return { ...getAvailableCities(state, locs[playerId]), ...otherPlayersCities };
 }
