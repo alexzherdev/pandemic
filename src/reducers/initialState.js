@@ -4,8 +4,8 @@ export default {
   playerCards: {
     deck: [
       { cardType: 'city', id: '8' },
-      { cardType: 'city', id: '6' },
-      { cardType: 'epidemic', name: 'Epidemic' }
+      { cardType: 'epidemic', name: 'Epidemic' },
+      { cardType: 'city', id: '6' }
     ],
     discard: [
       { cardType: 'event', id: 'one_quiet_night' },
@@ -26,7 +26,6 @@ export default {
       role: 'dispatcher',
       specialEvent: null,
       hand: [
-        { cardType: 'event', id: 'gov_grant' },
         { cardType: 'event', id: 'airlift' },
         { cardType: 'city', id: '0' },
         { cardType: 'city', id: '3' },
@@ -39,6 +38,7 @@ export default {
       name: 'Rima',
       role: 'ops_expert',
       hand: [
+        { cardType: 'event', id: 'res_pop' },
         { cardType: 'city', id: '4' },
         { cardType: 'city', id: '1' },
         { cardType: 'city', id: '6' },
@@ -95,8 +95,7 @@ export default {
     curingDisease: {},
     skipInfectionsStep: false,
     govGrantCities: [],
-    resPopChooseCard: false,
-    resPopSuggestOwner: null,
+    resPop: {},
     forecastCards: [],
     airlift: {},
     opsMoveAbility: {

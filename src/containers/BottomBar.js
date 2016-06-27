@@ -1,20 +1,22 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Panel } from 'react-bootstrap';
+import { Button, Panel } from 'react-bootstrap';
 import { partial, isEmpty } from 'lodash';
 import classnames from 'classnames';
 
 import Actions from './Actions';
 import SingleCardPicker from '../components/SingleCardPicker';
+import CityPicker from '../components/CityPicker';
 import MultiCardPicker from '../components/MultiCardPicker';
 import PlayerPicker from '../components/PlayerPicker';
 import DiseasePicker from '../components/DiseasePicker';
 import { getPlayerToDiscard, getPlayerHand, getTreatableDiseases, canTreatAllOfColor, canTreatAll,
-  getCurrentCityId, getCurrentPlayer, isDispatcher, getPlayers, getEventsInHands } from '../selectors';
+  getCurrentCityId, getCurrentPlayer, isDispatcher, getPlayers, getEventsInHands, getInfectionDiscard } from '../selectors';
 import * as mapActions from '../actions/mapActions';
 import * as cardActions from '../actions/cardActions';
 import * as diseaseActions from '../actions/diseaseActions';
+import * as globalActions from '../actions/globalActions';
 
 
 class BottomBar extends React.Component {
@@ -23,7 +25,8 @@ class BottomBar extends React.Component {
 
     ['onShowTreatColors', 'onTreatColorPicked', 'onDiscardCardPicked', 'onShareCandidatePicked',
       'onCureCardsPicked', 'onAirliftPlayerPicked', 'onOpsCardPicked', 'onContPlannerCardPicked',
-      'onMoveInit', 'onDispatcherPlayerPicked', 'onDispatcherCancel', 'chooseEvent', 'onEventPicked'].forEach((meth) => {
+      'onMoveInit', 'onDispatcherPlayerPicked', 'onDispatcherCancel', 'chooseEvent', 'onEventPicked',
+      'onResPopCardPicked', 'onResPopUsed', 'onContinueTurn'].forEach((meth) => {
       this[meth] = this[meth].bind(this);
     });
 
@@ -112,10 +115,22 @@ class BottomBar extends React.Component {
     this.props.actions.playEventInit(playerId, id);
   }
 
+  onResPopCardPicked(id) {
+    this.props.actions.resPopRemoveCard(id);
+  }
+
+  onResPopUsed() {
+    this.props.actions.playEventInit(this.props.currentMove.resPop.suggestOwner, 'res_pop');
+  }
+
+  onContinueTurn() {
+    this.props.actions.continueTurn();
+  }
+
   render() {
-    const { playerToDiscard, players, treatableDiseases } = this.props;
+    const { playerToDiscard, players, treatableDiseases, infectionDiscard } = this.props;
     const { shareCandidates, curingDisease, airlift, opsMoveAbility, contPlannerEvents,
-      availableCities, govGrantCities } = this.props.currentMove;
+      availableCities, govGrantCities, resPop } = this.props.currentMove;
     let content;
     if (playerToDiscard !== null) {
       content = (
@@ -175,6 +190,19 @@ class BottomBar extends React.Component {
           hand={this.state.events}
           onCardPicked={this.onEventPicked} />
       );
+    } else if (resPop.chooseCard) {
+      content = (
+        <CityPicker
+          cities={infectionDiscard}
+          onSubmit={this.onResPopCardPicked} />
+      );
+    } else if (resPop.suggestOwner) {
+      content = (
+        <div>
+          <Button onClick={this.onResPopUsed}>Use res pop</Button>
+          <Button onClick={this.onContinueTurn}>Continue</Button>
+        </div>
+      );
     } else {
       content = (
         <Actions
@@ -205,11 +233,12 @@ const mapStateToProps = (state) => ({
   canTreatAllOfColor: partial(canTreatAllOfColor, state),
   isDispatcher: isDispatcher(state),
   players: getPlayers(state),
-  events: getEventsInHands(state)
+  events: getEventsInHands(state),
+  infectionDiscard: getInfectionDiscard(state)
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  actions: bindActionCreators(Object.assign({}, mapActions, cardActions, diseaseActions), dispatch)
+  actions: bindActionCreators(Object.assign({}, mapActions, cardActions, diseaseActions, globalActions), dispatch)
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(BottomBar);
