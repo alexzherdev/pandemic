@@ -25,6 +25,8 @@ describe('RoleSagas', function() {
 
     it('treats cured diseases in the city if the player is a medic', () => {
       this.next = this.generator.next('medic');
+      expect(this.next.value).to.eql(take(types.ANIMATION_MOVE_COMPLETE));
+      this.next = this.generator.next({ type: types.ANIMATION_MOVE_COMPLETE });
       expect(this.next.value).to.eql(select(sel.getCuredDiseaseCubes));
       this.next = this.generator.next({ red: 2, yellow: 3 });
       expect(this.next.value).to.eql(put(medicTreatCuredDiseases('0', { red: 2, yellow: 3 })));

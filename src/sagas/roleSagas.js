@@ -10,6 +10,7 @@ import * as sel from '../selectors';
 
 export function* treatCuredDiseasesOnMedicMove(action) {
   if ((yield select(sel.getPlayerRole, action.playerId)) === 'medic') {
+    yield take(types.ANIMATION_MOVE_COMPLETE);
     const curedDiseaseCubes = yield select(sel.getCuredDiseaseCubes);
     yield put(medicTreatCuredDiseases(action.destinationId, curedDiseaseCubes));
   }

@@ -23,7 +23,7 @@ export default {
     0: {
       id: '0',
       name: 'Stephen',
-      role: 'dispatcher',
+      role: 'medic',
       specialEvent: null,
       hand: [
         { cardType: 'event', id: 'airlift' },

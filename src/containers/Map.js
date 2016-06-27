@@ -8,6 +8,7 @@ import PlayersLayer from '../containers/PlayersLayer';
 import LocationsLayer from '../components/map/LocationsLayer';
 import PathsLayer from '../components/map/PathsLayer';
 import * as mapActions from '../actions/mapActions';
+import * as globalActions from '../actions/globalActions';
 import { isDriveAvailable } from '../selectors';
 
 
@@ -17,7 +18,8 @@ class Map extends React.Component {
   }
 
   transitionPlayerMove(playerId, destinationId) {
-    this.refs.players.transitionPlayerMove(playerId, this.props.map.locations[destinationId].coords);
+    this.refs.players.transitionPlayerMove(playerId, this.props.map.locations[destinationId].coords,
+      this.props.actions.animationMoveComplete);
   }
 
   calculatePaths() {
@@ -81,7 +83,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    actions: bindActionCreators(Object.assign({}, mapActions), dispatch)
+    actions: bindActionCreators(Object.assign({}, mapActions, globalActions), dispatch)
   };
 };
 

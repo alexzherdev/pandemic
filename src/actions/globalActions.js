@@ -15,3 +15,7 @@ export function continueTurn() {
 export function passTurn(playerId) {
   return { type: types.PASS_TURN, playerId };
 }
+
+export function animationMoveComplete() {
+  return { type: types.ANIMATION_MOVE_COMPLETE };
+}
