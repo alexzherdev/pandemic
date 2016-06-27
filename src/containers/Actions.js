@@ -10,11 +10,8 @@ import * as diseaseActions from '../actions/diseaseActions';
 import * as cardActions from '../actions/cardActions';
 import * as globalActions from '../actions/globalActions';
 import { getCurrentCityId, canBuildStation, canTreatAll,
-  getCurrentPlayer, canShareCards,
-  getInfectionDiscard, getContPlannerEvent, isContingencyPlannerAbilityAvailable,
+  getCurrentPlayer, canShareCards, getContPlannerEvent, isContingencyPlannerAbilityAvailable,
   getCurableDisease, getTreatableDiseases, getEventsInHands } from '../selectors';
-
-import CityPicker from '../components/CityPicker';
 
 
 class Actions extends React.Component {
@@ -42,7 +39,7 @@ class Actions extends React.Component {
 
   render() {
     const { shareCandidates, forecastCards, actionsLeft } = this.props.currentMove;
-    const { infectionDiscard, isContingencyPlannerAbilityAvailable,
+    const { isContingencyPlannerAbilityAvailable,
       contPlannerEvent, treatableDiseases, canTreatAll, currentPlayer, events } = this.props;
     return (
       <Panel
@@ -101,7 +98,7 @@ const mapStateToProps = (state) => {
     canBuildStation: canBuildStation(state), canTreatAll: canTreatAll(state),
     curableDisease: getCurableDisease(state), treatableDiseases: getTreatableDiseases(state),
     currentPlayer: getCurrentPlayer(state), canShareCards: canShareCards(state),
-    infectionDiscard: getInfectionDiscard(state), contPlannerEvent: getContPlannerEvent(state),
+    contPlannerEvent: getContPlannerEvent(state),
     isContingencyPlannerAbilityAvailable: isContingencyPlannerAbilityAvailable(state),
     events: getEventsInHands(state)
   };
