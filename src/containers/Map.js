@@ -7,6 +7,7 @@ import cities from '../constants/cities';
 import PlayersLayer from '../containers/PlayersLayer';
 import LocationsLayer from '../components/map/LocationsLayer';
 import PathsLayer from '../components/map/PathsLayer';
+import CubesLayer from '../components/map/CubesLayer';
 import * as mapActions from '../actions/mapActions';
 import * as globalActions from '../actions/globalActions';
 import { isDriveAvailable } from '../selectors';
@@ -70,6 +71,7 @@ class Map extends React.Component {
           isDriveAvailable={isDriveAvailable} />
         <PlayersLayer ref="players" players={players} playersPositions={playersPositions}
           currentPlayerId={currentPlayerId} />
+        <CubesLayer locations={map.locations} />
       </div>
     );
   }

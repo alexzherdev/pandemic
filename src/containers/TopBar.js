@@ -2,8 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Panel } from 'react-bootstrap';
 
-import { allDiseases, getPlayerDeckCount, getInfectionRate } from '../selectors';
-
+import { getPlayerDeckCount, getInfectionRate } from '../selectors';
+import DISEASES from '../constants/diseases';
 
 class TopBar extends React.Component {
   render() {
@@ -13,7 +13,7 @@ class TopBar extends React.Component {
           <span className="top-icon player-deck-icon" />
           <span>{this.props.playerDeckCount}</span>
         </span>
-        {allDiseases().map((c) =>
+        {DISEASES.map((c) =>
           <span key={c}>
             <span className={`top-icon cube-icon-${c}`} />
             <span>{this.props.cubesLeft[c]}</span>

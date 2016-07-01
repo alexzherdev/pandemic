@@ -1,4 +1,4 @@
-export default {
+export default Object.freeze({
   0: {
     id: '0',
     name: 'Atlanta',
@@ -44,4 +44,4 @@ export default {
     name: 'Mexico City',
     color: 'yellow'
   }
-};
+});

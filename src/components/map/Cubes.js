@@ -2,12 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { values, pick, isEqual } from 'lodash';
 
-
-const diseases = ['red', 'yellow', 'blue', 'black'];
+import { getCubeOrigin } from '../../utils';
+import DISEASES from '../../constants/diseases';
 
 export default class Cubes extends React.Component {
   shouldComponentUpdate(nextProps) {
-    return !isEqual(pick(nextProps.location, diseases), pick(this.props.location, diseases));
+    return !isEqual(pick(nextProps.location, DISEASES), pick(this.props.location, DISEASES));
   }
 
   componentDidUpdate() {
@@ -19,27 +19,26 @@ export default class Cubes extends React.Component {
   }
 
   render() {
-    const cubes = [];
     const { location } = this.props;
-
-    const counts = values(pick(location, diseases));
+    const counts = values(pick(location, DISEASES));
     const maxCount = Math.max(...counts);
     const totalCubes = counts.reduce(function(sum, c) { return sum + c; }, 0);
     let cubesSoFar = 0;
-    diseases.forEach((c) => {
+    const cubes = [];
+    DISEASES.forEach((c) => {
       for (let i = 0; i < location[c]; i++, cubesSoFar++) {
         cubes.push(
-          <span
+          <div
             key={`cube-${location.coords.join('')}-${c}-${i}`}
             className={`cube cubes-${maxCount} cube-${location[c]}-${i+1} ${c}`}
-            style={{WebkitAnimationDelay: `-${cubesSoFar / totalCubes * (-maxCount * 3 + 12)}s`}}/>);
+            style={{
+              WebkitAnimationDelay: `-${cubesSoFar / totalCubes * (-maxCount * 3 + 12)}s`
+            }} />
+        );
       }
     });
     return (
-      <div>
-        {maxCount === 3 &&
-          <span className="outbreak-warning" />
-        }
+      <div className="cube-group" style={getCubeOrigin(location)}>
         {cubes}
       </div>
     );

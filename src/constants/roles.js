@@ -1,4 +1,4 @@
-export default {
+export default Object.freeze({
   cont_planner: {
     id: 'cont_planner',
     name: 'Contingency Planner'
@@ -33,4 +33,4 @@ export default {
     id: 'scientist',
     name: 'Scientist'
   }
-};
+});
