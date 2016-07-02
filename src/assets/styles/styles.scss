@@ -5,6 +5,7 @@ $cubeSize: 24px;
 $outbrSize: 40px;
 $playerSize: 40px;
 $topIconSize: 20px;
+$cubeFlashColor: #ebebeb;
 
 
 html {
@@ -44,6 +45,16 @@ body {
     -webkit-transform: rotate(360deg)
                translate(14px)
                rotate(-720deg);
+  }
+}
+
+@-webkit-keyframes cube-flash {
+  0%, 100% {
+    box-shadow: initial;
+  }
+
+  50% {
+    box-shadow: 0 0 50px 20px $cubeFlashColor;
   }
 }
 
@@ -454,46 +465,68 @@ body {
       background: #ccffff;
     }
 
+    .cube {
+      position: absolute;
+      width: $cubeSize;
+      height: $cubeSize;
+      background-size: $cubeSize $cubeSize;
+      animation-name: cube;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+
+      &.red {
+        background-image: url('../images/cube_red.png');
+      }
+
+      &.yellow {
+        background-image: url('../images/cube_yellow.png');
+      }
+
+      &.blue {
+        background-image: url('../images/cube_blue.png');
+      }
+
+      &.black {
+        background-image: url('../images/cube_black.png');
+      }
+
+      &.cubes-1 {
+        animation-duration: 9s;
+      }
+
+      &.cubes-2 {
+        animation-duration: 6s;
+      }
+
+      &.cubes-3 {
+        animation-duration: 3s;
+      }
+
+      &-flash::after {
+        content: "";
+        position: absolute;
+        border-radius: $cubeSize / 2;
+        z-index: 10050;
+        width: 0;
+        height: 0;
+        top: $cubeSize / 2;
+        left: $cubeSize / 2;
+
+        animation-name: cube-flash;
+        animation-timing-function: ease-in;
+        animation-duration: 0.4s;
+        animation-iteration-count: 1;
+      }
+
+      &-neighbor {
+        border-radius: $cubeSize / 2;
+        box-shadow: 0 0 4px 3px $cubeFlashColor;
+      }
+    }
+
     .cube-group {
       position: absolute;
 
-      .cube {
-        position: absolute;
-        width: $cubeSize;
-        height: $cubeSize;
-        background-size: $cubeSize $cubeSize;
-        animation-name: cube;
-        animation-timing-function: linear;
-        animation-iteration-count: infinite;
-
-        &.red {
-          background-image: url('../images/cube_red.png');
-        }
-
-        &.yellow {
-          background-image: url('../images/cube_yellow.png');
-        }
-
-        &.blue {
-          background-image: url('../images/cube_blue.png');
-        }
-
-        &.black {
-          background-image: url('../images/cube_black.png');
-        }
-
-        &.cubes-1 {
-          animation-duration: 9s;
-        }
-
-        &.cubes-2 {
-          animation-duration: 6s;
-        }
-
-        &.cubes-3 {
-          animation-duration: 3s;
-        }
-      }
     }
   }
 }

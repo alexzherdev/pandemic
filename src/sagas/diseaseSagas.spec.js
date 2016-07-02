@@ -128,6 +128,8 @@ describe('DiseaseSagas', function() {
         this.generator.next(3);
         this.generator.next();
         this.next = this.generator.next();
+        expect(this.next.value).to.eql(take(types.ANIMATION_INFECT_NEIGHBOR_COMPLETE));
+        this.next = this.generator.next({ type: types.ANIMATION_INFECT_NEIGHBOR_COMPLETE });
         expect(this.next.value).to.eql(put(queueOutbreak('0', 'blue')));
       });
 
@@ -139,6 +141,8 @@ describe('DiseaseSagas', function() {
         this.generator.next(1);
         this.generator.next();
         this.next = this.generator.next();
+        expect(this.next.value).to.eql(take(types.ANIMATION_INFECT_NEIGHBOR_COMPLETE));
+        this.next = this.generator.next({ type: types.ANIMATION_INFECT_NEIGHBOR_COMPLETE });
         expect(this.next.value).to.eql(put(completeOutbreak('0', 'blue')));
         this.next = this.generator.next();
         expect(this.next.value).to.eql(select(sel.getNextOutbreakCityId));
@@ -154,6 +158,8 @@ describe('DiseaseSagas', function() {
         this.generator.next(3);
         this.generator.next();
         this.next = this.generator.next();
+        expect(this.next.value).to.eql(take(types.ANIMATION_INFECT_NEIGHBOR_COMPLETE));
+        this.next = this.generator.next({ type: types.ANIMATION_INFECT_NEIGHBOR_COMPLETE });
         expect(this.next.value).to.eql(put(queueOutbreak('0', 'blue')));
         this.next = this.generator.next();
         expect(this.next.value).to.eql(put(completeOutbreak('0', 'blue')));

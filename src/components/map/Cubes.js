@@ -38,7 +38,9 @@ export default class Cubes extends React.Component {
       }
     });
     return (
-      <div className="cube-group" style={getCubeOrigin(location)}>
+      <div
+        className="cube-group"
+        style={getCubeOrigin(location)}>
         {cubes}
       </div>
     );

@@ -157,8 +157,8 @@ describe('MapReducer', () => {
     });
   });
 
-  it('adds one disease cube on INFECT_NEIGHBOR', () => {
-    const action = { type: types.INFECT_NEIGHBOR, cityId: '0', color: 'red' };
+  it('adds one disease cube on ANIMATION_INFECT_NEIGHBOR_COMPLETE', () => {
+    const action = { type: types.ANIMATION_INFECT_NEIGHBOR_COMPLETE, cityId: '0', color: 'red' };
 
     verifyLocationChange(action, '0', {
       coords: [200, 100],
@@ -170,8 +170,8 @@ describe('MapReducer', () => {
     });
   });
 
-  it('does not overflow the maximum cube count on INFECT_NEIGHBOR', () => {
-    const action = { type: types.INFECT_NEIGHBOR, cityId: '0', color: 'blue' };
+  it('does not overflow the maximum cube count on ANIMATION_INFECT_NEIGHBOR_COMPLETE', () => {
+    const action = { type: types.ANIMATION_INFECT_NEIGHBOR_COMPLETE, cityId: '0', color: 'blue' };
 
     verifyLocationChange(action, '0', {
       coords: [200, 100],

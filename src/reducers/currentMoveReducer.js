@@ -70,6 +70,20 @@ function outbreak(state, action) {
           ? state.pending
           : [...state.pending, action.cityId]
       };
+    case types.INFECT_NEIGHBOR:
+      return {
+        ...state,
+        infectingCube: {
+          cityId: action.cityId,
+          originId: action.originId,
+          color: action.color
+        }
+      };
+    case types.ANIMATION_INFECT_NEIGHBOR_COMPLETE:
+      return {
+        ...state,
+        infectingCube: {}
+      };
     default:
       return state;
   }

@@ -11,6 +11,7 @@ import CubesLayer from '../components/map/CubesLayer';
 import * as mapActions from '../actions/mapActions';
 import * as globalActions from '../actions/globalActions';
 import { isDriveAvailable } from '../selectors';
+import { getCubeOrigin } from '../utils';
 
 
 class Map extends React.Component {
@@ -18,9 +19,9 @@ class Map extends React.Component {
     super(props);
   }
 
-  transitionPlayerMove(playerId, destinationId) {
+  transitionPlayerMove(playerId, destinationId, fireCompleteAction = false) {
     this.refs.players.transitionPlayerMove(playerId, this.props.map.locations[destinationId].coords,
-      this.props.actions.animationMoveComplete);
+      fireCompleteAction && this.props.actions.animationMoveComplete);
   }
 
   calculatePaths() {
@@ -57,12 +58,18 @@ class Map extends React.Component {
 
   render() {
     const { map, availableCities, players, currentPlayerId, isDriveAvailable } = this.props;
-    const { govGrantCities, airlift } = this.props.currentMove;
+    const { govGrantCities, airlift, outbreak: { infectingCube }} = this.props.currentMove;
 
     const playersPositions = this.calculatePlayersPositions();
     const paths = this.calculatePaths();
     const citiesToSelect = find([availableCities, govGrantCities, airlift && airlift.cities], (c) => !isEmpty(c));
 
+    let origin, destination, color;
+    if (!isEmpty(infectingCube)) {
+      origin = getCubeOrigin(map.locations[infectingCube.originId]),
+        destination = getCubeOrigin(map.locations[infectingCube.cityId]),
+        color = infectingCube.color;
+    }
     return (
       <div className="map">
         <PathsLayer paths={paths} />
@@ -71,7 +78,11 @@ class Map extends React.Component {
           isDriveAvailable={isDriveAvailable} />
         <PlayersLayer ref="players" players={players} playersPositions={playersPositions}
           currentPlayerId={currentPlayerId} />
-        <CubesLayer locations={map.locations} />
+        <CubesLayer
+          locations={map.locations}
+          infectingCube={!isEmpty(infectingCube) && { origin, destination, color }}
+          infectNeighborCallback={partial(this.props.actions.animationInfectNeighborComplete,
+            infectingCube.cityId, infectingCube.originId, infectingCube.color)} />
       </div>
     );
   }

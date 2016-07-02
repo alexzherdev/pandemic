@@ -49,7 +49,7 @@ export default {
     2: {
       id: '2',
       name: 'Thomas',
-      role: 'quar_spec',
+      role: 'researcher',
       hand: [
         { cardType: 'city', id: '4' },
         { cardType: 'city', id: '0' },
@@ -88,7 +88,8 @@ export default {
     outbreak: {
       color: null,
       complete: [],
-      pending: []
+      pending: [],
+      infectingCube: {}
     },
     playerToDiscard: null,
     playerToMove: null,
@@ -162,7 +163,7 @@ export default {
         yellow: 1,
         red: 0,
         black: 0,
-        blue: 1
+        blue: 3
       },
       3: {
         coords: [325, 315],
@@ -184,7 +185,7 @@ export default {
         yellow: 1,
         red: 1,
         black: 0,
-        blue: 2
+        blue: 3
       },
       6: {
         coords: [370, 300],
