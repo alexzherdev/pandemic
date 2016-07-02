@@ -2,14 +2,15 @@ import React from 'react';
 
 
 export default class PlayersLayer extends React.Component {
-  transitionPlayerMove(playerId, coords) {
+  transitionPlayerMove(playerId, coords, callback) {
     const playerEl = document.getElementById('player-' + playerId);
-    playerEl.animate([
+    const anim = playerEl.animate([
       { left: playerEl.style.left, top: playerEl.style.top, opacity: 1},
       { left: playerEl.style.left, top: playerEl.style.top, opacity: .01, offset: .49 },
       { left: coords[1] + 'px', top: coords[0] + 'px', opacity: .01, offset: .5 },
       { left: coords[1] + 'px', top: coords[0] + 'px', opacity: 1 }
     ], 1000);
+    anim.onfinish = callback;
   }
 
   render() {
