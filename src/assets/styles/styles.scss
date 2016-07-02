@@ -454,44 +454,45 @@ body {
       background: #ccffff;
     }
 
-    .cube {
+    .cube-group {
       position: absolute;
-      width: $cubeSize;
-      height: $cubeSize;
-      background-size: $cubeSize $cubeSize;
-      top: 5px;
-      left: 5px;
 
-      animation-name: cube;
-      animation-timing-function: linear;
-      animation-iteration-count: infinite;
+      .cube {
+        position: absolute;
+        width: $cubeSize;
+        height: $cubeSize;
+        background-size: $cubeSize $cubeSize;
+        animation-name: cube;
+        animation-timing-function: linear;
+        animation-iteration-count: infinite;
 
-      &.red {
-        background-image: url('../images/cube_red.png');
-      }
+        &.red {
+          background-image: url('../images/cube_red.png');
+        }
 
-      &.yellow {
-        background-image: url('../images/cube_yellow.png');
-      }
+        &.yellow {
+          background-image: url('../images/cube_yellow.png');
+        }
 
-      &.blue {
-        background-image: url('../images/cube_blue.png');
-      }
+        &.blue {
+          background-image: url('../images/cube_blue.png');
+        }
 
-      &.black {
-        background-image: url('../images/cube_black.png');
-      }
+        &.black {
+          background-image: url('../images/cube_black.png');
+        }
 
-      &.cubes-1 {
-        animation-duration: 9s;
-      }
+        &.cubes-1 {
+          animation-duration: 9s;
+        }
 
-      &.cubes-2 {
-        animation-duration: 6s;
-      }
+        &.cubes-2 {
+          animation-duration: 6s;
+        }
 
-      &.cubes-3 {
-        animation-duration: 3s;
+        &.cubes-3 {
+          animation-duration: 3s;
+        }
       }
     }
   }

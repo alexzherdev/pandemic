@@ -3,13 +3,7 @@ import _ from 'lodash';
 import { isAtStation, getCurrentMapLocation } from './map';
 import { getCitiesInPlayersHand } from './hand';
 import { getCurrentPlayer, getCurrentRole } from './gameplay';
-
-
-const DISEASES = ['blue', 'red', 'yellow', 'black'];
-
-export function allDiseases() {
-  return DISEASES;
-}
+import DISEASES from '../constants/diseases';
 
 export function canTreatAll(state) {
   return getCurrentRole(state) === 'medic';

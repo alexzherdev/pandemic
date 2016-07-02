@@ -1,4 +1,4 @@
-export default {
+export default Object.freeze({
   forecast: {
     id: 'forecast',
     name: 'Forecast'
@@ -19,4 +19,4 @@ export default {
     id: 'airlift',
     name: 'Airlift'
   }
-};
+});

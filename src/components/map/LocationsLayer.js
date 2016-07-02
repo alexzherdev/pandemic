@@ -1,8 +1,8 @@
 import React from 'react';
-import { forOwn, find, partial, isEmpty } from 'lodash';
+import { forOwn, find, partial, isEmpty, pick, values } from 'lodash';
 
-import Cubes from './Cubes';
-
+import { getLocationOrigin } from '../../utils';
+import DISEASES from '../../constants/diseases';
 
 const LocationsLayer = ({ cities, locations, availableCities, onCityClicked, onCityDoubleClicked,
   isDriveAvailable }) => {
@@ -11,10 +11,12 @@ const LocationsLayer = ({ cities, locations, availableCities, onCityClicked, onC
   forOwn(cities, (c, id) => {
     const isAvailable = !!find(availableCities, { id });
     const loc = locations[id];
-    const coords = { top: loc.coords[0] - 16, left: loc.coords[1] - 16 };
+    const coords = getLocationOrigin(loc);
 
     const onClick = !isEmpty(availableCities) && partial(onCityClicked, id);
     const onDoubleClick = isEmpty(availableCities) && isDriveAvailable(id) && partial(onCityDoubleClicked, id);
+    const counts = values(pick(loc, DISEASES));
+    const maxCount = Math.max(...counts);
     items.push(
       <span
         className="city"
@@ -25,7 +27,6 @@ const LocationsLayer = ({ cities, locations, availableCities, onCityClicked, onC
 
         <span className={`icon ${c.color}`} />
 
-        <Cubes location={loc} />
         {isAvailable &&
           <span className="selection-container">
             <span className="selection" />
@@ -38,6 +39,9 @@ const LocationsLayer = ({ cities, locations, availableCities, onCityClicked, onC
             className="station"
             onClick={onClick}
             onDoubleClick={onDoubleClick} />
+        }
+        {maxCount === 3 &&
+          <span className="outbreak-warning" />
         }
       </span>
     );
