@@ -71,11 +71,11 @@ describe('CurrentMoveReducer', () => {
       expect(reducer(initial, action)).to.eql(expected);
     });
 
-    it('cleans up available cities and decrements move counter on PLAYER_MOVE_TO_CITY', () => {
+    it('cleans up available cities on PLAYER_MOVE_TO_CITY', () => {
       const action = { type: types.PLAYER_MOVE_TO_CITY };
 
       const initial = { ...getInitialState(), availableCities: { 0: { id: '0' }}};
-      const expected = { ...initial, availableCities: {}, actionsLeft: 2 };
+      const expected = { ...initial, availableCities: {}};
       expect(reducer(initial, action)).to.eql(expected);
     });
   });
@@ -373,10 +373,10 @@ describe('CurrentMoveReducer', () => {
       expect(reducer(initial, action)).to.eql(expected);
     });
 
-    it('cleans up the player and decrements the move counter on PLAYER_MOVE_TO_CITY', () => {
+    it('cleans up the player on PLAYER_MOVE_TO_CITY', () => {
       const action = { type: types.PLAYER_MOVE_TO_CITY };
       const initial = { ...getInitialState(), playerToMove: '1' };
-      const expected = { ...getInitialState(), actionsLeft: 2 };
+      const expected = getInitialState();
       expect(reducer(initial, action)).to.eql(expected);
     });
   });

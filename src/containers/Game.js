@@ -31,7 +31,7 @@ class Game extends React.Component {
       originId = this.props.currentCityId;
     }
 
-    this.refs.map.getWrappedInstance().transitionPlayerMove(playerId, destinationId);
+    this.refs.map.getWrappedInstance().transitionPlayerMove(playerId, destinationId, true);
     this.props.actions.moveToCity(
       playerId,
       originId,

@@ -35,7 +35,7 @@ function cityReducer(state, action) {
         ...state,
         [action.color]: Math.min(3, state[action.color] + action.count)
       };
-    case types.INFECT_NEIGHBOR:
+    case types.ANIMATION_INFECT_NEIGHBOR_COMPLETE:
       return {
         ...state,
         [action.color]: Math.min(3, state[action.color] + 1)
@@ -53,7 +53,7 @@ function locationsReducer(state, action) {
     case types.PLAYER_TREAT_ALL_DISEASE:
     case types.MEDIC_TREAT_CURED_DISEASES:
     case types.INFECT_CITY:
-    case types.INFECT_NEIGHBOR:
+    case types.ANIMATION_INFECT_NEIGHBOR_COMPLETE:
       return {
         ...state,
         [action.cityId]: cityReducer(state[action.cityId], action)
@@ -80,7 +80,7 @@ export default function mapReducer(state = initialState.map, action) {
     case types.PLAYER_TREAT_ALL_DISEASE:
     case types.MEDIC_TREAT_CURED_DISEASES:
     case types.INFECT_CITY:
-    case types.INFECT_NEIGHBOR:
+    case types.ANIMATION_INFECT_NEIGHBOR_COMPLETE:
       return {
         ...state,
         locations: locationsReducer(state.locations, action)

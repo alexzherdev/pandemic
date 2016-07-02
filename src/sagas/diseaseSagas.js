@@ -28,6 +28,7 @@ export function* yieldOutbreak(cityId, color) {
         const cubesInNeighbor = yield select(sel.getCubesInCity, id, color);
         yield call(useCubes, id, color, 1);
         yield put(infectNeighbor(id, cityId, color));
+        yield take(types.ANIMATION_INFECT_NEIGHBOR_COMPLETE);
         if (cubesInNeighbor === 3) {
           yield put(queueOutbreak(id, color));
         }
