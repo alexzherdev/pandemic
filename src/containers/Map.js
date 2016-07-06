@@ -33,7 +33,7 @@ class Map extends React.Component {
         if (matrix[i][j] === 1) {
           const begin = locations[i].coords;
           const end = locations[j].coords;
-          paths.push([begin, end]);
+          paths.push([begin.slice().reverse(), end.slice().reverse()]);
         }
       }
     }
