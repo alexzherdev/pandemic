@@ -1,9 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { values, pick, isEqual } from 'lodash';
+import autoprefixer from 'autoprefixer';
+import postcssJs from 'postcss-js';
 
 import { getCubeOrigin } from '../../utils';
 import DISEASES from '../../constants/diseases';
+
+
+const prefixer = postcssJs.sync([autoprefixer]);
 
 export default class Cubes extends React.Component {
   shouldComponentUpdate(nextProps) {
@@ -31,9 +36,9 @@ export default class Cubes extends React.Component {
           <div
             key={`cube-${location.coords.join('')}-${c}-${i}`}
             className={`cube cubes-${maxCount} cube-${location[c]}-${i+1} ${c}`}
-            style={{
-              WebkitAnimationDelay: `-${cubesSoFar / totalCubes * (-maxCount * 3 + 12)}s`
-            }} />
+            style={prefixer({
+              animationDelay: `-${cubesSoFar / totalCubes * (-maxCount * 3 + 12)}s`
+            })} />
         );
       }
     });

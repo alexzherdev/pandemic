@@ -1,6 +1,7 @@
 import webpack from 'webpack';
 import ProvidePlugin from 'webpack/lib/ProvidePlugin';
 import path from 'path';
+import autoprefixer from 'autoprefixer';
 
 const GLOBALS = {
   'process.env.NODE_ENV': JSON.stringify('development'),
@@ -11,6 +12,9 @@ export default {
   debug: true,
   devtool: 'cheap-module-eval-source-map', // more info:https://webpack.github.io/docs/build-performance.html#sourcemaps and https://webpack.github.io/docs/configuration.html#devtool
   noInfo: true, // set to false to see a list of every file being bundled.
+  node: {
+    fs: 'empty'
+  },
   entry: [
     'babel-polyfill',
     'webpack-hot-middleware/client?reload=true',
@@ -41,7 +45,11 @@ export default {
       {test: /\.svg(\?v=\d+.\d+.\d+)?$/, loader: 'file-loader?limit=10000&mimetype=image/svg+xml'},
       {test: /\.(jpe?g|png|gif)$/i, loaders: ['file']},
       {test: /\.ico$/, loader: 'file-loader?name=[name].[ext]'},
-      {test: /(\.css|\.scss)$/, loaders: ['style', 'css?sourceMap', 'sass?sourceMap']}
+      {test: /(\.css|\.scss)$/, loaders: ['style', 'css?sourceMap', 'postcss', 'sass?sourceMap']},
+      {test: /\.json$/, loaders: ['json']}
     ]
-  }
+  },
+  postcss: [
+    autoprefixer({ browsers: ['last 3 versions', 'safari >= 7'] })
+  ]
 };

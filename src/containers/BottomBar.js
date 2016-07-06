@@ -11,6 +11,7 @@ import CityPicker from '../components/CityPicker';
 import MultiCardPicker from '../components/MultiCardPicker';
 import PlayerPicker from '../components/PlayerPicker';
 import DiseasePicker from '../components/DiseasePicker';
+import Hand from './Hand';
 import { getPlayerToDiscard, getPlayerHand, getTreatableDiseases, canTreatAllOfColor, canTreatAll,
   getCurrentCityId, getCurrentPlayer, isDispatcher, getPlayers, getEventsInHands, getInfectionDiscard } from '../selectors';
 import * as mapActions from '../actions/mapActions';
@@ -204,13 +205,15 @@ class BottomBar extends React.Component {
         </div>
       );
     } else {
-      content = (
+      content = ([
+        <Hand key="hand" />,
         <Actions
+          key="actions"
           onShowTreatColors={this.onShowTreatColors}
           onTreatColorPicked={this.onTreatColorPicked}
           onMoveInit={this.onMoveInit}
           onPlayEventClicked={this.chooseEvent} />
-      );
+      ]);
     }
 
     const classes = classnames(['bottom-bar', { 'hide': !isEmpty(availableCities) || !isEmpty(govGrantCities) }]);

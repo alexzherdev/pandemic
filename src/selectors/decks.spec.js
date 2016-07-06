@@ -40,7 +40,7 @@ describe('Decks selector', () => {
     it('gets ids from the infection discard together with the names', () => {
       expect(sel.getInfectionDiscard(getState())).to.eql([
         { id: '1', name: 'Chicago' },
-        { id: '3', name: 'Washington' }
+        { id: '3', name: 'Montreal' }
       ]);
     });
   });

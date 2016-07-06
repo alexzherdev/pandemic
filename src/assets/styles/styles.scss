@@ -6,6 +6,9 @@ $outbrSize: 40px;
 $playerSize: 40px;
 $topIconSize: 20px;
 $cubeFlashColor: #ebebeb;
+$cardWidth: 144px;
+$cardHeight: 200px;
+$events-list: 'airlift' 'forecast' 'gov_grant' 'res_pop' 'one_quiet_night';
 
 
 html {
@@ -15,7 +18,7 @@ html {
 
 body {
   height: 100%;
-  overflow: auto;
+  overflow: hidden;
   margin: 0;
 }
 
@@ -24,31 +27,31 @@ body {
   src: url(../fonts/Phage.otf) format("opentype");
 }
 
-@-webkit-keyframes rotate {
+@keyframes rotate {
   0% {
-    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
   }
 
   100% {
-    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
   }
 }
 
-@-webkit-keyframes cube {
+@keyframes cube {
   0% {
-    -webkit-transform: rotate(0deg)
+    transform: rotate(0deg)
                translate(14px)
                rotate(0deg);
   }
 
   100% {
-    -webkit-transform: rotate(360deg)
+    transform: rotate(360deg)
                translate(14px)
                rotate(-720deg);
   }
 }
 
-@-webkit-keyframes cube-flash {
+@keyframes cube-flash {
   0%, 100% {
     box-shadow: initial;
   }
@@ -58,7 +61,7 @@ body {
   }
 }
 
-@-webkit-keyframes outbreak-warning {
+@keyframes outbreak-warning {
   0% {
     opacity: 0.3;
   }
@@ -68,13 +71,13 @@ body {
   }
 }
 
-@-webkit-keyframes cur-player {
+@keyframes cur-player {
   0% {
-    -webkit-transform: translate(-50%, -15px);
+    transform: translate(-50%, -15px);
   }
 
   100% {
-    -webkit-transform: translate(-50%, -10px);
+    transform: translate(-50%, -10px);
   }
 }
 
@@ -175,6 +178,10 @@ body {
     .panel-body {
       padding: 0;
     }
+
+    .card:not(:last-child) {
+      margin-right: 5px;
+    }
   }
 
   .actions {
@@ -187,9 +194,17 @@ body {
 
       .play-event {
         position: absolute;
-        top: 0;
-        right: 0;
+        top: 9px;
+        right: 9px;
+        width: 36px;
+        height: 50px;
+        padding: 0;
+        border: none;
         z-index: 10001;
+
+        img {
+          content: url(../images/event.png);
+        }
       }
     }
 
@@ -210,13 +225,11 @@ body {
     bottom: 110px;
     margin-bottom: 0;
     min-width: 150px;
-
     overflow-y: scroll;
 
     > .panel-body {
       padding: 0;
     }
-
 
     .team-player {
       margin-bottom: 0;
@@ -298,11 +311,10 @@ body {
 
   .map {
     position: relative;
-    width: 1024px;
-    height: 768px;
     background: url(../images/map.jpg);
     background-size: cover;
-    margin: 0 auto;
+    margin: -120px auto 0;
+    overflow: hidden;
 
     .city, .player, .station {
       position: absolute;
@@ -341,11 +353,11 @@ body {
         left: $citySize / 2;
         transform: translate(-50%, 0);
         font-family: 'Phage';
-        font-size: 12px;
+        font-size: 11px;
         color: white;
         text-shadow: 1px 1px 1px black;
         white-space: nowrap;
-        -webkit-user-select: none;
+        user-select: none;
         cursor: default;
       }
 
@@ -363,10 +375,10 @@ body {
           float: left;
           background: url(../images/city_sel.png);
           background-size: $selSize $selSize;
-          -webkit-animation-name: rotate;
-          -webkit-animation-duration: 5s;
-          -webkit-animation-iteration-count: infinite;
-          -webkit-animation-timing-function: linear;
+          animation-name: rotate;
+          animation-duration: 5s;
+          animation-iteration-count: infinite;
+          animation-timing-function: linear;
         }
 
         .selection-bg {
@@ -392,11 +404,11 @@ body {
         top: ($citySize - $outbrSize) / 2;
         border-radius: $outbrSize / 2;
         background: darkred;
-        -webkit-animation-name: outbreak-warning;
-        -webkit-animation-duration: 0.5s;
-        -webkit-animation-iteration-count: infinite;
-        -webkit-animation-timing-function: linear;
-        -webkit-animation-direction: alternate;
+        animation-name: outbreak-warning;
+        animation-duration: 0.5s;
+        animation-iteration-count: infinite;
+        animation-timing-function: linear;
+        animation-direction: alternate;
       }
     }
 
@@ -417,6 +429,7 @@ body {
       background-size: cover;
       text-align: center;
       transform: translate(-50%, -($citySize));
+      -webkit-transform: translate(-50%, -($citySize));
       z-index: 50;
 
       &.cont_planner {
@@ -449,11 +462,11 @@ body {
 
       .cur-player {
         position: absolute;
-        -webkit-animation-name: cur-player;
-        -webkit-animation-duration: 0.8s;
-        -webkit-animation-iteration-count: infinite;
-        -webkit-animation-timing-function: ease;
-        -webkit-animation-direction: alternate;
+        animation-name: cur-player;
+        animation-duration: 0.8s;
+        animation-iteration-count: infinite;
+        animation-timing-function: ease;
+        animation-direction: alternate;
       }
     }
 
@@ -462,6 +475,7 @@ body {
       height: 1px;
       box-shadow: 0px 0px 2px 1px #ccffff;
       transform-origin: 0 100%;
+      -webkit-transform-origin: 0 100%;
       background: #ccffff;
     }
 
@@ -527,6 +541,38 @@ body {
     .cube-group {
       position: absolute;
 
+    }
+  }
+
+  .hand {
+    position: fixed;
+    bottom: -40px;
+    width: 100%;
+    height: $cardHeight;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+
+    .card:not(:first-child) {
+      margin-left: -$cardWidth / 2;
+    }
+  }
+
+  .card {
+    width: $cardWidth;
+    height: $cardHeight;
+    border: none;
+
+    @for $id from 0 through 47 {
+      &.city-#{$id} {
+        background-image: url('../images/city-#{$id}.png');
+      }
+    }
+
+    @each $event in $events-list {
+      &.event-#{$event} {
+        background-image: url('../images/event-#{$event}.png');
+      }
     }
   }
 }

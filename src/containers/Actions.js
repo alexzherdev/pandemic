@@ -85,7 +85,7 @@ class Actions extends React.Component {
           <Button
             onClick={this.props.onPlayEventClicked}
             className="play-event">
-            Play Event
+            <img />
           </Button>
         }
       </Panel>
