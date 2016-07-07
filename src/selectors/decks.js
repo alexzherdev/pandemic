@@ -20,7 +20,7 @@ function getInfectionDeck(state) {
 }
 
 export function getInfectionDiscard(state) {
-  return state.infectionCards.discard.map((id) => ({ id, name: cities[id].name }));
+  return state.infectionCards.discard.map((id) => ({ id, name: cities[id].name, cardType: 'city' }));
 }
 
 export function getCardsForForecast(state) {

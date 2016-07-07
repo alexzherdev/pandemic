@@ -1,16 +1,18 @@
 import React from 'react';
+import { Button, Panel } from 'react-bootstrap';
+import { partial } from 'lodash';
 
 
 export default class MultiCardPicker extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
-    this.onCardSelect = this.onCardSelect.bind(this);
+    this.onCardToggle = this.onCardToggle.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
   }
 
-  onCardSelect(event) {
-    this.setState({ [event.target.dataset.id]: event.target.checked });
+  onCardToggle(id) {
+    this.setState({ [id]: !this.state[id] });
   }
 
   onSubmit() {
@@ -22,15 +24,24 @@ export default class MultiCardPicker extends React.Component {
   }
 
   render() {
-    const { cards, countNeeded } = this.props;
+    const { cards, countNeeded, title } = this.props;
     return (
-      <div>
+      <Panel
+        header={title}
+        footer={
+          <div>
+            <Button onClick={this.onSubmit} disabled={this.getSelectedIds().length !== countNeeded}>OK</Button>
+            <Button onClick={this.props.onCancel}>Cancel</Button>
+          </div>
+        }
+        className="card-picker multi-card-picker">
         {cards.map((c) =>
-          <span key={c.id}><input type="checkbox" data-id={c.id} onChange={this.onCardSelect} />{c.name}</span>
+          <Button
+            key={c.id}
+            className={`card ${c.cardType}-${c.id} ${!!this.state[c.id] && 'selected'}`}
+            onClick={partial(this.onCardToggle, c.id)} />
         )}
-        <button onClick={this.onSubmit} disabled={this.getSelectedIds().length !== countNeeded}>OK</button>
-        <button onClick={this.props.onCancel}>Cancel</button>
-      </div>
+      </Panel>
     );
   }
 }

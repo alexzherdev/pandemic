@@ -9,6 +9,7 @@ $cubeFlashColor: #ebebeb;
 $cardWidth: 144px;
 $cardHeight: 200px;
 $events-list: 'airlift' 'forecast' 'gov_grant' 'res_pop' 'one_quiet_night';
+$diseases-list: yellow red blue black;
 
 
 html {
@@ -179,6 +180,10 @@ body {
       padding: 0;
     }
 
+    .panel-heading {
+      font-size: 1.4em;
+    }
+
     .card:not(:last-child) {
       margin-right: 5px;
     }
@@ -213,9 +218,59 @@ body {
     }
   }
 
-  .disease-picker {
+  .card-picker {
     @extend .bottom-bar;
     z-index: 10001;
+
+    .panel-body {
+      padding: 10px;
+    }
+
+    .card {
+      border-radius: 4px;
+
+      &:focus {
+        outline: none;
+      }
+
+      &:hover {
+        box-shadow: 0 0 2px 2px white;
+        transition: all 0.2s;
+      }
+    }
+
+    &.multi-card-picker {
+      .card.selected {
+        box-shadow: 0 0 2px 2px orange;
+      }
+    }
+  }
+
+  .disease-picker {
+    @extend .bottom-bar;
+
+    .btn {
+      padding: 4px 8px;
+
+      img {
+        width: 60px;
+        height: 60px;
+
+        @each $disease in $diseases-list {
+          &.disease-#{$disease} {
+            content: url('../images/city_#{$disease}.png');
+          }
+        }
+      }
+    }
+  }
+
+  .player-picker {
+    @extend .bottom-bar;
+
+    .btn {
+      height: 70px;
+    }
   }
 
   .team-panel {
@@ -540,7 +595,6 @@ body {
 
     .cube-group {
       position: absolute;
-
     }
   }
 

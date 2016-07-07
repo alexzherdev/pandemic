@@ -7,13 +7,13 @@ import classnames from 'classnames';
 
 import Actions from './Actions';
 import SingleCardPicker from '../components/SingleCardPicker';
-import CityPicker from '../components/CityPicker';
 import MultiCardPicker from '../components/MultiCardPicker';
 import PlayerPicker from '../components/PlayerPicker';
 import DiseasePicker from '../components/DiseasePicker';
 import Hand from './Hand';
 import { getPlayerToDiscard, getPlayerHand, getTreatableDiseases, canTreatAllOfColor, canTreatAll,
-  getCurrentCityId, getCurrentPlayer, isDispatcher, getPlayers, getEventsInHands, getInfectionDiscard } from '../selectors';
+  getCurrentCityId, getCurrentPlayer, isDispatcher, getPlayers, getEventsInHands, getInfectionDiscard,
+  cardsNeededToCure } from '../selectors';
 import * as mapActions from '../actions/mapActions';
 import * as cardActions from '../actions/cardActions';
 import * as diseaseActions from '../actions/diseaseActions';
@@ -116,7 +116,7 @@ class BottomBar extends React.Component {
     this.props.actions.playEventInit(playerId, id);
   }
 
-  onResPopCardPicked(id) {
+  onResPopCardPicked(cardType, id) {
     this.props.actions.resPopRemoveCard(id);
   }
 
@@ -129,19 +129,21 @@ class BottomBar extends React.Component {
   }
 
   render() {
-    const { playerToDiscard, players, treatableDiseases, infectionDiscard } = this.props;
+    const { playerToDiscard, players, treatableDiseases, infectionDiscard, cardsNeededToCure } = this.props;
     const { shareCandidates, curingDisease, airlift, opsMoveAbility, contPlannerEvents,
       availableCities, govGrantCities, resPop } = this.props.currentMove;
     let content;
     if (playerToDiscard !== null) {
       content = (
         <SingleCardPicker
+          title="Discard a city card or play an event:"
           hand={this.props.getPlayerHand(playerToDiscard)}
           onCardPicked={this.onDiscardCardPicked} />
       );
     } else if (!isEmpty(shareCandidates)) {
       content = (
         <PlayerPicker
+          title="Pick a player to share with:"
           players={shareCandidates}
           onPlayerPicked={this.onShareCandidatePicked}
           onCancel={this.props.actions.shareCardsCancel} />
@@ -149,14 +151,16 @@ class BottomBar extends React.Component {
     } else if (!isEmpty(curingDisease)) {
       content = (
         <MultiCardPicker
+          title={`Pick ${cardsNeededToCure} cards to cure the ${curingDisease.color} disease:`}
           cards={curingDisease.cards}
-          countNeeded={this.props.cardsNeededToCure}
+          countNeeded={cardsNeededToCure}
           onSubmit={this.onCureCardsPicked}
           onCancel={this.props.actions.cureDiseaseCancel} />
       );
     } else if (!isEmpty(airlift) && !airlift.playerId) {
       content = (
         <PlayerPicker
+          title="Pick a player to move:"
           players={players}
           onPlayerPicked={this.onAirliftPlayerPicked} />
       );
@@ -175,12 +179,14 @@ class BottomBar extends React.Component {
     } else if (this.state.showTreatColors) {
       content = (
         <DiseasePicker
+          title="Pick a disease to treat:"
           diseases={Object.keys(treatableDiseases)}
           onDiseasePicked={this.onTreatColorPicked} />
       );
     } else if (!isEmpty(this.state.dispatcherPlayers)) {
       content = (
         <PlayerPicker
+          title="Pick a player to move:"
           players={this.state.dispatcherPlayers}
           onPlayerPicked={this.onDispatcherPlayerPicked}
           onCancel={this.onDispatcherCancel} />
@@ -193,9 +199,10 @@ class BottomBar extends React.Component {
       );
     } else if (resPop.chooseCard) {
       content = (
-        <CityPicker
-          cities={infectionDiscard}
-          onSubmit={this.onResPopCardPicked} />
+        <SingleCardPicker
+          title="Pick a card to remove from the infection discard pile:"
+          hand={infectionDiscard}
+          onCardPicked={this.onResPopCardPicked} />
       );
     } else if (resPop.suggestOwner) {
       content = (
@@ -237,7 +244,8 @@ const mapStateToProps = (state) => ({
   isDispatcher: isDispatcher(state),
   players: getPlayers(state),
   events: getEventsInHands(state),
-  infectionDiscard: getInfectionDiscard(state)
+  infectionDiscard: getInfectionDiscard(state),
+  cardsNeededToCure: cardsNeededToCure(state)
 });
 
 const mapDispatchToProps = (dispatch) => ({

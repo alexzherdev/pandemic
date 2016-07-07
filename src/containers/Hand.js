@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 
 import Card from '../components/Card';
 import { getCurrentPlayerHand } from '../selectors';
-import { sortHand } from '../utils';
 
 
 class Hand extends React.Component {
@@ -20,7 +19,7 @@ class Hand extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    hand: sortHand(getCurrentPlayerHand(state))
+    hand: getCurrentPlayerHand(state)
   };
 };
 

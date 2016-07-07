@@ -6,6 +6,10 @@ import cities from '../constants/cities';
 import events from '../constants/events';
 
 
+function sortHand(hand) {
+  return _.sortBy(hand, ['cardType', 'color', 'name']);
+}
+
 export function getCitiesInPlayersHand(state, playerId) {
   const hand = getPlayerHand(state, playerId);
   return getCitiesInHand(state, hand);
@@ -23,13 +27,13 @@ export function getCurrentPlayerHand(state) {
 }
 
 export function getPlayerHand(state, playerId) {
-  return state.players[playerId].hand.map((card) => {
+  return sortHand(state.players[playerId].hand.map((card) => {
     const res = { ...card, name: card.cardType === 'city' ? cities[card.id].name : events[card.id].name };
     if (card.cardType === 'city') {
       res.color = getCityColor(state, card.id);
     }
     return res;
-  });
+  }));
 }
 
 export function isOverHandLimit(state, playerId) {

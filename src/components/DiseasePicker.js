@@ -3,15 +3,17 @@ import { Button, Panel } from 'react-bootstrap';
 import { partial } from 'lodash';
 
 
-const DiseasePicker = ({ diseases, onDiseasePicked }) => {
+const DiseasePicker = ({ title, diseases, onDiseasePicked }) => {
   return (
-    <Panel className="disease-picker">
+    <Panel
+      className="disease-picker"
+      header={title}>
       {diseases.map((c) =>
         <Button
           id={`disease-picker-${c}`}
           key={c}
           onClick={partial(onDiseasePicked, c)}>
-          {c}
+          <img className={`disease-${c}`} />
         </Button>
       )}
     </Panel>

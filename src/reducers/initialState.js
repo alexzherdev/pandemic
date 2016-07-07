@@ -23,14 +23,15 @@ export default {
     0: {
       id: '0',
       name: 'Stephen',
-      role: 'medic',
+      role: 'dispatcher',
       specialEvent: null,
       hand: [
-        { cardType: 'event', id: 'gov_grant' },
+        { cardType: 'event', id: 'res_pop' },
         { cardType: 'city', id: '0' },
         { cardType: 'city', id: '3' },
         { cardType: 'city', id: '2' },
-        { cardType: 'city', id: '5' }
+        { cardType: 'city', id: '5' },
+        { cardType: 'city', id: '42' }
       ]
     },
     1: {
