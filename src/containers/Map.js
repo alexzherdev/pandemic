@@ -12,6 +12,7 @@ import * as mapActions from '../actions/mapActions';
 import * as globalActions from '../actions/globalActions';
 import { isDriveAvailable } from '../selectors';
 import { getCubeOrigin } from '../utils';
+import * as styles from '../styles';
 
 
 class Map extends React.Component {
@@ -71,12 +72,21 @@ class Map extends React.Component {
         color = infectingCube.color;
     }
     return (
-      <div className="map">
+      <div
+        className="map"
+        style={styles.map}>
         <PathsLayer paths={paths} />
-        <LocationsLayer locations={map.locations} cities={cities} availableCities={citiesToSelect}
-          onCityClicked={this.props.onCityClicked} onCityDoubleClicked={this.props.onCityDoubleClicked}
+        <LocationsLayer
+          locations={map.locations}
+          cities={cities}
+          availableCities={citiesToSelect}
+          onCityClicked={this.props.onCityClicked}
+          onCityDoubleClicked={this.props.onCityDoubleClicked}
           isDriveAvailable={isDriveAvailable} />
-        <PlayersLayer ref="players" players={players} playersPositions={playersPositions}
+        <PlayersLayer
+          ref="players"
+          players={players}
+          playersPositions={playersPositions}
           currentPlayerId={currentPlayerId} />
         <CubesLayer
           locations={map.locations}

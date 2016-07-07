@@ -3,6 +3,7 @@
 
 import browserSync from 'browser-sync';
 import historyApiFallback from 'connect-history-api-fallback';
+import compression from 'compression';
 
 // Run Browsersync
 browserSync({
@@ -13,10 +14,9 @@ browserSync({
   server: {
     baseDir: 'dist'
   },
-
   files: [
     'src/*.html'
   ],
 
-  middleware: [historyApiFallback()]
+  middleware: [compression(), historyApiFallback()]
 });

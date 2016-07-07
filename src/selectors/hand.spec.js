@@ -12,7 +12,7 @@ describe('Hand selector', () => {
         hand: [
           { cardType: 'city', id: '0' },
           { cardType: 'event', id: 'airlift' },
-          { cardType: 'city', id: '5' }
+          { cardType: 'city', id: '13' }
         ]
       },
       1: {
@@ -38,9 +38,9 @@ describe('Hand selector', () => {
   it('returns the current player\'s hand', () => {
     expect(sel.getCurrentPlayerHand(getState())).to.eql(
       [
-        { cardType: 'city', id: '0', name: 'Atlanta', color: 'blue' },
+        { cardType: 'city', id: '0', name: 'San Francisco', color: 'blue' },
         { cardType: 'event', id: 'airlift', name: 'Airlift' },
-        { cardType: 'city', id: '5', name: 'San Francisco', color: 'red' }
+        { cardType: 'city', id: '13', name: 'Mexico City', color: 'yellow' }
       ]
     );
   });
@@ -48,7 +48,7 @@ describe('Hand selector', () => {
   it('gets a hand by player id', () => {
     expect(sel.getPlayerHand(getState(), '1')).to.eql(
       [
-        { cardType: 'city', id: '1', name: 'Chicago', color: 'black' },
+        { cardType: 'city', id: '1', name: 'Chicago', color: 'blue' },
         { cardType: 'event', id: 'forecast', name: 'Forecast' }
       ]
     );
@@ -78,8 +78,8 @@ describe('Hand selector', () => {
   });
 
   it('selects cards of a given color from the current player\'s hand', () => {
-    expect(sel.getCardsOfColorInCurrentHand(getState(), 'red')).to.eql(
-      [{ cardType: 'city', id: '5', name: 'San Francisco', color: 'red' }]
+    expect(sel.getCardsOfColorInCurrentHand(getState(), 'yellow')).to.eql(
+      [{ cardType: 'city', id: '13', name: 'Mexico City', color: 'yellow' }]
     );
   });
 
@@ -92,8 +92,8 @@ describe('Hand selector', () => {
 
   it('selects the cities a player has in hand', () => {
     expect(sel.getCitiesInPlayersHand(getState(), '0')).to.eql([
-      { id: '0', name: 'Atlanta', color: 'blue' },
-      { id: '5', name: 'San Francisco', color: 'red' }
+      { id: '0', name: 'San Francisco', color: 'blue' },
+      { id: '13', name: 'Mexico City', color: 'yellow' }
     ]);
   });
 
