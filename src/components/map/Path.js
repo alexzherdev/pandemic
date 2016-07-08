@@ -5,7 +5,7 @@ import autoprefixer from 'autoprefixer';
 const prefixer = postcssJs.sync([autoprefixer]);
 
 
-const Path = ({ path: [[y1, x1], [y2, x2]] }) => {
+const Path = ({ path: [[x1, y1], [x2, y2]] }) => {
   const length = Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
   const angle  = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
   const transform = `rotate(${angle}deg)`;

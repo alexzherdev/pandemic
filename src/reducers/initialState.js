@@ -3,9 +3,9 @@ export default {
 
   playerCards: {
     deck: [
-      { cardType: 'city', id: '8' },
-      { cardType: 'epidemic', name: 'Epidemic' },
-      { cardType: 'city', id: '6' }
+      { cardType: 'city', id: '30' },
+      { cardType: 'city', id: '36' },
+      { cardType: 'epidemic', name: 'Epidemic' }
     ],
     discard: [
       { cardType: 'event', id: 'one_quiet_night' },
@@ -15,7 +15,7 @@ export default {
   },
 
   infectionCards: {
-    deck: ['8', '7', '0', '5', '6', '1', '3'],
+    deck: ['0', '7', '8', '5', '6', '1', '3'],
     discard: ['4', '2']
   },
 
@@ -51,11 +51,11 @@ export default {
       name: 'Thomas',
       role: 'researcher',
       hand: [
-        { cardType: 'city', id: '4' },
-        { cardType: 'city', id: '0' },
-        { cardType: 'city', id: '3' },
-        { cardType: 'city', id: '2' },
-        { cardType: 'city', id: '5' }
+        { cardType: 'city', id: '11' },
+        { cardType: 'city', id: '10' },
+        { cardType: 'city', id: '13' },
+        { cardType: 'city', id: '12' },
+        { cardType: 'city', id: '15' }
       ]
     },
     3: {
@@ -63,11 +63,11 @@ export default {
       name: 'Paul',
       role: 'cont_planner',
       hand: [
-        { cardType: 'city', id: '4' },
-        { cardType: 'city', id: '0' },
-        { cardType: 'city', id: '3' },
-        { cardType: 'city', id: '2' },
-        { cardType: 'city', id: '5' }
+        { cardType: 'city', id: '24' },
+        { cardType: 'city', id: '20' },
+        { cardType: 'city', id: '23' },
+        { cardType: 'city', id: '22' },
+        { cardType: 'city', id: '25' }
       ]
     }
   },
@@ -187,7 +187,7 @@ export default {
         yellow: 2,
         red: 1,
         black: 0,
-        blue: 1
+        blue: 3
       },
       1: {
         coords: [285, 225],
