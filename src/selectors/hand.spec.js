@@ -39,8 +39,8 @@ describe('Hand selector', () => {
     expect(sel.getCurrentPlayerHand(getState())).to.eql(
       [
         { cardType: 'city', id: '0', name: 'San Francisco', color: 'blue' },
-        { cardType: 'event', id: 'airlift', name: 'Airlift' },
-        { cardType: 'city', id: '13', name: 'Mexico City', color: 'yellow' }
+        { cardType: 'city', id: '13', name: 'Mexico City', color: 'yellow' },
+        { cardType: 'event', id: 'airlift', name: 'Airlift' }
       ]
     );
   });

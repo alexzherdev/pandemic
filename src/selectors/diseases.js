@@ -5,6 +5,7 @@ import { getCitiesInPlayersHand } from './hand';
 import { getCurrentPlayer, getCurrentRole } from './gameplay';
 import DISEASES from '../constants/diseases';
 
+
 export function canTreatAll(state) {
   return getCurrentRole(state) === 'medic';
 }
@@ -22,7 +23,7 @@ export function areAllDiseasesCured(state) {
 }
 
 export function cardsNeededToCure(state) {
-  return getCurrentRole(state) === 'scientist' ? 4 : 1;
+  return getCurrentRole(state) === 'scientist' ? 4 : 3;
 }
 
 export function getCurableDisease(state) {

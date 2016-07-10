@@ -1,14 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { isEmpty } from 'lodash';
+import { isEmpty, partial } from 'lodash';
 
 import TopBar from './TopBar';
 import Map from './Map';
 import TeamPanel from './TeamPanel';
 import BottomBar from './BottomBar';
 import * as mapActions from '../actions/mapActions';
-import { getPlayers, getCurrentCityId } from '../selectors';
+import { getPlayers, getCurrentCityId, getPlayerCityId } from '../selectors';
 
 
 class Game extends React.Component {
@@ -25,7 +25,7 @@ class Game extends React.Component {
     let playerId, originId;
     if (playerToMove) {
       playerId = playerToMove;
-      originId = find(this.props.players, { id: playerId });
+      originId = this.props.getPlayerCityId(playerId);
     } else {
       playerId = this.props.currentPlayerId;
       originId = this.props.currentCityId;
@@ -76,7 +76,8 @@ const mapStateToProps = (state) => ({
   currentMove: state.currentMove,
   players: getPlayers(state),
   currentPlayerId: state.currentMove.player,
-  currentCityId: getCurrentCityId(state)
+  currentCityId: getCurrentCityId(state),
+  getPlayerCityId: partial(getPlayerCityId, state)
 });
 
 const mapDispatchToProps = (dispatch) => ({

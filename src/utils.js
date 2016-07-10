@@ -1,5 +1,3 @@
-import { sortBy } from 'lodash';
-
 import { map } from './styles';
 
 
@@ -9,10 +7,6 @@ export function getLocationOrigin(loc) {
 
 export function getCubeOrigin(loc) {
   return { top: loc.coords[0] - 12, left: loc.coords[1] - 12 };
-}
-
-export function sortHand(hand) {
-  return sortBy(hand, ['cardType', 'color', 'name']);
 }
 
 export function splitPath([x1, y1], [x2, y2]) {
