@@ -4,7 +4,7 @@ import { select, put, take, fork, cancel, call } from 'redux-saga/effects';
 import { moveShowCities } from '../actions/mapActions';
 import { cureDiseaseShowCards } from '../actions/diseaseActions';
 import { shareCardsShowCandidates, discardFromHand, chooseCardsToDiscard,
-  cardOverLimitComplete, drawCardsInit, drawCardsHandle } from '../actions/cardActions';
+  cardOverLimitComplete, drawCardsInit, drawCardsHandleInit } from '../actions/cardActions';
 import { passTurn } from '../actions/globalActions';
 import * as sel from '../selectors';
 import * as types from '../constants/actionTypes';
@@ -99,14 +99,16 @@ export function* drawPlayerCards() {
   if (cards.length < 2) {
     yield call(yieldDefeat);
   } else {
-    const currentPlayer = yield select(sel.getCurrentPlayer);
     if (cards[1].cardType === 'epidemic') {
       cards.reverse();
     }
+    yield call(delay, 500);
     yield put(drawCardsInit(cards));
+    yield call(delay, 500);
     for (let i = 0; i < 2; i++) {
-      yield delay(1000);
-      yield put(drawCardsHandle(cards[i], currentPlayer.id));
+      yield call(delay, 500);
+      yield put(drawCardsHandleInit(cards[i]));
+      yield take(types.CARD_DRAW_CARDS_HANDLE);
       if (cards[i].cardType === 'epidemic') {
         yield call(yieldEpidemic);
       }

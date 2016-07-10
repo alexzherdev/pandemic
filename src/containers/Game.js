@@ -7,6 +7,7 @@ import TopBar from './TopBar';
 import Map from './Map';
 import TeamPanel from './TeamPanel';
 import BottomBar from './BottomBar';
+import CardLayer from './CardLayer';
 import * as mapActions from '../actions/mapActions';
 import { getPlayers, getCurrentCityId, getPlayerCityId } from '../selectors';
 
@@ -67,6 +68,7 @@ class Game extends React.Component {
           ref="map"
           onCityClicked={this.onCityClicked}
           onCityDoubleClicked={this.onCityDoubleClicked} />
+        <CardLayer />
       </div>
     );
   }

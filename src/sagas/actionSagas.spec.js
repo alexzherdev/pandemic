@@ -1,9 +1,9 @@
 import { expect } from 'chai';
-import { select, put, call } from 'redux-saga/effects';
+import { select, put, call, take } from 'redux-saga/effects';
 
 import { moveShowCities, moveCancel, moveToCity } from '../actions/mapActions';
 import { discardFromHand, shareCardsShowCandidates, shareCardsCancel, shareCard, drawCardsInit,
-  drawCardsHandle } from '../actions/cardActions';
+  drawCardsHandleInit } from '../actions/cardActions';
 import { cureDiseaseShowCards } from '../actions/diseaseActions';
 import { showAvailableCities, showCitiesAndMove, showShareCandidates, drawIfNoActionsLeft,
   drawPlayerCards, waitToDiscardIfOverLimit, showCardsToCure } from './actionSagas';
@@ -159,21 +159,22 @@ describe('ActionSagas', function() {
     it('first draws an epidemic card and then a city card', () => {
       const cards = [
         { cardType: 'city', id: '1' },
-        { cardType: 'epidemic', name: 'Epidemic' }
+        { cardType: 'epidemic', id: 'epidemic' }
       ];
       this.generator.next([...cards]);
-      this.next = this.generator.next({ id: '0' });
+      this.next = this.generator.next();
       expect(this.next.value).to.eql(put(drawCardsInit([...cards].reverse())));
       this.generator.next();
+      this.generator.next();
       this.next = this.generator.next();
-      expect(this.next.value).to.eql(put(drawCardsHandle(cards[1], '0')));
+      expect(this.next.value).to.eql(put(drawCardsHandleInit(cards[1], '0')));
+      this.next = this.generator.next();
+      expect(this.next.value).to.eql(take(types.CARD_DRAW_CARDS_HANDLE));
       this.next = this.generator.next();
       expect(this.next.value).to.eql(call(yieldEpidemic));
       this.generator.next();
       this.next = this.generator.next();
-      expect(this.next.value).to.eql(put(drawCardsHandle(cards[0], '0')));
-      this.next = this.generator.next();
-      expect(this.next.done).to.be.true;
+      expect(this.next.value).to.eql(put(drawCardsHandleInit(cards[0], '0')));
     });
   });
 

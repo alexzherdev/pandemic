@@ -1,5 +1,3 @@
-import { isEqual } from 'lodash';
-
 import initialState from './initialState';
 import * as types from '../constants/actionTypes';
 
@@ -42,8 +40,16 @@ function cardsDrawn(state, action) {
   switch (action.type) {
     case types.CARD_DRAW_CARDS_INIT:
       return action.cards;
+    case types.CARD_DRAW_CARDS_HANDLE_INIT:
+      return state.map((c) => {
+        if (c.cardType === action.card.cardType && c.id === action.card.id) {
+          return { ...c, handling: true };
+        } else {
+          return c;
+        }
+      });
     case types.CARD_DRAW_CARDS_HANDLE:
-      return state.filter((c) => !isEqual(c, action.card));
+      return state.filter((c) => c.id !== action.card.id || c.cardType !== action.card.cardType);
     default:
       return state;
   }
@@ -244,6 +250,17 @@ function contPlannerEvents(state, action) {
   }
 }
 
+function epidemicInProgress(state, action) {
+  switch (action.type) {
+    case types.EPIDEMIC_INCREASE:
+      return true;
+    case types.EPIDEMIC_INTENSIFY:
+      return false;
+    default:
+      return state;
+  }
+}
+
 export default function currentMoveReducer(state = initialState.currentMove, action) {
   return {
     ...state,
@@ -262,6 +279,7 @@ export default function currentMoveReducer(state = initialState.currentMove, act
     forecastCards: forecastCards(state.forecastCards, action),
     airlift: airlift(state.airlift, action),
     opsMoveAbility: opsMoveAbility(state.opsMoveAbility, action),
-    contPlannerEvents: contPlannerEvents(state.contPlannerEvents, action)
+    contPlannerEvents: contPlannerEvents(state.contPlannerEvents, action),
+    epidemicInProgress: epidemicInProgress(state.epidemicInProgress, action)
   };
 }

@@ -8,6 +8,8 @@ $topIconSize: 20px;
 $cubeFlashColor: #ebebeb;
 $cardWidth: 144px;
 $cardHeight: 200px;
+$bottomBarMinHeight: 110px;
+
 $events-list: airlift forecast gov_grant res_pop one_quiet_night;
 $diseases-list: yellow red blue black;
 $roles-list: cont_planner dispatcher medic ops_expert quar_spec researcher scientist;
@@ -163,7 +165,7 @@ body {
     position: fixed;
     text-align: center;
     width: 100%;
-    min-height: 110px;
+    min-height: $bottomBarMinHeight;
     border-top: 3px solid #485563;
     z-index: 10000;
 
@@ -575,6 +577,43 @@ body {
     @each $event in $events-list {
       &.event-#{$event} {
         background-image: url('../images/event-#{$event}.png');
+      }
+    }
+
+    &.epidemic {
+      background-image: url('../images/epidemic.png');
+    }
+  }
+
+  .card-layer {
+    position: absolute;
+    width: 100%;
+    height: calc(100% - #{$bottomBarMinHeight});
+    left: 0;
+    top: 0;
+    z-index: 11000;
+
+    &.empty {
+      height: 40px;
+    }
+
+    &.is-epidemic {
+      .card-drawer {
+        display: none;
+      }
+    }
+
+    .card-drawer {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+
+      .card {
+        &:first-child {
+          margin-right: 10px;
+        }
       }
     }
   }

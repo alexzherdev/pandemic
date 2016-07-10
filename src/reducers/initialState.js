@@ -5,7 +5,7 @@ export default {
     deck: [
       { cardType: 'city', id: '30' },
       { cardType: 'city', id: '36' },
-      { cardType: 'epidemic', name: 'Epidemic' }
+      { cardType: 'epidemic', id: 'epidemic' }
     ],
     discard: [
       { cardType: 'event', id: 'one_quiet_night' },
@@ -86,6 +86,7 @@ export default {
     shareCandidates: [],
     actionsLeft: 4,
     cardsDrawn: [],
+    epidemicInProgress: false,
     outbreak: {
       color: null,
       complete: [],

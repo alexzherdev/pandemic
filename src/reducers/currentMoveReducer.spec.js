@@ -28,7 +28,8 @@ describe('CurrentMoveReducer', () => {
       cards: [],
       used: false
     },
-    contPlannerEvents: []
+    contPlannerEvents: [],
+    epidemicInProgress: false
   });
 
   it('resets move counter and switches players on PASS_TURN', () => {
