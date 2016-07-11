@@ -108,3 +108,11 @@ export function getContPlannerEvent(state) {
   const id = getCurrentPlayer(state).specialEvent;
   return events[id];
 }
+
+export function getCardsDrawn(state) {
+  return state.currentMove.cardsDrawn;
+}
+
+export function isEpidemicInProgress(state) {
+  return state.currentMove.epidemicInProgress;
+}

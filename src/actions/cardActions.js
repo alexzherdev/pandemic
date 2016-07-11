@@ -8,6 +8,10 @@ export function drawCardsInit(cards) {
   return { type: types.CARD_DRAW_CARDS_INIT, cards };
 }
 
+export function drawCardsHandleInit(card) {
+  return { type: types.CARD_DRAW_CARDS_HANDLE_INIT, card };
+}
+
 export function drawCardsHandle(card, playerId) {
   return { type: types.CARD_DRAW_CARDS_HANDLE, card, playerId };
 }
