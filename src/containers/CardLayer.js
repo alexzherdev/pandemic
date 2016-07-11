@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { isEmpty } from 'lodash';
 import classnames from 'classnames';
@@ -6,9 +6,20 @@ import classnames from 'classnames';
 import CardWrapper from '../components/CardWrapper';
 import { drawCardsHandle } from '../actions/cardActions';
 import { getCardsDrawn, isEpidemicInProgress } from '../selectors';
+import { cardProps } from '../constants/propTypes';
 
 
 class CardLayer extends React.Component {
+  static propTypes = {
+    cardsDrawn: PropTypes.arrayOf(PropTypes.shape({
+      ...cardProps,
+      handling: PropTypes.bool
+    })).isRequired,
+    isEpidemicInProgress: PropTypes.bool.isRequired,
+    currentPlayerId: PropTypes.string.isRequired,
+    dispatch: PropTypes.func.isRequired
+  }
+
   constructor(props) {
     super(props);
     this.onCardAnimationStart = this.onCardAnimationStart.bind(this);

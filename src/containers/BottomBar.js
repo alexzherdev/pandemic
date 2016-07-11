@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Button, Panel } from 'react-bootstrap';
@@ -18,9 +18,33 @@ import * as mapActions from '../actions/mapActions';
 import * as cardActions from '../actions/cardActions';
 import * as diseaseActions from '../actions/diseaseActions';
 import * as globalActions from '../actions/globalActions';
+import { playerType, playerProps, cardProps, eventCardType } from '../constants/propTypes';
 
 
 class BottomBar extends React.Component {
+  static propTypes = {
+    currentCityId: PropTypes.string.isRequired,
+    currentPlayer: playerType.isRequired,
+    currentMove: PropTypes.object.isRequired,
+    playerToDiscard: PropTypes.string,
+    getPlayerHand: PropTypes.func.isRequired,
+    treatableDiseases: PropTypes.objectOf(PropTypes.number.isRequired),
+    canTreatAll: PropTypes.bool.isRequired,
+    canTreatAllOfColor: PropTypes.func.isRequired,
+    isDispatcher: PropTypes.bool.isRequired,
+    players: PropTypes.arrayOf(PropTypes.shape({
+      ...playerProps,
+      cityId: PropTypes.string.isRequired
+    }).isRequired).isRequired,
+    events: PropTypes.arrayOf(eventCardType.isRequired).isRequired,
+    infectionDiscard: PropTypes.arrayOf(PropTypes.shape({
+      ...cardProps,
+      name: PropTypes.string.isRequired
+    }).isRequired).isRequired,
+    cardsNeededToCure: PropTypes.number.isRequired,
+    actions: PropTypes.object.isRequired
+  }
+
   constructor(props) {
     super(props);
 
@@ -249,7 +273,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  actions: bindActionCreators(Object.assign({}, mapActions, cardActions, diseaseActions, globalActions), dispatch)
+  actions: bindActionCreators({ ...mapActions, ...cardActions, ...diseaseActions, ...globalActions }, dispatch)
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(BottomBar);

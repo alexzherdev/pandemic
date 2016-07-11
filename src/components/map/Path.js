@@ -2,6 +2,8 @@ import React from 'react';
 import postcssJs from 'postcss-js';
 import autoprefixer from 'autoprefixer';
 
+import { pathType } from '../../constants/propTypes';
+
 const prefixer = postcssJs.sync([autoprefixer]);
 
 
@@ -15,6 +17,10 @@ const Path = ({ path: [[x1, y1], [x2, y2]] }) => {
       className="path"
       style={prefixer({ left: x1, top: y1, width: length, transform })} />
   );
+};
+
+Path.propTypes = {
+  path: pathType.isRequired
 };
 
 export default Path;

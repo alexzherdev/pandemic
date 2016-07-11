@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { Panel, Glyphicon, ListGroup, ListGroupItem } from 'react-bootstrap';
 
-import roles from '../constants/roles';
+import ROLES from '../constants/roles';
+import { playerType, cardType } from '../constants/propTypes';
 
 
 const TeamPlayerHand = ({ player, hand, isCurrent }) => {
@@ -10,7 +11,7 @@ const TeamPlayerHand = ({ player, hand, isCurrent }) => {
       header={
         <div>
           <h5>{isCurrent && <Glyphicon glyph="triangle-right" />}{player.name}</h5>
-          <h6>{roles[player.role].name}</h6>
+          <h6>{ROLES[player.role].name}</h6>
         </div>
       }
       className={`team-player team-player-${player.role}`}>
@@ -28,6 +29,12 @@ const TeamPlayerHand = ({ player, hand, isCurrent }) => {
       </ListGroup>
     </Panel>
   );
+};
+
+TeamPlayerHand.propTypes = {
+  player: playerType.isRequired,
+  hand: PropTypes.arrayOf(cardType.isRequired).isRequired,
+  isCurrent: PropTypes.bool.isRequired
 };
 
 export default TeamPlayerHand;

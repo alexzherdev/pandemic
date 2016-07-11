@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { invertBy, reduce, partial, find, isEmpty } from 'lodash';
 
 import cities from '../constants/cities';
+import { playerType, cityType } from '../constants/propTypes';
 import PlayersLayer from '../containers/PlayersLayer';
 import LocationsLayer from '../components/map/LocationsLayer';
 import PathsLayer from '../components/map/PathsLayer';
@@ -16,6 +17,19 @@ import * as styles from '../styles';
 
 
 class Map extends React.Component {
+  static propTypes = {
+    onCityClicked: PropTypes.func.isRequired,
+    onCityDoubleClicked: PropTypes.func.isRequired,
+
+    map: PropTypes.object.isRequired,
+    players: PropTypes.objectOf(playerType.isRequired).isRequired,
+    currentMove: PropTypes.object.isRequired,
+    availableCities: PropTypes.objectOf(cityType).isRequired,
+    currentPlayerId: PropTypes.string.isRequired,
+    isDriveAvailable: PropTypes.func.isRequired,
+    actions: PropTypes.object.isRequired
+  }
+
   constructor(props) {
     super(props);
   }
@@ -90,7 +104,7 @@ class Map extends React.Component {
           currentPlayerId={currentPlayerId} />
         <CubesLayer
           locations={map.locations}
-          infectingCube={!isEmpty(infectingCube) && { origin, destination, color }}
+          infectingCube={isEmpty(infectingCube) ? undefined : { origin, destination, color }}
           infectNeighborCallback={partial(this.props.actions.animationInfectNeighborComplete,
             infectingCube.cityId, infectingCube.originId, infectingCube.color)} />
       </div>
@@ -106,7 +120,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    actions: bindActionCreators(Object.assign({}, mapActions, globalActions), dispatch)
+    actions: bindActionCreators({ ...mapActions, ...globalActions }, dispatch)
   };
 };
 

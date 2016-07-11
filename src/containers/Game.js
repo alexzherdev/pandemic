@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { isEmpty, partial } from 'lodash';
@@ -13,6 +13,22 @@ import { getPlayers, getCurrentCityId, getPlayerCityId } from '../selectors';
 
 
 class Game extends React.Component {
+  static propTypes = {
+    currentMove: PropTypes.object.isRequired,
+    players: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        name: PropTypes.string.isRequired,
+        role: PropTypes.string.isRequired,
+        cityId: PropTypes.string.isRequired
+      })
+    ),
+    currentPlayerId: PropTypes.string.isRequired,
+    currentCityId: PropTypes.string.isRequired,
+    getPlayerCityId: PropTypes.func.isRequired,
+    actions: PropTypes.object.isRequired
+  }
+
   constructor(props) {
     super(props);
 
@@ -83,7 +99,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  actions: bindActionCreators(Object.assign({}, mapActions), dispatch)
+  actions: bindActionCreators({ ...mapActions }, dispatch)
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Game);

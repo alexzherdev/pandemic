@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { Button, Panel } from 'react-bootstrap';
 import { partial } from 'lodash';
+
+import { diseaseType } from '../constants/propTypes';
 
 
 const DiseasePicker = ({ title, diseases, onDiseasePicked }) => {
@@ -18,6 +20,12 @@ const DiseasePicker = ({ title, diseases, onDiseasePicked }) => {
       )}
     </Panel>
   );
+};
+
+DiseasePicker.propTypes = {
+  diseases: PropTypes.arrayOf(diseaseType.isRequired).isRequired,
+  onDiseasePicked: PropTypes.func.isRequired,
+  title: PropTypes.string
 };
 
 export default DiseasePicker;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Panel } from 'react-bootstrap';
 
@@ -6,6 +6,14 @@ import { getPlayerDeckCount, getInfectionRate } from '../selectors';
 import DISEASES from '../constants/diseases';
 
 class TopBar extends React.Component {
+  static propTypes = {
+    cubesLeft: PropTypes.objectOf(PropTypes.number.isRequired).isRequired,
+    stationsLeft: PropTypes.number.isRequired,
+    playerDeckCount: PropTypes.number.isRequired,
+    infectionRate: PropTypes.number.isRequired,
+    outbreaks: PropTypes.number.isRequired
+  }
+
   render() {
     return (
       <Panel className="top-bar">
