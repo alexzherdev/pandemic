@@ -5,7 +5,7 @@ import { invertBy, reduce, partial, find, isEmpty } from 'lodash';
 
 import cities from '../constants/cities';
 import { playerType, cityType } from '../constants/propTypes';
-import PlayersLayer from '../containers/PlayersLayer';
+import PlayersLayer from '../components/map/PlayersLayer';
 import LocationsLayer from '../components/map/LocationsLayer';
 import PathsLayer from '../components/map/PathsLayer';
 import CubesLayer from '../components/map/CubesLayer';

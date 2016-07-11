@@ -5,11 +5,11 @@ import { isEmpty, partial } from 'lodash';
 
 import TopBar from './TopBar';
 import Map from './Map';
-import TeamPanel from './TeamPanel';
+import TeamPanel from '../components/TeamPanel';
 import BottomBar from './BottomBar';
 import CardLayer from './CardLayer';
 import * as mapActions from '../actions/mapActions';
-import { getPlayers, getCurrentCityId, getPlayerCityId } from '../selectors';
+import { getPlayers, getCurrentCityId, getPlayerCityId, getPlayerHand } from '../selectors';
 
 
 class Game extends React.Component {
@@ -26,6 +26,7 @@ class Game extends React.Component {
     currentPlayerId: PropTypes.string.isRequired,
     currentCityId: PropTypes.string.isRequired,
     getPlayerCityId: PropTypes.func.isRequired,
+    getPlayerHand: PropTypes.func.isRequired,
     actions: PropTypes.object.isRequired
   }
 
@@ -78,7 +79,10 @@ class Game extends React.Component {
     return (
       <div className="game">
         <TopBar />
-        <TeamPanel />
+        <TeamPanel
+          players={this.props.players}
+          getPlayerHand={this.props.getPlayerHand}
+          currentPlayerId={this.props.currentPlayerId} />
         <BottomBar />
         <Map
           ref="map"
@@ -95,7 +99,8 @@ const mapStateToProps = (state) => ({
   players: getPlayers(state),
   currentPlayerId: state.currentMove.player,
   currentCityId: getCurrentCityId(state),
-  getPlayerCityId: partial(getPlayerCityId, state)
+  getPlayerCityId: partial(getPlayerCityId, state),
+  getPlayerHand: partial(getPlayerHand, state)
 });
 
 const mapDispatchToProps = (dispatch) => ({

@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 
-import { playerType } from '../constants/propTypes';
+import { playerType } from '../../constants/propTypes';
 
 
 export default class PlayersLayer extends React.Component {
