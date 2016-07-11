@@ -26,7 +26,7 @@ export default {
       role: 'dispatcher',
       specialEvent: null,
       hand: [
-        { cardType: 'event', id: 'res_pop' },
+        { cardType: 'event', id: 'airlift' },
         { cardType: 'city', id: '0' },
         { cardType: 'city', id: '3' },
         { cardType: 'city', id: '2' },
@@ -86,6 +86,7 @@ export default {
     shareCandidates: [],
     actionsLeft: 4,
     cardsDrawn: [],
+    infectionCardDrawn: {},
     epidemicInProgress: false,
     outbreak: {
       color: null,

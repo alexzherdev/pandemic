@@ -11,6 +11,7 @@ describe('CurrentMoveReducer', () => {
     shareCandidates: [],
     actionsLeft: 3,
     cardsDrawn: [],
+    infectionCardDrawn: {},
     outbreak: {
       color: null,
       complete: [],

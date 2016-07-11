@@ -20,6 +20,10 @@ export function animationMoveComplete() {
   return { type: types.ANIMATION_MOVE_COMPLETE };
 }
 
+export function animationDrawInfectionCardComplete() {
+  return { type: types.ANIMATION_DRAW_INFECTION_CARD_COMPLETE };
+}
+
 export function animationInfectNeighborComplete(cityId, originId, color) {
   return { type: types.ANIMATION_INFECT_NEIGHBOR_COMPLETE, cityId, originId, color };
 }

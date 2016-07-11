@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { forOwn, find, partial, isEmpty, pick, values } from 'lodash';
+import { forOwn, find, isEmpty, pick, values } from 'lodash';
 
 import { getLocationOrigin } from '../../utils';
 import { locationType, cityType } from '../../constants/propTypes';
