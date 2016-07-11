@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { forOwn, find, partial, isEmpty, pick, values } from 'lodash';
 
 import { getLocationOrigin } from '../../utils';
+import { locationType, cityType } from '../../constants/propTypes';
 import DISEASES from '../../constants/diseases';
+
 
 const LocationsLayer = ({ cities, locations, availableCities, onCityClicked, onCityDoubleClicked,
   isDriveAvailable }) => {
@@ -51,6 +53,15 @@ const LocationsLayer = ({ cities, locations, availableCities, onCityClicked, onC
       {items}
     </div>
   );
+};
+
+LocationsLayer.propTypes = {
+  cities: PropTypes.objectOf(cityType.isRequired).isRequired,
+  locations: PropTypes.objectOf(locationType.isRequired).isRequired,
+  onCityClicked: PropTypes.func.isRequired,
+  onCityDoubleClicked: PropTypes.func.isRequired,
+  isDriveAvailable: PropTypes.func.isRequired,
+  availableCities: PropTypes.objectOf(cityType.isRequired)
 };
 
 export default LocationsLayer;

@@ -1,13 +1,24 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { forOwn, isEmpty, isEqual, pick } from 'lodash';
 
 import Cubes from './Cubes';
 import { splitPath, getLength, constrainCubeMovement } from '../../utils';
+import { locationType, diseaseType, viewCoordsType } from '../../constants/propTypes';
 
 
 const INFECTING_CUBE_SPEED = 8;
 
 export default class CubesLayer extends React.Component {
+  static propTypes = {
+    locations: PropTypes.objectOf(locationType.isRequired).isRequired,
+    infectNeighborCallback: PropTypes.func.isRequired,
+    infectingCube: PropTypes.shape({
+      origin: viewCoordsType.isRequired,
+      destination: viewCoordsType.isRequired,
+      color: diseaseType.isRequired
+    })
+  }
+
   shouldComponentUpdate(nextProps) {
     return !isEqual(
       pick(nextProps, ['locations', 'infectingCube']),

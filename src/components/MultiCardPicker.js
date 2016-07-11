@@ -1,9 +1,19 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { Button, Panel } from 'react-bootstrap';
 import { partial } from 'lodash';
 
+import { cardType } from '../constants/propTypes';
+
 
 export default class MultiCardPicker extends React.Component {
+  static propTypes = {
+    cards: PropTypes.arrayOf(cardType.isRequired).isRequired,
+    countNeeded: PropTypes.number.isRequired,
+    onSubmit: PropTypes.func.isRequired,
+    onCancel: PropTypes.func.isRequired,
+    title: PropTypes.string
+  }
+
   constructor(props) {
     super(props);
     this.state = {};
@@ -24,14 +34,14 @@ export default class MultiCardPicker extends React.Component {
   }
 
   render() {
-    const { cards, countNeeded, title } = this.props;
+    const { cards, countNeeded, title, onCancel } = this.props;
     return (
       <Panel
         header={title}
         footer={
           <div>
             <Button onClick={this.onSubmit} disabled={this.getSelectedIds().length !== countNeeded}>OK</Button>
-            <Button onClick={this.props.onCancel}>Cancel</Button>
+            <Button onClick={onCancel}>Cancel</Button>
           </div>
         }
         className="card-picker multi-card-picker">

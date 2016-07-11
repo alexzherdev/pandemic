@@ -1,13 +1,19 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Panel } from 'react-bootstrap';
 import { partial } from 'lodash';
 
 import { getPlayers, getPlayerHand, getCurrentPlayer } from '../selectors';
 import TeamPlayerHand from '../components/TeamPlayerHand';
+import { playerType } from '../constants/propTypes';
 
 
 class TeamPanel extends React.Component {
+  static propTypes = {
+    players: PropTypes.arrayOf(playerType.isRequired).isRequired,
+    getPlayerHand: PropTypes.func.isRequired,
+    currentPlayer: playerType.isRequired
+  }
 
   render() {
     return (

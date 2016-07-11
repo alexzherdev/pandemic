@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { partial, isEmpty, shuffle } from 'lodash';
@@ -12,9 +12,30 @@ import * as globalActions from '../actions/globalActions';
 import { getCurrentCityId, canBuildStation, canTreatAll,
   getCurrentPlayer, canShareCards, getContPlannerEvent, isContingencyPlannerAbilityAvailable,
   getCurableDisease, getTreatableDiseases, getEventsInHands } from '../selectors';
+import { playerType, diseaseType, eventCardType } from '../constants/propTypes';
 
 
 class Actions extends React.Component {
+  static propTypes = {
+    onShowTreatColors: PropTypes.func.isRequired,
+    onTreatColorPicked: PropTypes.func.isRequired,
+    onMoveInit: PropTypes.func.isRequired,
+    onPlayEventClicked: PropTypes.func.isRequired,
+
+    currentMove: PropTypes.object.isRequired,
+    currentCityId: PropTypes.string.isRequired,
+    canBuildStation: PropTypes.bool.isRequired,
+    canTreatAll: PropTypes.bool.isRequired,
+    curableDisease: diseaseType,
+    treatableDiseases: PropTypes.objectOf(PropTypes.number.isRequired),
+    currentPlayer: playerType.isRequired,
+    canShareCards: PropTypes.bool.isRequired,
+    contPlannerEvent: PropTypes.object,
+    isContingencyPlannerAbilityAvailable: PropTypes.bool.isRequired,
+    events: PropTypes.arrayOf(eventCardType.isRequired).isRequired,
+    actions: PropTypes.object.isRequired
+  }
+
   constructor(props) {
     super(props);
 
@@ -106,7 +127,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    actions: bindActionCreators(Object.assign({}, mapActions, diseaseActions, cardActions, globalActions), dispatch)
+    actions: bindActionCreators({ ...mapActions, ...diseaseActions, ...cardActions, ...globalActions }, dispatch)
   };
 };
 

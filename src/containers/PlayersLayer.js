@@ -1,7 +1,18 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
+
+import { playerType } from '../constants/propTypes';
 
 
 export default class PlayersLayer extends React.Component {
+  static propTypes = {
+    players: PropTypes.objectOf(playerType.isRequired).isRequired,
+    playersPositions: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      coords: PropTypes.arrayOf(PropTypes.number.isRequired).isRequired
+    })).isRequired,
+    currentPlayerId: PropTypes.string.isRequired
+  }
+
   transitionPlayerMove(playerId, coords, callback) {
     const playerEl = document.getElementById('player-' + playerId);
     const anim = playerEl.animate([

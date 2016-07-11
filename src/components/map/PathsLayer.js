@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { flatten, isEmpty } from 'lodash';
 
 import Path from './Path';
 import { splitPath } from '../../utils';
+import { pathType } from '../../constants/propTypes';
 
 
 const getPaths = (path, index) => {
@@ -23,6 +24,10 @@ const PathsLayer = ({ paths }) => {
       {flatten(paths.map(getPaths))}
     </div>
   );
+};
+
+PathsLayer.propTypes = {
+  paths: PropTypes.arrayOf(pathType.isRequired).isRequired
 };
 
 export default PathsLayer;

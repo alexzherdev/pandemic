@@ -6,11 +6,16 @@ import postcssJs from 'postcss-js';
 
 import { getCubeOrigin } from '../../utils';
 import DISEASES from '../../constants/diseases';
+import { locationType } from '../../constants/propTypes';
 
 
 const prefixer = postcssJs.sync([autoprefixer]);
 
 export default class Cubes extends React.Component {
+  static propTypes = {
+    location: locationType.isRequired
+  }
+
   shouldComponentUpdate(nextProps) {
     return !isEqual(pick(nextProps.location, DISEASES), pick(this.props.location, DISEASES));
   }
