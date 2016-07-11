@@ -6,6 +6,13 @@ import { locationType, cityType } from '../../constants/propTypes';
 import DISEASES from '../../constants/diseases';
 
 
+const nonPropagatingHandler = (callback, id) => {
+  return (e) => {
+    e.stopPropagation();
+    callback(id);
+  };
+};
+
 const LocationsLayer = ({ cities, locations, availableCities, onCityClicked, onCityDoubleClicked,
   isDriveAvailable }) => {
   const items = [];
@@ -15,8 +22,9 @@ const LocationsLayer = ({ cities, locations, availableCities, onCityClicked, onC
     const loc = locations[id];
     const coords = getLocationOrigin(loc);
 
-    const onClick = !isEmpty(availableCities) && partial(onCityClicked, id);
-    const onDoubleClick = isEmpty(availableCities) && isDriveAvailable(id) && partial(onCityDoubleClicked, id);
+    const onClick = !isEmpty(availableCities) && nonPropagatingHandler(onCityClicked, id);
+    const onDoubleClick = isEmpty(availableCities) && isDriveAvailable(id) &&
+      nonPropagatingHandler(onCityDoubleClicked, id);
     const counts = values(pick(loc, DISEASES));
     const maxCount = Math.max(...counts);
     items.push(
