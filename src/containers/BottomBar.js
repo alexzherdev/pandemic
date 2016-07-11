@@ -10,7 +10,7 @@ import SingleCardPicker from '../components/SingleCardPicker';
 import MultiCardPicker from '../components/MultiCardPicker';
 import PlayerPicker from '../components/PlayerPicker';
 import DiseasePicker from '../components/DiseasePicker';
-import Hand from './Hand';
+import Hand from '../components/Hand';
 import { getPlayerToDiscard, getPlayerHand, getTreatableDiseases, canTreatAllOfColor, canTreatAll,
   getCurrentCityId, getCurrentPlayer, isDispatcher, getPlayers, getEventsInHands, getInfectionDiscard,
   cardsNeededToCure } from '../selectors';
@@ -153,7 +153,8 @@ class BottomBar extends React.Component {
   }
 
   render() {
-    const { playerToDiscard, players, treatableDiseases, infectionDiscard, cardsNeededToCure } = this.props;
+    const { playerToDiscard, players, treatableDiseases, infectionDiscard, cardsNeededToCure,
+      getPlayerHand, currentPlayer } = this.props;
     const { shareCandidates, curingDisease, airlift, opsMoveAbility, contPlannerEvents,
       availableCities, govGrantCities, resPop } = this.props.currentMove;
     let content;
@@ -237,7 +238,9 @@ class BottomBar extends React.Component {
       );
     } else {
       content = ([
-        <Hand key="hand" />,
+        <Hand
+          key="hand"
+          hand={getPlayerHand(currentPlayer.id)} />,
         <Actions
           key="actions"
           onShowTreatColors={this.onShowTreatColors}
