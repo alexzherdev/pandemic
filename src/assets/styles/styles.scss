@@ -8,8 +8,9 @@ $topIconSize: 20px;
 $cubeFlashColor: #ebebeb;
 $cardWidth: 144px;
 $cardHeight: 200px;
-$events-list: 'airlift' 'forecast' 'gov_grant' 'res_pop' 'one_quiet_night';
+$events-list: airlift forecast gov_grant res_pop one_quiet_night;
 $diseases-list: yellow red blue black;
+$roles-list: cont_planner dispatcher medic ops_expert quar_spec researcher scientist;
 
 
 html {
@@ -114,20 +115,10 @@ body {
         margin-right: 2px;
       }
 
-      .cube-icon-red {
-        background-image: url(../images/cube_red.png);
-      }
-
-      .cube-icon-yellow {
-        background-image: url(../images/cube_yellow.png);
-      }
-
-      .cube-icon-blue {
-        background-image: url(../images/cube_blue.png);
-      }
-
-      .cube-icon-black {
-        background-image: url(../images/cube_black.png);
+      @each $disease in $diseases-list {
+        .cube-icon-#{$disease} {
+          background-image: url(../images/cube_#{$disease}.png);
+        }
       }
 
       .stations-icon {
@@ -386,20 +377,10 @@ body {
         height: $citySize;
         cursor: pointer;
 
-        &.yellow {
-          background-image: url(../images/city_yellow.png);
-        }
-
-        &.red {
-          background-image: url(../images/city_red.png);
-        }
-
-        &.blue {
-          background-image: url(../images/city_blue.png);
-        }
-
-        &.black {
-          background-image: url(../images/city_black.png);
+        @each $disease in $diseases-list {
+          &.#{$disease} {
+            background-image: url(../images/city_#{$disease}.png);
+          }
         }
       }
 
@@ -487,32 +468,10 @@ body {
       -webkit-transform: translate(-50%, -($citySize));
       z-index: 50;
 
-      &.cont_planner {
-        background-image: url(../images/cont_planner.png);
-      }
-
-      &.dispatcher {
-        background-image: url(../images/dispatcher.png);
-      }
-
-      &.medic {
-        background-image: url(../images/medic.png);
-      }
-
-      &.ops_expert {
-        background-image: url(../images/ops.png);
-      }
-
-      &.quar_spec {
-        background-image: url(../images/quar_spec.png);
-      }
-
-      &.researcher {
-        background-image: url(../images/researcher.png);
-      }
-
-      &.scientist {
-        background-image: url(../images/scientist.png);
+      @each $role in $roles-list {
+        &.#{$role} {
+          background-image: url(../images/#{$role}.png);
+        }
       }
 
       .cur-player {
@@ -543,20 +502,10 @@ body {
       animation-timing-function: linear;
       animation-iteration-count: infinite;
 
-      &.red {
-        background-image: url('../images/cube_red.png');
-      }
-
-      &.yellow {
-        background-image: url('../images/cube_yellow.png');
-      }
-
-      &.blue {
-        background-image: url('../images/cube_blue.png');
-      }
-
-      &.black {
-        background-image: url('../images/cube_black.png');
+      @each $disease in $diseases-list {
+        &.#{$disease} {
+          background-image: url('../images/cube_#{$disease}.png');
+        }
       }
 
       &.cubes-1 {
