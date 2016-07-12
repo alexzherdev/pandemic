@@ -167,7 +167,7 @@ body {
     width: 100%;
     min-height: $bottomBarMinHeight;
     border-top: 3px solid #485563;
-    z-index: 10000;
+    z-index: 50000;
 
     .panel-body {
       padding: 0;
@@ -363,6 +363,16 @@ body {
     background-size: cover;
     margin: -120px auto 0;
     overflow: hidden;
+
+    .mask {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 20000;
+      cursor: not-allowed;
+    }
 
     .city, .player, .station {
       position: absolute;

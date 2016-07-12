@@ -73,7 +73,7 @@ class Map extends React.Component {
 
   render() {
     const { map, availableCities, players, currentPlayerId, isDriveAvailable } = this.props;
-    const { govGrantCities, airlift, outbreak: { infectingCube }} = this.props.currentMove;
+    const { govGrantCities, airlift, outbreak: { infectingCube }, actionsLeft } = this.props.currentMove;
 
     const playersPositions = this.calculatePlayersPositions();
     const paths = this.calculatePaths();
@@ -107,6 +107,7 @@ class Map extends React.Component {
           infectingCube={isEmpty(infectingCube) ? undefined : { origin, destination, color }}
           infectNeighborCallback={partial(this.props.actions.animationInfectNeighborComplete,
             infectingCube.cityId, infectingCube.originId, infectingCube.color)} />
+        {actionsLeft === 0 && <div className="mask" />}
       </div>
     );
   }
