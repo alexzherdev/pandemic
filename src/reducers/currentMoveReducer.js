@@ -55,6 +55,22 @@ function cardsDrawn(state, action) {
   }
 }
 
+function infectionCardDrawn(state, action) {
+  switch (action.type) {
+    case types.CARD_DRAW_INFECTION_CARD:
+      return { id: action.cityId };
+    case types.CARD_DRAW_INFECTION_CARD_HANDLE:
+      return {
+        ...state,
+        handling: true
+      };
+    case types.ANIMATION_DRAW_INFECTION_CARD_COMPLETE:
+      return {};
+    default:
+      return state;
+  }
+}
+
 function outbreak(state, action) {
   switch (action.type) {
     case types.OUTBREAK_INIT:
@@ -268,6 +284,7 @@ export default function currentMoveReducer(state = initialState.currentMove, act
     shareCandidates: shareCandidates(state.shareCandidates, action),
     actionsLeft: actionsLeft(state.actionsLeft, action),
     cardsDrawn: cardsDrawn(state.cardsDrawn, action),
+    infectionCardDrawn: infectionCardDrawn(state.infectionCardDrawn, action),
     outbreak: outbreak(state.outbreak, action),
     playerToDiscard: playerToDiscard(state.playerToDiscard, action),
     playerToMove: playerToMove(state.playerToMove, action),

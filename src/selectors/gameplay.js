@@ -113,6 +113,10 @@ export function getCardsDrawn(state) {
   return state.currentMove.cardsDrawn;
 }
 
+export function getInfectionCardDrawn(state) {
+  return state.currentMove.infectionCardDrawn;
+}
+
 export function isEpidemicInProgress(state) {
   return state.currentMove.epidemicInProgress;
 }
