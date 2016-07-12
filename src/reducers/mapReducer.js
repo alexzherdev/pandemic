@@ -1,5 +1,3 @@
-import { reduce } from 'lodash';
-
 import initialState from './initialState';
 import * as types from '../constants/actionTypes';
 
@@ -24,7 +22,7 @@ function cityReducer(state, action) {
         [action.color]: 0
       };
     case types.MEDIC_TREAT_CURED_DISEASES: {
-      const colors = reduce(Object.keys(action.cubes), (acc, c) => { acc[c] = 0; return acc; }, {});
+      const colors = Object.keys(action.cubes).reduce((acc, c) => { acc[c] = 0; return acc; }, {});
       return {
         ...state,
         ...colors

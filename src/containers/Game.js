@@ -8,7 +8,9 @@ import Map from './Map';
 import TeamPanel from '../components/TeamPanel';
 import BottomBar from './BottomBar';
 import CardLayer from './CardLayer';
+import IntroDialog from '../components/IntroDialog';
 import * as mapActions from '../actions/mapActions';
+import * as globalActions from '../actions/globalActions';
 import { getPlayers, getCurrentCityId, getPlayerCityId, getPlayerHand } from '../selectors';
 
 
@@ -27,15 +29,17 @@ class Game extends React.Component {
     currentCityId: PropTypes.string.isRequired,
     getPlayerCityId: PropTypes.func.isRequired,
     getPlayerHand: PropTypes.func.isRequired,
+    status: PropTypes.oneOf(['prepare', 'playing']).isRequired,
     actions: PropTypes.object.isRequired
   }
 
   constructor(props) {
     super(props);
 
-    ['onCityClicked', 'onCityDoubleClicked'].forEach((meth) => {
+    ['onCityClicked', 'onCityDoubleClicked', 'onIntroClosed'].forEach((meth) => {
       this[meth] = this[meth].bind(this);
     });
+    this.state = { showIntro: true };
   }
 
   doMovePlayer(destinationId, source) {
@@ -57,6 +61,11 @@ class Game extends React.Component {
       source);
   }
 
+  onIntroClosed() {
+    this.setState({ showIntro: false });
+    this.props.actions.dealCardsInit();
+  }
+
   onCityClicked(id) {
     const { availableCities, airlift, govGrantCities } = this.props.currentMove;
     if (!isEmpty(availableCities)) {
@@ -76,19 +85,29 @@ class Game extends React.Component {
 
 
   render() {
+    const { status } = this.props;
     return (
       <div className="game">
         <TopBar />
-        <TeamPanel
-          players={this.props.players}
-          getPlayerHand={this.props.getPlayerHand}
-          currentPlayerId={this.props.currentPlayerId} />
-        <BottomBar />
+        {status !== 'prepare' &&
+          <TeamPanel
+            players={this.props.players}
+            getPlayerHand={this.props.getPlayerHand}
+            currentPlayerId={this.props.currentPlayerId} />
+        }
+        {status !== 'prepare' &&
+          <BottomBar />
+        }
         <Map
           ref="map"
           onCityClicked={this.onCityClicked}
           onCityDoubleClicked={this.onCityDoubleClicked} />
         <CardLayer />
+        {status === 'prepare' && this.state.showIntro &&
+          <IntroDialog
+            players={this.props.players}
+            onClosed={this.onIntroClosed} />
+        }
       </div>
     );
   }
@@ -100,11 +119,12 @@ const mapStateToProps = (state) => ({
   currentPlayerId: state.currentMove.player,
   currentCityId: getCurrentCityId(state),
   getPlayerCityId: partial(getPlayerCityId, state),
-  getPlayerHand: partial(getPlayerHand, state)
+  getPlayerHand: partial(getPlayerHand, state),
+  status: state.status
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  actions: bindActionCreators({ ...mapActions }, dispatch)
+  actions: bindActionCreators({ ...mapActions, ...globalActions }, dispatch)
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Game);

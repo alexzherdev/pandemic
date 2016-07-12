@@ -1,12 +1,15 @@
 import { watchActionsLeft, watchMoveInit, watchShareInit, watchCureInit, watchBuildStation } from './actionSagas';
 import { watchTreatEradication, watchCureEradication } from './diseaseSagas';
-import { watchVictory, watchInfectionRateDefeat, watchOutbreaksDefeat } from './globalSagas';
+import { watchCreateQuickGame, watchVictory, watchInfectionRateDefeat, watchOutbreaksDefeat,
+  watchDealCards } from './globalSagas';
 import { watchEvents } from './eventSagas';
 import { watchMedicMove, watchContPlannerInit, watchDispatcherMove, watchCureDisease } from './roleSagas';
 
 
 export default function* rootSaga() {
   yield [
+    watchCreateQuickGame(),
+    watchDealCards(),
     watchMoveInit(),
     watchShareInit(),
     watchActionsLeft(),

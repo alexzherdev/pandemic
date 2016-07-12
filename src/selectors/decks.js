@@ -15,6 +15,10 @@ export function peekAtInfectionDeck(state) {
   return getInfectionDeck(state)[0];
 }
 
+export function getPlayerDeck(state) {
+  return state.playerCards.deck;
+}
+
 function getInfectionDeck(state) {
   return state.infectionCards.deck;
 }

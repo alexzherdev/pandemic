@@ -1,5 +1,5 @@
 export default {
-  status: 'playing',
+  status: 'prepare',
 
   playerCards: {
     deck: [
@@ -20,7 +20,7 @@ export default {
   },
 
   players: {
-    0: {
+    /*0: {
       id: '0',
       name: 'Stephen',
       role: 'dispatcher',
@@ -70,14 +70,14 @@ export default {
         { cardType: 'city', id: '22' },
         { cardType: 'city', id: '25' }
       ]
-    }
+    }*/
   },
 
   diseases: {
     red: 'active',
     blue: 'active',
-    yellow: 'cured',
-    black: 'eradicated'
+    yellow: 'active',
+    black: 'active'
   },
 
   currentMove: {
@@ -178,63 +178,62 @@ export default {
     ],
 
     playersLocations: {
-      0: '2',
+      /*0: '2',
       1: '2',
       2: '2',
-      3: '2'
+      3: '2'*/
     },
 
     locations: {
       0: {
         coords: [315, 145],
-        yellow: 2,
-        red: 1,
+        yellow: 0,
+        red: 0,
         black: 0,
-        blue: 3
+        blue: 0
       },
       1: {
         coords: [285, 225],
-        yellow: 1,
+        yellow: 0,
         red: 0,
         black: 0,
-        blue: 1
+        blue: 0
       },
       2: {
         coords: [335, 250],
-        yellow: 1,
-        red: 0,
-        black: 0,
-        blue: 3,
-        station: true
-      },
-      3: {
-        coords: [280, 290],
-        yellow: 1,
-        red: 1,
-        black: 0,
-        blue: 3
-      },
-      4: {
-        coords: [325, 315],
         yellow: 0,
         red: 0,
         black: 0,
         blue: 0,
         station: true
       },
+      3: {
+        coords: [280, 290],
+        yellow: 0,
+        red: 0,
+        black: 0,
+        blue: 0
+      },
+      4: {
+        coords: [325, 315],
+        yellow: 0,
+        red: 0,
+        black: 0,
+        blue: 0
+      },
       5: {
         coords: [295, 345],
-        yellow: 1,
-        red: 1,
+        yellow: 0,
+        red: 0,
         black: 0,
-        blue: 3
+        blue: 0
       },
       6: {
         coords: [315, 455],
-        yellow: 1,
-        red: 1,
+        yellow: 0,
+        red: 0,
         black: 0,
-        blue: 1
+        blue: 0
       },
       7: {
         coords: [260, 500],
@@ -245,10 +244,10 @@ export default {
       },
       8: {
         coords: [295, 525],
-        yellow: 1,
-        red: 1,
-        black: 1,
-        blue: 1
+        yellow: 0,
+        red: 0,
+        black: 0,
+        blue: 0
       },
       9: {
         coords: [235, 540],
