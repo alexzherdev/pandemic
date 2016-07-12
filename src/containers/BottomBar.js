@@ -10,6 +10,7 @@ import SingleCardPicker from '../components/SingleCardPicker';
 import MultiCardPicker from '../components/MultiCardPicker';
 import PlayerPicker from '../components/PlayerPicker';
 import DiseasePicker from '../components/DiseasePicker';
+import ForecastBar from './ForecastBar';
 import Hand from '../components/Hand';
 import { getPlayerToDiscard, getPlayerHand, getTreatableDiseases, canTreatAllOfColor, canTreatAll,
   getCurrentCityId, getCurrentPlayer, isDispatcher, getPlayers, getEventsInHands, getInfectionDiscard,
@@ -156,7 +157,7 @@ class BottomBar extends React.Component {
     const { playerToDiscard, players, treatableDiseases, infectionDiscard, cardsNeededToCure,
       getPlayerHand, currentPlayer } = this.props;
     const { shareCandidates, curingDisease, airlift, opsMoveAbility, contPlannerEvents,
-      availableCities, govGrantCities, resPop } = this.props.currentMove;
+      availableCities, govGrantCities, resPop, forecastCards } = this.props.currentMove;
     let content;
     if (playerToDiscard !== null) {
       content = (
@@ -235,6 +236,12 @@ class BottomBar extends React.Component {
           <Button onClick={this.onResPopUsed}>Use res pop</Button>
           <Button onClick={this.onContinueTurn}>Continue</Button>
         </div>
+      );
+    } else if (!isEmpty(forecastCards)) {
+      content = (
+        <ForecastBar
+          cards={forecastCards}
+          onSubmit={this.props.actions.forecastShuffle} />
       );
     } else {
       content = ([

@@ -26,7 +26,7 @@ export default {
       role: 'dispatcher',
       specialEvent: null,
       hand: [
-        { cardType: 'event', id: 'airlift' },
+        { cardType: 'event', id: 'forecast' },
         { cardType: 'city', id: '0' },
         { cardType: 'city', id: '3' },
         { cardType: 'city', id: '2' },

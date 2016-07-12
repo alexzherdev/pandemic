@@ -266,6 +266,19 @@ body {
     }
   }
 
+  .forecast-bar {
+    @extend .bottom-bar;
+
+    .panel-body {
+      display: flex;
+      justify-content: center;
+
+      > div {
+        margin-right: 4px;
+      }
+    }
+  }
+
   .team-panel {
     position: absolute;
     right: 0;
