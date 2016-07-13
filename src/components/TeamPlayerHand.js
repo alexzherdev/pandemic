@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { Panel, Glyphicon, ListGroup, ListGroupItem } from 'react-bootstrap';
+import { Panel, Glyphicon, ListGroup, ListGroupItem, OverlayTrigger, Popover } from 'react-bootstrap';
 
 import ROLES from '../constants/roles';
 import { playerType, cardType } from '../constants/propTypes';
@@ -11,7 +11,17 @@ const TeamPlayerHand = ({ player, hand, isCurrent }) => {
       header={
         <div>
           <h5>{isCurrent && <Glyphicon glyph="triangle-right" />}{player.name}</h5>
-          <h6>{ROLES[player.role].name}</h6>
+          <OverlayTrigger
+            id={`role-${player.role}`}
+            trigger={['hover', 'focus']}
+            placement="left"
+            overlay={
+              <Popover>
+                {ROLES[player.role].description.map((str) => [str, <br key={player.role} />])}
+              </Popover>
+            }>
+            <h6>{ROLES[player.role].name}</h6>
+          </OverlayTrigger>
         </div>
       }
       className={`team-player team-player-${player.role}`}>
