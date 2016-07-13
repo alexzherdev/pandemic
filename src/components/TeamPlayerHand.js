@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 import { Panel, Glyphicon, ListGroup, ListGroupItem, OverlayTrigger, Popover } from 'react-bootstrap';
 
 import ROLES from '../constants/roles';
+import EVENTS from '../constants/events';
 import { playerType, cardType } from '../constants/propTypes';
 
 
@@ -16,7 +17,7 @@ const TeamPlayerHand = ({ player, hand, isCurrent }) => {
             trigger={['hover', 'focus']}
             placement="left"
             overlay={
-              <Popover>
+              <Popover id={`role-desc-${player.role}`}>
                 {ROLES[player.role].description.map((str) => [str, <br key={player.role} />])}
               </Popover>
             }>
@@ -32,7 +33,20 @@ const TeamPlayerHand = ({ player, hand, isCurrent }) => {
               {c.cardType === 'city' && <Glyphicon glyph="stop" style={{color: c.color}} />}
               {c.cardType === 'event' && <Glyphicon glyph="gift" />}
               &nbsp;
-              {c.name}
+              {c.cardType === 'event' &&
+                <OverlayTrigger
+                  id={`event-${c.id}`}
+                  trigger={['hover', 'focus']}
+                  placement="left"
+                  overlay={
+                    <Popover id={`event-desc-${c.id}`}>
+                      {EVENTS[c.id].description || 'bar'}
+                    </Popover>
+                  }>
+                  <span className="event-name">{c.name}</span>
+                </OverlayTrigger>
+              }
+              {c.cardType === 'city' && c.name}
             </span>
           </ListGroupItem>
         )}
