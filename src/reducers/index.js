@@ -17,6 +17,7 @@ import initialState from './initialState';
 
 const combinedReducer = combineReducers({
   status,
+  difficulty: (state) => state || initialState.difficulty,
   playerCards,
   infectionCards,
   map,
@@ -33,6 +34,7 @@ export default (state, action) => {
   if (action.type === types.CREATE_GAME) {
     return {
       ...initialState,
+      difficulty: action.difficulty,
       playerCards: {
         deck: action.playerDeck,
         discard: []

@@ -83,7 +83,6 @@ class Game extends React.Component {
     this.doMovePlayer(id, 'drive');
   }
 
-
   render() {
     const { status } = this.props;
     return (

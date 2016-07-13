@@ -1,7 +1,7 @@
 import { takeEvery, END } from 'redux-saga';
 import { put, select, call } from 'redux-saga/effects';
 import { browserHistory } from 'react-router';
-import { sampleSize, shuffle } from 'lodash';
+import { difference, sample, sampleSize, shuffle } from 'lodash';
 
 import * as types from '../constants/actionTypes';
 import ROLES from '../constants/roles';
@@ -12,6 +12,8 @@ import { useDiseaseCubes, infectCity } from '../actions/diseaseActions';
 import { discardTopInfectionCard } from '../actions/cardActions';
 import * as sel from '../selectors';
 
+
+const QUICK_GAME_DIFFICULTY = 5;
 
 export function* createQuickGame(action) {
   const { numberOfPlayers } = action;
@@ -26,9 +28,29 @@ export function* createQuickGame(action) {
     });
   }
 
+  yield call(shuffleDecksAndCreateGame, players, QUICK_GAME_DIFFICULTY);
+}
+
+export function* createCustomGame(action) {
+  const { players, difficulty } = action;
+
+  const availableRoles = difference(Object.keys(ROLES), players.map((pl) => pl.role));
+  const playersToCreate = players.map((pl) => {
+    let role = pl.role;
+    if (!role) {
+      role = sample(availableRoles);
+      availableRoles.splice(availableRoles.indexOf(role), 1);
+    }
+    return { name: pl.name, role };
+  });
+
+  yield call(shuffleDecksAndCreateGame, playersToCreate, difficulty);
+}
+
+function* shuffleDecksAndCreateGame(players, difficulty) {
   const playerDeck = shuffle(PLAYER_DECK);
   const infectionDeck = shuffle(INFECTION_DECK);
-  yield put(createGame(players, playerDeck, infectionDeck));
+  yield put(createGame(players, playerDeck, infectionDeck, difficulty));
 
   browserHistory.push('/');
 }
@@ -55,7 +77,7 @@ export function* dealCardsToPlayers() {
     Math.floor(Math.random() * (max - min)) + min; // max is not included
   const deckLength = playerDeck.length;
 
-  const difficulty = 5;
+  const difficulty = yield select(sel.getDifficulty);
   for (let i = 0; i < difficulty; i++) {
     const epidemicIndex = getRandomInt(Math.floor(i / difficulty * deckLength),
       Math.floor((i + 1) / difficulty * deckLength));
@@ -118,6 +140,10 @@ export function* watchOutbreaksDefeat() {
 
 export function* watchCreateQuickGame() {
   yield* takeEvery(types.CREATE_QUICK_GAME_INIT, createQuickGame);
+}
+
+export function* watchCreateCustomGame() {
+  yield* takeEvery(types.CREATE_CUSTOM_GAME_INIT, createCustomGame);
 }
 
 export function* watchDealCards() {

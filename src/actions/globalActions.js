@@ -5,8 +5,12 @@ export function createQuickGameInit(numberOfPlayers) {
   return { type: types.CREATE_QUICK_GAME_INIT, numberOfPlayers };
 }
 
-export function createGame(players, playerDeck, infectionDeck) {
-  return { type: types.CREATE_GAME, players, playerDeck, infectionDeck };
+export function createCustomGameInit(players, difficulty) {
+  return { type: types.CREATE_CUSTOM_GAME_INIT, players, difficulty };
+}
+
+export function createGame(players, playerDeck, infectionDeck, difficulty) {
+  return { type: types.CREATE_GAME, players, playerDeck, infectionDeck, difficulty };
 }
 
 export function dealCardsInit() {

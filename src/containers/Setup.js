@@ -3,8 +3,9 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Button } from 'react-bootstrap';
 
-import { createQuickGameInit } from '../actions/globalActions';
+import { createQuickGameInit, createCustomGameInit } from '../actions/globalActions';
 import QuickGame from '../components/setup/QuickGame';
+import CustomGame from '../containers/CustomGame';
 
 
 class Setup extends React.Component {
@@ -16,6 +17,9 @@ class Setup extends React.Component {
     super(props);
     this.onQuickGameClicked = this.onQuickGameClicked.bind(this);
     this.onQuickNumberOfPlayersPicked = this.onQuickNumberOfPlayersPicked.bind(this);
+    this.onCustomGameClicked = this.onCustomGameClicked.bind(this);
+    this.onCustomGameComplete = this.onCustomGameComplete.bind(this);
+    this.showMenu = this.showMenu.bind(this);
   }
 
   state = {
@@ -26,20 +30,41 @@ class Setup extends React.Component {
     this.setState({ mode: 'quick' });
   }
 
+  onCustomGameClicked() {
+    this.setState({ mode: 'custom' });
+  }
+
   onQuickNumberOfPlayersPicked(n) {
     this.props.dispatch(createQuickGameInit(n));
+  }
+
+  onCustomGameComplete(players, difficulty) {
+    this.props.dispatch(createCustomGameInit(players, difficulty));
+  }
+
+  showMenu() {
+    this.setState({ mode: null });
   }
 
   render() {
     return (
       <div className="setup">
+        <h1 className="text-danger">Epidemic</h1>
         {this.state.mode === null &&
           <div className="menu">
-            <Button bsSize="large" onClick={this.onQuickGameClicked}>Quick Game</Button>
+            <Button bsSize="large" onClick={this.onQuickGameClicked}>Quick Start</Button>
+            <Button bsSize="large" onClick={this.onCustomGameClicked}>Custom Game</Button>
           </div>
         }
         {this.state.mode === 'quick' &&
-          <QuickGame onNumberOfPlayersPicked={this.onQuickNumberOfPlayersPicked} />
+          <QuickGame
+            onNumberOfPlayersPicked={this.onQuickNumberOfPlayersPicked}
+            onBackClicked={this.showMenu} />
+        }
+        {this.state.mode === 'custom' &&
+          <CustomGame
+            onComplete={this.onCustomGameComplete}
+            onBackClicked={this.showMenu} />
         }
       </div>
     );

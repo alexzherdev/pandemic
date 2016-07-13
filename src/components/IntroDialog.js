@@ -7,7 +7,7 @@ import { playerType } from '../constants/propTypes';
 
 const IntroDialog = ({ players, onClosed }) =>
   <Modal.Dialog
-    bsSize={players.length > 4 ? 'large' : ''}
+    bsSize={players.length > 4 ? 'large' : undefined}
     className="intro-dialog">
     <Modal.Header>
       Fighting to save the humanity today:
@@ -23,7 +23,9 @@ const IntroDialog = ({ players, onClosed }) =>
       </div>
     </Modal.Body>
     <Modal.Footer>
-      <Button onClick={onClosed}>GO</Button>
+      <Button
+        bsStyle="primary"
+        onClick={onClosed}>Start</Button>
     </Modal.Footer>
   </Modal.Dialog>;
 
