@@ -10,6 +10,7 @@ require('./favicon.ico');
 import './assets/styles/app.scss';
 import './assets/styles/bootstrap-superhero.min.css';
 import './assets/styles/animate.min.css';
+import './assets/styles/font-awesome.min.css';
 import './assets/styles/styles.scss';
 
 import 'jquery';

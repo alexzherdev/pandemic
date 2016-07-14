@@ -40,7 +40,7 @@ export default {
     loaders: [
       {test: /\.js$/, include: path.join(__dirname, 'src'), loaders: ['babel']},
       {test: /\.(eot|otf)(\?v=\d+.\d+.\d+)?$/, loader: 'file'},
-      {test: /\.(woff|woff2)$/, loader: 'file-loader?prefix=font/&limit=5000'},
+      {test: /\.(woff|woff2)(\?\S*)?$/, loader: 'file-loader?prefix=font/&limit=100000&name=[name].[ext]'},
       {test: /\.ttf(\?v=\d+.\d+.\d+)?$/, loader: 'file-loader?limit=10000&mimetype=application/octet-stream'},
       {test: /\.svg(\?v=\d+.\d+.\d+)?$/, loader: 'file-loader?limit=10000&mimetype=image/svg+xml'},
       {test: /\.(jpe?g|png|gif)$/i, loaders: ['file']},
