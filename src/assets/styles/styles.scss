@@ -309,6 +309,11 @@ body {
 
       .event {
         color: darkorange;
+
+        .event-name {
+          cursor: help;
+          border-bottom: 1px dotted darkorange;
+        }
       }
 
       .panel-heading {
