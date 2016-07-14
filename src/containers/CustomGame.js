@@ -116,7 +116,7 @@ export default class CustomGame extends React.Component {
         <Button
           className={classnames(["add-player", { 'invisible': this.state.players.length === 5 }])}
           bsStyle="link"
-          onClick={this.onAddPlayerClicked}>Add</Button>
+          onClick={this.onAddPlayerClicked}>Add Player</Button>
         <div className="button-container">
           <Button
             bsStyle="primary"
