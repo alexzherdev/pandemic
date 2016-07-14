@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { Panel } from 'react-bootstrap';
 
-import TeamPlayerHand from '../components/TeamPlayerHand';
+import TeamPlayerHand from '../components/teamPanel/TeamPlayerHand';
 import { playerType } from '../constants/propTypes';
 
 
