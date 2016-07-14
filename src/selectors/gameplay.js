@@ -63,6 +63,10 @@ export function isPlaying(state) {
   return state.status === 'playing';
 }
 
+export function getDifficulty(state) {
+  return state.difficulty;
+}
+
 export function canShareCards(state) {
   return getShareCandidates(state).length > 0;
 }

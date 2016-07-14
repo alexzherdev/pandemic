@@ -5,7 +5,7 @@ import * as types from '../constants/actionTypes';
 function actionsLeft(state, action) {
   if (types.ACTIONS.includes(action.type)) {
     return state - 1;
-  } else if (action.type === types.PASS_TURN) {
+  } else if (action.type === types.PASS_TURN || action.type === types.CREATE_GAME) {
     return 4;
   } else {
     return state;
@@ -16,6 +16,7 @@ function availableCities(state, action) {
   switch (action.type) {
     case types.PLAYER_MOVE_SHOW_CITIES:
       return action.cities;
+    case types.CREATE_GAME:
     case types.PLAYER_MOVE_TO_CITY:
     case types.PLAYER_MOVE_CANCEL:
       return {};
@@ -28,6 +29,7 @@ function shareCandidates(state, action) {
   switch (action.type) {
     case types.PLAYER_SHARE_SHOW_CANDIDATES:
       return action.players;
+    case types.CREATE_GAME:
     case types.PLAYER_SHARE_CARD:
     case types.PLAYER_SHARE_CANCEL:
       return [];
@@ -38,6 +40,8 @@ function shareCandidates(state, action) {
 
 function cardsDrawn(state, action) {
   switch (action.type) {
+    case types.CREATE_GAME:
+      return [];
     case types.CARD_DRAW_CARDS_INIT:
       return action.cards;
     case types.CARD_DRAW_CARDS_HANDLE_INIT:
@@ -73,6 +77,7 @@ function infectionCardDrawn(state, action) {
 
 function outbreak(state, action) {
   switch (action.type) {
+    case types.CREATE_GAME:
     case types.OUTBREAK_INIT:
       return {
         ...state,

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { DragSource, DropTarget } from 'react-dnd';
 import { findDOMNode } from 'react-dom';
 
@@ -51,6 +51,12 @@ const cardTarget = {
   isDragging: monitor.isDragging()
 }))
 export default class DraggableCard extends React.Component {
+  static propTypes = {
+    isDragging: PropTypes.bool.isRequired,
+    connectDragSource: PropTypes.func.isRequired,
+    connectDropTarget: PropTypes.func.isRequired
+  }
+
   render() {
     const { isDragging, connectDragSource, connectDropTarget, ...rest } = this.props;
     const opacity = isDragging ? 0 : 1;

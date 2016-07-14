@@ -1,9 +1,27 @@
+import { find } from 'lodash';
+
 import initialState from './initialState';
 import * as types from '../constants/actionTypes';
 
 
 export default function playerCardsReducer(state = initialState.playerCards, action) {
   switch (action.type) {
+    case types.DEAL_CARDS:
+      return {
+        ...state,
+        deck: state.deck.filter((c) => {
+          return !find(action.cards, { cardType: c.cardType, id: c.id });
+        })
+      };
+    case types.INSERT_PLAYER_CARD:
+      return {
+        ...state,
+        deck: [
+          ...state.deck.slice(0, action.index),
+          action.card,
+          ...state.deck.slice(action.index)
+        ]
+      };
     case types.CARD_DRAW_CARDS_INIT:
       return {
         ...state,

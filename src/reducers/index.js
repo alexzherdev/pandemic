@@ -11,10 +11,13 @@ import diseases from './diseasesReducer';
 import status from './statusReducer';
 import playerCards from './playerCardsReducer';
 import infectionCards from './infectionCardsReducer';
+import * as types from '../constants/actionTypes';
+import initialState from './initialState';
 
 
-export default combineReducers({
+const combinedReducer = combineReducers({
   status,
+  difficulty: (state) => state || initialState.difficulty,
   playerCards,
   infectionCards,
   map,
@@ -26,3 +29,33 @@ export default combineReducers({
   cubesLeft,
   infectionRate
 });
+
+export default (state, action) => {
+  if (action.type === types.CREATE_GAME) {
+    return {
+      ...initialState,
+      difficulty: action.difficulty,
+      playerCards: {
+        deck: action.playerDeck,
+        discard: []
+      },
+      infectionCards: {
+        deck: action.infectionDeck,
+        discard: []
+      },
+      players: action.players.reduce((acc, pl, id) => {
+        acc[id] = { ...pl, id: id + '', hand: [] };
+        return acc;
+      }, {}),
+      map: {
+        ...initialState.map,
+        playersLocations: action.players.reduce((acc, pl, id) => {
+          acc[id] = '2';
+          return acc;
+        }, {})
+      }
+    };
+  } else {
+    return combinedReducer(state, action);
+  }
+};

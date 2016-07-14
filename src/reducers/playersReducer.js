@@ -5,6 +5,8 @@ import * as types from '../constants/actionTypes';
 
 function hand(state = [], action) {
   switch (action.type) {
+    case types.DEAL_CARDS:
+      return action.cards;
     case types.CARD_DISCARD_FROM_HAND:
       return state.filter((c) => !(c.cardType === action.cardType && c.id === action.id));
     case types.PLAYER_PLAY_EVENT_COMPLETE:
@@ -22,6 +24,7 @@ function hand(state = [], action) {
 
 export default function playersReducer(state = initialState.players, action) {
   switch (action.type) {
+    case types.DEAL_CARDS:
     case types.CARD_DISCARD_FROM_HAND:
     case types.CARD_DRAW_CARDS_HANDLE:
     case types.PLAYER_PLAY_EVENT_COMPLETE: {
