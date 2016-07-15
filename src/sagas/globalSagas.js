@@ -7,8 +7,8 @@ import * as types from '../constants/actionTypes';
 import ROLES from '../constants/roles';
 import NAMES from '../constants/names';
 import { PLAYER_DECK, INFECTION_DECK } from '../constants/decks';
-import { createGame, dealCards, insertEpidemicCardsInit, insertEpidemicCardsComplete,
-  insertPlayerCard, startGame, defeat, victory } from '../actions/globalActions';
+import { createGame, dealCards, insertEpidemicCardsInit, insertPlayerCard, startGame,
+  defeat, victory } from '../actions/globalActions';
 import { useDiseaseCubes, infectCity } from '../actions/diseaseActions';
 import { discardTopInfectionCard } from '../actions/cardActions';
 import * as sel from '../selectors';
@@ -89,14 +89,16 @@ export function* dealCardsToPlayers() {
   }
 
   yield take(types.ANIMATION_INSERT_EPIDEMIC_CARDS_COMPLETE);
+  yield call(delay, 1000);
 
   for (let i = 3; i > 0; i--) {
     for (let j = 0; j < 3; j++) {
       const topInfectionCard = yield select(sel.peekAtInfectionDeck);
       const color = yield select(sel.getCityColor, topInfectionCard);
       yield put(useDiseaseCubes(color, i));
-      yield put(infectCity(topInfectionCard, color, i));
+      yield put(infectCity(topInfectionCard, color, i, true));
       yield put(discardTopInfectionCard());
+      yield call(delay, 2000);
     }
   }
   yield put(startGame());

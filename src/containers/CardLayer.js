@@ -19,8 +19,10 @@ class CardLayer extends React.Component {
       handling: PropTypes.bool
     })).isRequired,
     isEpidemicInProgress: PropTypes.bool.isRequired,
+    difficulty: PropTypes.number.isRequired,
     currentPlayerId: PropTypes.string.isRequired,
     isDealingPlayerCards: PropTypes.bool,
+    isDealingEpidemicCards: PropTypes.bool,
     cardsDealtCount: PropTypes.number,
     playerIndex: PropTypes.number,
     infectionCardDrawn: PropTypes.shape({
@@ -91,13 +93,10 @@ class CardLayer extends React.Component {
               duration: 300,
               fill: 'forwards'
             });
-            console.log(j);
-            console.log(this.epidemics);
+
             if (j === this.epidemics.length - 1) {
-              animation.onfinish = () => {
-                console.log('dispatching')
+              animation.onfinish = () =>
                 this.props.dispatch(animationInsertEpidemicCardsComplete());
-              }
             }
           }.bind(this, cardOffset, i), 300 * i);
         });

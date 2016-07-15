@@ -3,6 +3,7 @@ export default {
   difficulty: null,
 
   dealingCards: {},
+  initialInfectedCity: null,
 
   playerCards: {
     deck: [

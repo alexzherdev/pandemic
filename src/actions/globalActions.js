@@ -25,10 +25,6 @@ export function insertEpidemicCardsInit() {
   return { type: types.INSERT_EPIDEMIC_CARDS_INIT };
 }
 
-export function insertEpidemicCardsComplete() {
-  return { type: types.INSERT_EPIDEMIC_CARDS_COMPLETE };
-}
-
 export function insertPlayerCard(index, card) {
   return { type: types.INSERT_PLAYER_CARD, index, card };
 }

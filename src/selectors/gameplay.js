@@ -146,3 +146,7 @@ export function getPlayerDealtToIndex(state) {
 export function getCardsDealtCount(state) {
   return state.dealingCards.cards && state.dealingCards.cards.length;
 }
+
+export function getInitialInfectedCity(state) {
+  return state.initialInfectedCity;
+}
