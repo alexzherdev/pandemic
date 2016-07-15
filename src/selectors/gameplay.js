@@ -128,3 +128,21 @@ export function getInfectionCardDrawn(state) {
 export function isEpidemicInProgress(state) {
   return state.currentMove.epidemicInProgress;
 }
+
+export function isDealingPlayerCards(state) {
+  return state.dealingCards.dealing === 'player';
+}
+
+export function isDealingEpidemicCards(state) {
+  return state.dealingCards.dealing === 'epidemic';
+}
+
+export function getPlayerDealtToIndex(state) {
+  return typeof state.dealingCards.playerIndex === 'undefined'
+    ? null
+    : state.dealingCards.playerIndex;
+}
+
+export function getCardsDealtCount(state) {
+  return state.dealingCards.cards && state.dealingCards.cards.length;
+}

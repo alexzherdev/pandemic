@@ -1,5 +1,5 @@
-import { takeEvery, END } from 'redux-saga';
-import { put, select, call } from 'redux-saga/effects';
+import { takeEvery, delay, END } from 'redux-saga';
+import { put, select, call, take } from 'redux-saga/effects';
 import { browserHistory } from 'react-router';
 import { difference, sample, sampleSize, shuffle } from 'lodash';
 
@@ -7,7 +7,8 @@ import * as types from '../constants/actionTypes';
 import ROLES from '../constants/roles';
 import NAMES from '../constants/names';
 import { PLAYER_DECK, INFECTION_DECK } from '../constants/decks';
-import { createGame, dealCards, insertPlayerCard, startGame, defeat, victory } from '../actions/globalActions';
+import { createGame, dealCards, insertEpidemicCardsInit, insertEpidemicCardsComplete,
+  insertPlayerCard, startGame, defeat, victory } from '../actions/globalActions';
 import { useDiseaseCubes, infectCity } from '../actions/diseaseActions';
 import { discardTopInfectionCard } from '../actions/cardActions';
 import * as sel from '../selectors';
@@ -66,10 +67,12 @@ export function* dealCardsToPlayers() {
 
   const players = yield select(sel.getPlayers);
   const cardsToDeal = cardCountMap[players.length];
+  yield take(types.ANIMATION_DEAL_CARDS_INIT_COMPLETE);
   for (let i = 0; i < players.length; i++) {
     const deck = yield select(sel.getPlayerDeck);
     const cards = sampleSize(deck, cardsToDeal);
-    yield put(dealCards(players[i].id, cards));
+    yield put(dealCards(players[i].id, cards, i));
+    yield take(types.ANIMATION_DEAL_CARDS_COMPLETE);
   }
 
   const playerDeck = yield select(sel.getPlayerDeck);
@@ -78,11 +81,14 @@ export function* dealCardsToPlayers() {
   const deckLength = playerDeck.length;
 
   const difficulty = yield select(sel.getDifficulty);
+  yield put(insertEpidemicCardsInit());
   for (let i = 0; i < difficulty; i++) {
     const epidemicIndex = getRandomInt(Math.floor(i / difficulty * deckLength),
       Math.floor((i + 1) / difficulty * deckLength));
     yield put(insertPlayerCard(epidemicIndex, { cardType: 'epidemic', id: 'epidemic' }));
   }
+
+  yield take(types.ANIMATION_INSERT_EPIDEMIC_CARDS_COMPLETE);
 
   for (let i = 3; i > 0; i--) {
     for (let j = 0; j < 3; j++) {

@@ -246,8 +246,6 @@ body {
     }
 
     .card {
-      border-radius: 4px;
-
       &:focus {
         outline: none;
       }
@@ -628,6 +626,7 @@ body {
     width: $cardWidth;
     height: $cardHeight;
     border: none;
+    border-radius: 4px;
 
     @for $id from 0 through 47 {
       &.city-#{$id} {
@@ -649,7 +648,7 @@ body {
   .card-layer {
     position: absolute;
     width: 100%;
-    height: calc(100% - #{$bottomBarMinHeight});
+    height: 100%;//calc(100% - #{$bottomBarMinHeight});
     left: 0;
     top: 0;
     z-index: 11000;
@@ -672,9 +671,32 @@ body {
       height: 100%;
 
       .card {
-        &:first-child {
+        &:not(:last-child) {
           margin-right: 10px;
         }
+
+        &.player-deck {
+          background-size: $cardWidth $cardHeight;
+          background-image: url(../images/player_card.png);
+
+          &.dealing {
+            position: absolute;
+            opacity: 0.6;
+          }
+        }
+
+        &.epidemic {
+          z-index: -1;
+        }
+      }
+
+      .epidemics {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 10px;
+        display: flex;
+        justify-content: center;
       }
     }
   }

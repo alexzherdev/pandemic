@@ -2,6 +2,8 @@ export default {
   status: 'prepare',
   difficulty: null,
 
+  dealingCards: {},
+
   playerCards: {
     deck: [
       { cardType: 'city', id: '30' },
