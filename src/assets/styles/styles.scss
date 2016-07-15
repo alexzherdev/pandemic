@@ -156,7 +156,7 @@ body {
           background-size: 25px 35px;
           background-image: url(../images/player_card.png);
           position: absolute;
-          right: 12px;
+          right: 18px;
         }
       }
 
@@ -200,6 +200,14 @@ body {
     .panel-body {
       .btn {
         font-size: 1.2em;
+
+        .fa-car {
+          font-size: 0.9em;
+        }
+
+        .fa-plane {
+          font-size: 1.1em;
+        }
       }
 
       .play-event {
@@ -210,7 +218,13 @@ body {
         height: 50px;
         padding: 0;
         border: none;
+        border-radius: 1px;
         z-index: 10001;
+
+        &:hover {
+          box-shadow: 0 0 1px 1px white;
+          transition: all 0.2s;
+        }
 
         img {
           content: url(../images/event.png);

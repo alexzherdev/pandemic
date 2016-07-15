@@ -68,11 +68,11 @@ class Actions extends React.Component {
         footer={`${currentPlayer.name}'s turn, ${pluralize('action', actionsLeft, true)} left`}>
         <Button
           onClick={this.props.onMoveInit}>
-            <Glyphicon glyph="arrow-right" /><div>Move</div></Button>
+            <i className="fa fa-car" /> / <i className="fa fa-plane" /><div>Move</div></Button>
         <Button
           onClick={partial(this.props.actions.buildStation, this.props.currentCityId)}
           disabled={!this.props.canBuildStation}>
-          <Glyphicon glyph="home" /><div>Build</div></Button>
+          <i className="fa fa-building" /><div>Build</div></Button>
         <Button
           onClick={this.props.actions.shareCardsInit}
           disabled={!this.props.canShareCards || !isEmpty(shareCandidates)}>
@@ -80,13 +80,13 @@ class Actions extends React.Component {
         <Button
           onClick={this.onTreatClicked}
           disabled={isEmpty(treatableDiseases)}>
-          <Glyphicon glyph="plus" />
+          <i className="fa fa-medkit" />
           <div>{canTreatAll ? 'Treat All' : 'Treat'}</div>
         </Button>
         <Button
           onClick={partial(this.props.actions.cureDiseaseInit, this.props.curableDisease)}
           disabled={!this.props.curableDisease}>
-          <Glyphicon glyph="ok" />
+          <i className="fa fa-flask" />
           <div>Cure</div>
         </Button>
 
@@ -105,6 +105,7 @@ class Actions extends React.Component {
         {!isEmpty(events) &&
           <Button
             onClick={this.props.onPlayEventClicked}
+            title="Play an event"
             className="play-event">
             <img />
           </Button>
