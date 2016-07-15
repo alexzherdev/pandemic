@@ -113,7 +113,7 @@ body {
       display: flex;
       justify-content: center;
 
-      > span {
+      > span, > .rates span {
         padding: 0 3px;
       }
 
@@ -823,6 +823,68 @@ body {
     .btn-link {
       position: absolute;
       top: 5px;
+    }
+  }
+}
+
+.rates-popover {
+  max-width: 400px;
+  z-index: 20000;
+  font-family: 'Phage';
+
+  h4 {
+    margin: 0 0 5px;
+
+    span {
+      display: inline-block;
+      width: 100%;
+    }
+  }
+
+  ul {
+    margin: 0;
+
+    li {
+      width: 30px;
+      height: 30px;
+      text-align: center;
+    }
+  }
+
+  .infection-rate {
+    margin-bottom: 10px;
+    text-align: center;
+
+    li {
+      border-radius: 15px;
+      line-height: 30px;
+
+      &:not(:first-child) {
+        margin-left: 4px;
+      }
+
+      &:not(.current) {
+        background: rgba(0, 0, 0, 0.1);
+      }
+
+      &.past {
+        opacity: 0.65;
+      }
+    }
+  }
+
+  .outbreaks {
+    li {
+      background-size: 30px 30px;
+      background-image: url(../images/outbreaks_shape.png);
+
+      &:not(:first-child) {
+        margin-left: 2px;
+      }
+
+      &.past {
+        background-image: url(../images/outbreaks_filled.png);
+      }
     }
   }
 }

@@ -121,10 +121,10 @@ export default {
 
   infectionRate: {
     values: [2, 2, 2, 3, 3, 4, 4],
-    index: 0
+    index: 4
   },
 
-  outbreaks: 0,
+  outbreaks: 3,
 
   map: {
     matrix: [
