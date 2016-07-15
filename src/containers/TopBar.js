@@ -1,9 +1,11 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { Panel } from 'react-bootstrap';
+import { OverlayTrigger, Panel, Popover } from 'react-bootstrap';
 
-import { getPlayerDeckCount, getInfectionRate } from '../selectors';
+import RatesPopover from '../components/RatesPopover';
+import { getPlayerDeckCount, getInfectionRate, getInfectionRateValues } from '../selectors';
 import DISEASES from '../constants/diseases';
+
 
 class TopBar extends React.Component {
   static propTypes = {
@@ -11,10 +13,15 @@ class TopBar extends React.Component {
     stationsLeft: PropTypes.number.isRequired,
     playerDeckCount: PropTypes.number.isRequired,
     infectionRate: PropTypes.number.isRequired,
+    infectionRateValues: PropTypes.shape({
+      index: PropTypes.number.isRequired,
+      values: PropTypes.arrayOf(PropTypes.number.isRequired).isRequired
+    }),
     outbreaks: PropTypes.number.isRequired
   }
 
   render() {
+    const { infectionRateValues } = this.props;
     return (
       <Panel className="top-bar">
         <span className="player-deck">
@@ -33,15 +40,30 @@ class TopBar extends React.Component {
           <span>{this.props.stationsLeft}</span>
         </span>
 
-        <span>
-          <span className="top-icon infection-rate-icon" />
-          <span>{this.props.infectionRate}</span>
-        </span>
-
-        <span>
-          <span className="top-icon outbreaks-icon" />
-          <span>{this.props.outbreaks}</span>
-        </span>
+        <OverlayTrigger
+          id="rates-trigger"
+          trigger={['hover', 'focus']}
+          placement="bottom"
+          overlay={
+            <Popover
+              id="rates-popover"
+              className="rates-popover">
+              <RatesPopover
+                infectionRateValues={infectionRateValues}
+                outbreaks={this.props.outbreaks} />
+            </Popover>
+          }>
+          <span className="rates">
+            <span>
+              <span className="top-icon infection-rate-icon" />
+              <span>{this.props.infectionRate}</span>
+            </span>
+            <span>
+              <span className="top-icon outbreaks-icon" />
+              <span>{this.props.outbreaks}</span>
+            </span>
+          </span>
+        </OverlayTrigger>
 
         <span className="top-icon infection-deck-icon" />
       </Panel>
@@ -51,7 +73,8 @@ class TopBar extends React.Component {
 
 const mapStateToProps = (state) => ({
   cubesLeft: state.cubesLeft, stationsLeft: state.stationsLeft, playerDeckCount: getPlayerDeckCount(state),
-  infectionRate: getInfectionRate(state), outbreaks: state.outbreaks
+  infectionRate: getInfectionRate(state), outbreaks: state.outbreaks,
+  infectionRateValues: getInfectionRateValues(state)
 });
 
 export default connect(mapStateToProps)(TopBar);

@@ -43,6 +43,10 @@ export function getInfectionRate(state) {
   return state.infectionRate.values[state.infectionRate.index];
 }
 
+export function getInfectionRateValues(state) {
+  return state.infectionRate;
+}
+
 export function isOutbreaksCountOutOfBounds(state) {
   return state.outbreaks >= 8;
 }
