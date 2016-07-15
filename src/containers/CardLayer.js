@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import { findDOMNode } from 'react-dom';
 import { connect } from 'react-redux';
 import { isEmpty } from 'lodash';
 import classnames from 'classnames';
@@ -10,10 +11,12 @@ import { animationDrawInfectionCardComplete, animationDealCardsComplete,
 import { getCardsDrawn, getInfectionCardDrawn, isEpidemicInProgress, isDealingPlayerCards,
   getPlayerDealtToIndex, getCardsDealtCount, isDealingEpidemicCards, getPlayers, getDifficulty } from '../selectors';
 import { cardProps, playerType } from '../constants/propTypes';
+import { getLocationOrigin } from '../utils';
 
 
 class CardLayer extends React.Component {
   static propTypes = {
+    map: PropTypes.element.isRequired,
     cardsDrawn: PropTypes.arrayOf(PropTypes.shape({
       ...cardProps,
       handling: PropTypes.bool
@@ -21,6 +24,8 @@ class CardLayer extends React.Component {
     isEpidemicInProgress: PropTypes.bool.isRequired,
     difficulty: PropTypes.number.isRequired,
     currentPlayerId: PropTypes.string.isRequired,
+    initialInfectedCity: PropTypes.string,
+    infectingLocation: PropTypes.string,
     isDealingPlayerCards: PropTypes.bool,
     isDealingEpidemicCards: PropTypes.bool,
     cardsDealtCount: PropTypes.number,
@@ -100,6 +105,13 @@ class CardLayer extends React.Component {
             }
           }.bind(this, cardOffset, i), 300 * i);
         });
+      } else if (this.props.initialInfectedCity !== null) {
+        const mapNode = findDOMNode(this.props.map);
+        const origin = getLocationOrigin(this.props.infectingLocation);
+        const offset = $(mapNode).offset();
+
+        this.refs.infectedCity.style.top = `${offset.top + origin.top}px`;
+        this.refs.infectedCity.style.left = `${offset.left + origin.left + 50}px`;
       }
     }
   }
@@ -118,7 +130,7 @@ class CardLayer extends React.Component {
 
   render() {
     const { cardsDrawn, infectionCardDrawn, isEpidemicInProgress, isDealingPlayerCards, playerIndex,
-      isDealingEpidemicCards, difficulty } = this.props;
+      isDealingEpidemicCards, difficulty, initialInfectedCity } = this.props;
     const cards = !isEmpty(infectionCardDrawn) && [{ cardType: 'city', ...infectionCardDrawn }] || cardsDrawn;
     let items = null;
     this.epidemics = [];
@@ -164,11 +176,17 @@ class CardLayer extends React.Component {
           }
         </div>
       ];
+    } else if (initialInfectedCity !== null) {
+      items = (
+        <div
+          key={initialInfectedCity}
+          ref="infectedCity"
+          className={`infection card animated fadeInDown city-${initialInfectedCity}`} />);
     }
 
     return (
       <div className={classnames(['card-layer', {
-        'empty': isEmpty(cardsDrawn) && isEmpty(infectionCardDrawn) && !isDealingPlayerCards && !isDealingEpidemicCards,
+        'empty': isEmpty(items),
         'is-epidemic': isEpidemicInProgress }])}>
         <div className="card-drawer">
           {items}
@@ -178,7 +196,7 @@ class CardLayer extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state, ownProps) => ({
   cardsDrawn: getCardsDrawn(state),
   infectionCardDrawn: getInfectionCardDrawn(state),
   isEpidemicInProgress: isEpidemicInProgress(state),
@@ -188,7 +206,8 @@ const mapStateToProps = (state) => ({
   playerIndex: getPlayerDealtToIndex(state),
   cardsDealtCount: getCardsDealtCount(state),
   players: getPlayers(state),
-  difficulty: getDifficulty(state)
+  difficulty: getDifficulty(state),
+  infectingLocation: state.map.locations[ownProps.initialInfectedCity]
 });
 
 export default connect(mapStateToProps)(CardLayer);

@@ -11,7 +11,7 @@ import PathsLayer from '../components/map/PathsLayer';
 import CubesLayer from '../components/map/CubesLayer';
 import * as mapActions from '../actions/mapActions';
 import * as globalActions from '../actions/globalActions';
-import { isDriveAvailable, getInitialInfectedCity } from '../selectors';
+import { isDriveAvailable } from '../selectors';
 import { getCubeOrigin } from '../utils';
 import * as styles from '../styles';
 
@@ -33,16 +33,6 @@ class Map extends React.Component {
 
   constructor(props) {
     super(props);
-  }
-
-  state = {
-    initialInfectedCity: null
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (this.props.initialInfectedCity !== nextProps.initialInfectedCity) {
-      this.setState({ initialInfectedCity: nextProps.initialInfectedCity });
-    }
   }
 
   transitionPlayerMove(playerId, destinationId, fireCompleteAction = false) {
@@ -108,7 +98,7 @@ class Map extends React.Component {
           onCityClicked={this.props.onCityClicked}
           onCityDoubleClicked={this.props.onCityDoubleClicked}
           isDriveAvailable={isDriveAvailable}
-          initialInfectedCity={this.state.initialInfectedCity} />
+          initialInfectedCity={this.props.initialInfectedCity} />
         <PlayersLayer
           ref="players"
           players={players}
@@ -128,7 +118,7 @@ class Map extends React.Component {
 const mapStateToProps = (state) => {
   return { map: state.map, players: state.players, currentMove: state.currentMove,
     availableCities: state.currentMove.availableCities, currentPlayerId: state.currentMove.player,
-    isDriveAvailable: partial(isDriveAvailable, state), initialInfectedCity: getInitialInfectedCity(state) };
+    isDriveAvailable: partial(isDriveAvailable, state) };
 };
 
 const mapDispatchToProps = (dispatch) => {

@@ -10,6 +10,8 @@ export default function initialInfectedCityReducer(state = initialState.initialI
       } else {
         return state;
       }
+    case types.START_GAME:
+      return null;
     default:
       return state;
   }

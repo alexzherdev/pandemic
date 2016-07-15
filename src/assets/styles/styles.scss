@@ -100,19 +100,16 @@ body {
 @keyframes crosshair-rotate {
   0% {
     transform: rotate(0deg) scale(4);
-    // transform-origin: 50% 50%;
     opacity: 0;
   }
 
   33% {
     transform: rotate(120deg) scale(1);
-    // transform-origin: 50% 50%;
     opacity: 1;
   }
 
   66% {
     transform: rotate(240deg) scale(1);
-    // transform-origin: 50% 50%;
     opacity: 1;
   }
 
@@ -673,7 +670,7 @@ body {
   .card-layer {
     position: absolute;
     width: 100%;
-    height: 100%;//calc(100% - #{$bottomBarMinHeight});
+    height: 100%;
     left: 0;
     top: 0;
     z-index: 11000;
@@ -689,6 +686,7 @@ body {
     }
 
     .card-drawer {
+      position: relative;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -712,6 +710,10 @@ body {
 
         &.epidemic {
           z-index: -1;
+        }
+
+        &.infection {
+          position: absolute;
         }
       }
 

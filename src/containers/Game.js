@@ -11,7 +11,8 @@ import CardLayer from './CardLayer';
 import IntroDialog from '../components/IntroDialog';
 import * as mapActions from '../actions/mapActions';
 import * as globalActions from '../actions/globalActions';
-import { getPlayers, getCurrentCityId, getPlayerCityId, getPlayerHand } from '../selectors';
+import { getPlayers, getCurrentCityId, getPlayerCityId, getPlayerHand,
+  getInitialInfectedCity } from '../selectors';
 
 
 class Game extends React.Component {
@@ -30,6 +31,7 @@ class Game extends React.Component {
     getPlayerCityId: PropTypes.func.isRequired,
     getPlayerHand: PropTypes.func.isRequired,
     status: PropTypes.oneOf(['prepare', 'playing']).isRequired,
+    initialInfectedCity: PropTypes.string,
     actions: PropTypes.object.isRequired
   }
 
@@ -39,7 +41,18 @@ class Game extends React.Component {
     ['onCityClicked', 'onCityDoubleClicked', 'onIntroClosed'].forEach((meth) => {
       this[meth] = this[meth].bind(this);
     });
-    this.state = { showIntro: true };
+  }
+
+
+  state = {
+    showIntro: true,
+    initialInfectedCity: null
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.initialInfectedCity !== nextProps.initialInfectedCity) {
+      this.setState({ initialInfectedCity: nextProps.initialInfectedCity });
+    }
   }
 
   doMovePlayer(destinationId, source) {
@@ -100,8 +113,11 @@ class Game extends React.Component {
         <Map
           ref="map"
           onCityClicked={this.onCityClicked}
-          onCityDoubleClicked={this.onCityDoubleClicked} />
-        <CardLayer />
+          onCityDoubleClicked={this.onCityDoubleClicked}
+          initialInfectedCity={this.state.initialInfectedCity} />
+        <CardLayer
+          map={this.refs.map}
+          initialInfectedCity={this.state.initialInfectedCity} />
         {status === 'prepare' && this.state.showIntro &&
           <IntroDialog
             players={this.props.players}
@@ -119,7 +135,8 @@ const mapStateToProps = (state) => ({
   currentCityId: getCurrentCityId(state),
   getPlayerCityId: partial(getPlayerCityId, state),
   getPlayerHand: partial(getPlayerHand, state),
-  status: state.status
+  status: state.status,
+  initialInfectedCity: getInitialInfectedCity(state)
 });
 
 const mapDispatchToProps = (dispatch) => ({
