@@ -17,8 +17,12 @@ export function dealCardsInit() {
   return { type: types.DEAL_CARDS_INIT };
 }
 
-export function dealCards(playerId, cards) {
-  return { type: types.DEAL_CARDS, playerId, cards };
+export function dealCards(playerId, cards, playerIndex) {
+  return { type: types.DEAL_CARDS, playerId, cards, playerIndex };
+}
+
+export function insertEpidemicCardsInit() {
+  return { type: types.INSERT_EPIDEMIC_CARDS_INIT };
 }
 
 export function insertPlayerCard(index, card) {
@@ -55,4 +59,16 @@ export function animationDrawInfectionCardComplete() {
 
 export function animationInfectNeighborComplete(cityId, originId, color) {
   return { type: types.ANIMATION_INFECT_NEIGHBOR_COMPLETE, cityId, originId, color };
+}
+
+export function animationDealCardsComplete() {
+  return { type: types.ANIMATION_DEAL_CARDS_COMPLETE };
+}
+
+export function animationDealCardsInitComplete() {
+  return { type: types.ANIMATION_DEAL_CARDS_INIT_COMPLETE };
+}
+
+export function animationInsertEpidemicCardsComplete() {
+  return { type: types.ANIMATION_INSERT_EPIDEMIC_CARDS_COMPLETE };
 }

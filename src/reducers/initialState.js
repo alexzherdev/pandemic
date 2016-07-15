@@ -2,6 +2,9 @@ export default {
   status: 'prepare',
   difficulty: null,
 
+  dealingCards: {},
+  initialInfectedCity: null,
+
   playerCards: {
     deck: [
       { cardType: 'city', id: '30' },

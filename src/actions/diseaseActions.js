@@ -32,8 +32,8 @@ export function initOutbreak(cityId, color) {
   return { type: types.OUTBREAK_INIT, cityId, color };
 }
 
-export function infectCity(cityId, color, count) {
-  return { type: types.INFECT_CITY, cityId, color, count };
+export function infectCity(cityId, color, count, initial = false) {
+  return { type: types.INFECT_CITY, cityId, color, count, initial };
 }
 
 export function infectNeighbor(cityId, originId, color) {

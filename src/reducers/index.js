@@ -11,6 +11,8 @@ import diseases from './diseasesReducer';
 import status from './statusReducer';
 import playerCards from './playerCardsReducer';
 import infectionCards from './infectionCardsReducer';
+import dealingCards from './dealingCardsReducer';
+import initialInfectedCity from './initialInfectedCityReducer';
 import * as types from '../constants/actionTypes';
 import initialState from './initialState';
 
@@ -18,6 +20,8 @@ import initialState from './initialState';
 const combinedReducer = combineReducers({
   status,
   difficulty: (state) => state || initialState.difficulty,
+  initialInfectedCity,
+  dealingCards,
   playerCards,
   infectionCards,
   map,

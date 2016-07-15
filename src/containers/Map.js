@@ -27,6 +27,7 @@ class Map extends React.Component {
     availableCities: PropTypes.objectOf(cityType).isRequired,
     currentPlayerId: PropTypes.string.isRequired,
     isDriveAvailable: PropTypes.func.isRequired,
+    initialInfectedCity: PropTypes.string,
     actions: PropTypes.object.isRequired
   }
 
@@ -96,7 +97,8 @@ class Map extends React.Component {
           availableCities={citiesToSelect}
           onCityClicked={this.props.onCityClicked}
           onCityDoubleClicked={this.props.onCityDoubleClicked}
-          isDriveAvailable={isDriveAvailable} />
+          isDriveAvailable={isDriveAvailable}
+          initialInfectedCity={this.props.initialInfectedCity} />
         <PlayersLayer
           ref="players"
           players={players}

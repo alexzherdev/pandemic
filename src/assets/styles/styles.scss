@@ -97,6 +97,28 @@ body {
   }
 }
 
+@keyframes crosshair-rotate {
+  0% {
+    transform: rotate(0deg) scale(4);
+    opacity: 0;
+  }
+
+  33% {
+    transform: rotate(120deg) scale(1);
+    opacity: 1;
+  }
+
+  66% {
+    transform: rotate(240deg) scale(1);
+    opacity: 1;
+  }
+
+  100% {
+    transform: rotate(360deg);
+    opacity: 0;
+  }
+}
+
 .game {
   .top-bar {
     position: fixed;
@@ -246,8 +268,6 @@ body {
     }
 
     .card {
-      border-radius: 4px;
-
       &:focus {
         outline: none;
       }
@@ -628,6 +648,7 @@ body {
     width: $cardWidth;
     height: $cardHeight;
     border: none;
+    border-radius: 4px;
 
     @for $id from 0 through 47 {
       &.city-#{$id} {
@@ -649,7 +670,7 @@ body {
   .card-layer {
     position: absolute;
     width: 100%;
-    height: calc(100% - #{$bottomBarMinHeight});
+    height: 100%;
     left: 0;
     top: 0;
     z-index: 11000;
@@ -665,6 +686,7 @@ body {
     }
 
     .card-drawer {
+      position: relative;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -672,10 +694,53 @@ body {
       height: 100%;
 
       .card {
-        &:first-child {
+        &:not(:last-child) {
           margin-right: 10px;
         }
+
+        &.player-deck {
+          background-size: $cardWidth $cardHeight;
+          background-image: url(../images/player_card.png);
+
+          &.dealing {
+            position: absolute;
+            opacity: 0.6;
+          }
+        }
+
+        &.epidemic {
+          z-index: -1;
+        }
+
+        &.infection {
+          position: absolute;
+        }
       }
+
+      .epidemics {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 10px;
+        display: flex;
+        justify-content: center;
+      }
+    }
+  }
+
+  .locations-layer {
+    .crosshair {
+      display: block;
+      position: absolute;
+      left: ($citySize - 76px) / 2;
+      top: -23px;
+      width: 76px;
+      height: 76px;
+      background: url(../images/crosshair.png);
+      background-size: 76px 76px;
+      border-radius: 38px;
+      animation: crosshair-rotate 3s linear;
+      animation-fill-mode: forwards;
     }
   }
 

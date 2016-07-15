@@ -14,7 +14,7 @@ const nonPropagatingHandler = (callback, id) => {
 };
 
 const LocationsLayer = ({ cities, locations, availableCities, onCityClicked, onCityDoubleClicked,
-  isDriveAvailable }) => {
+  isDriveAvailable, initialInfectedCity }) => {
   const items = [];
 
   forOwn(cities, (c, id) => {
@@ -53,11 +53,14 @@ const LocationsLayer = ({ cities, locations, availableCities, onCityClicked, onC
         {maxCount === 3 &&
           <span className="outbreak-warning" />
         }
+        {id === initialInfectedCity &&
+          <span className="crosshair" />
+        }
       </span>
     );
   });
   return (
-    <div>
+    <div className="locations-layer">
       {items}
     </div>
   );
@@ -69,7 +72,8 @@ LocationsLayer.propTypes = {
   onCityClicked: PropTypes.func.isRequired,
   onCityDoubleClicked: PropTypes.func.isRequired,
   isDriveAvailable: PropTypes.func.isRequired,
-  availableCities: PropTypes.objectOf(cityType.isRequired)
+  availableCities: PropTypes.objectOf(cityType.isRequired),
+  initialInfectedCity: PropTypes.string
 };
 
 export default LocationsLayer;
