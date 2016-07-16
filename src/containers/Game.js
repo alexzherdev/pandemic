@@ -33,7 +33,9 @@ class Game extends React.Component {
     getPlayerHand: PropTypes.func.isRequired,
     status: PropTypes.oneOf(['prepare', 'playing']).isRequired,
     initialInfectedCity: PropTypes.string,
-    actions: PropTypes.object.isRequired
+    actions: PropTypes.object.isRequired,
+    route: PropTypes.object.isRequired,
+    router: PropTypes.object.isRequired
   }
 
   constructor(props) {
@@ -49,15 +51,15 @@ class Game extends React.Component {
     initialInfectedCity: null
   }
 
+  componentDidMount() {
+    this.props.router.setRouteLeaveHook(this.props.route, () =>
+      'Do you want to leave the game?');
+  }
+
   componentWillReceiveProps(nextProps) {
     if (this.props.initialInfectedCity !== nextProps.initialInfectedCity) {
       this.setState({ initialInfectedCity: nextProps.initialInfectedCity });
     }
-  }
-
-  componentDidMount() {
-    this.props.router.setRouteLeaveHook(this.props.route, () =>
-      'Do you want to leave the game?');
   }
 
   doMovePlayer(destinationId, source) {

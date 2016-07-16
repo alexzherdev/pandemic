@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import { routerReducer } from 'react-router-redux';
 
 import map from './mapReducer';
 import players from './playersReducer';
@@ -31,7 +32,8 @@ const combinedReducer = combineReducers({
   currentMove,
   stationsLeft,
   cubesLeft,
-  infectionRate
+  infectionRate,
+  routing: routerReducer
 });
 
 export default (state, action) => {
@@ -57,7 +59,8 @@ export default (state, action) => {
           acc[id] = '2';
           return acc;
         }, {})
-      }
+      },
+      routing: routerReducer(state, action)
     };
   } else {
     return combinedReducer(state, action);
