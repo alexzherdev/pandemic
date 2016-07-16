@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { isEmpty, partial } from 'lodash';
@@ -43,7 +44,6 @@ class Game extends React.Component {
     });
   }
 
-
   state = {
     showIntro: true,
     initialInfectedCity: null
@@ -53,6 +53,11 @@ class Game extends React.Component {
     if (this.props.initialInfectedCity !== nextProps.initialInfectedCity) {
       this.setState({ initialInfectedCity: nextProps.initialInfectedCity });
     }
+  }
+
+  componentDidMount() {
+    this.props.router.setRouteLeaveHook(this.props.route, () =>
+      'Do you want to leave the game?');
   }
 
   doMovePlayer(destinationId, source) {
@@ -143,4 +148,4 @@ const mapDispatchToProps = (dispatch) => ({
   actions: bindActionCreators({ ...mapActions, ...globalActions }, dispatch)
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Game);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Game));
