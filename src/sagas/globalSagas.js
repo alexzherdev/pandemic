@@ -1,6 +1,7 @@
-import { takeEvery, delay, END } from 'redux-saga';
-import { put, select, call, take } from 'redux-saga/effects';
+import { takeEvery, takeLatest, delay, END } from 'redux-saga';
+import { put, select, call, take, fork, cancel } from 'redux-saga/effects';
 import { browserHistory } from 'react-router';
+import { LOCATION_CHANGE } from 'react-router-redux';
 import { difference, sample, sampleSize, shuffle } from 'lodash';
 
 import * as types from '../constants/actionTypes';
@@ -155,5 +156,15 @@ export function* watchCreateCustomGame() {
 }
 
 export function* watchDealCards() {
-  yield* takeEvery(types.DEAL_CARDS_INIT, dealCardsToPlayers);
+  while (true) { // eslint-disable-line no-constant-condition
+    const action = yield take(types.DEAL_CARDS_INIT);
+    const task = yield fork(dealCardsToPlayers, action);
+    yield fork(takeLatest, LOCATION_CHANGE, cancelDealCards, task);
+  }
+}
+
+function* cancelDealCards(task, action) {
+  if (action.payload.pathname === '/setup') {
+    yield cancel(task);
+  }
 }
