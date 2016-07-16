@@ -701,6 +701,7 @@ body {
         &.player-deck {
           background-size: $cardWidth $cardHeight;
           background-image: url(../images/player_card.png);
+          margin-right: 0;
 
           &.dealing {
             position: absolute;

@@ -16,7 +16,7 @@ import { getLocationOrigin } from '../utils';
 
 class CardLayer extends React.Component {
   static propTypes = {
-    map: PropTypes.element.isRequired,
+    map: PropTypes.element,
     cardsDrawn: PropTypes.arrayOf(PropTypes.shape({
       ...cardProps,
       handling: PropTypes.bool
@@ -25,7 +25,7 @@ class CardLayer extends React.Component {
     difficulty: PropTypes.number.isRequired,
     currentPlayerId: PropTypes.string.isRequired,
     initialInfectedCity: PropTypes.string,
-    infectingLocation: PropTypes.string,
+    infectingLocation: PropTypes.object,
     isDealingPlayerCards: PropTypes.bool,
     isDealingEpidemicCards: PropTypes.bool,
     cardsDealtCount: PropTypes.number,
@@ -103,7 +103,7 @@ class CardLayer extends React.Component {
               animation.onfinish = () =>
                 this.props.dispatch(animationInsertEpidemicCardsComplete());
             }
-          }.bind(this, cardOffset, i), 300 * i);
+          }.bind(this, cardOffset, i), 300 * (i + 1));
         });
       } else if (this.props.initialInfectedCity !== null) {
         const mapNode = findDOMNode(this.props.map);
