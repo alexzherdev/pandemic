@@ -1,4 +1,4 @@
-import { takeEvery, delay } from 'redux-saga';
+import { takeEvery } from 'redux-saga';
 import { select, put, take, fork, cancel, call } from 'redux-saga/effects';
 
 import { moveShowCities } from '../actions/mapActions';
@@ -102,11 +102,9 @@ export function* drawPlayerCards() {
     if (cards[1].cardType === 'epidemic') {
       cards.reverse();
     }
-    yield call(delay, 500);
     yield put(drawCardsInit(cards));
-    yield call(delay, 500);
+    yield take(types.ANIMATION_DRAW_CARDS_INIT_COMPLETE);
     for (let i = 0; i < 2; i++) {
-      yield call(delay, 500);
       yield put(drawCardsHandleInit(cards[i]));
       yield take(types.CARD_DRAW_CARDS_HANDLE);
       if (cards[i].cardType === 'epidemic') {

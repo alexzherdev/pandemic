@@ -175,15 +175,6 @@ body {
 
       .player-deck {
         position: relative;
-
-        .player-deck-icon {
-          width: 25px;
-          height: 35px;
-          background-size: 25px 35px;
-          background-image: url(../images/player_card.png);
-          position: absolute;
-          right: 18px;
-        }
       }
 
 
@@ -718,20 +709,6 @@ body {
     }
   }
 
-  .hand {
-    position: fixed;
-    bottom: -40px;
-    width: 100%;
-    height: $cardHeight;
-    margin: 0 auto;
-    display: flex;
-    justify-content: center;
-
-    .card:not(:first-child) {
-      margin-left: -$cardWidth / 2;
-    }
-  }
-
   .card {
     width: $cardWidth;
     height: $cardHeight;
@@ -764,12 +741,50 @@ body {
     z-index: 11000;
 
     &.empty {
-      display: none;
+      height: 0;
     }
 
     &.is-epidemic {
       .card-drawer {
         display: none;
+      }
+    }
+
+    .hand {
+      position: fixed;
+      height: $cardHeight;
+      bottom: -40px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+
+      .card {
+        z-index: 0;
+      }
+
+      .card:not(:first-child) {
+        margin-left: -$cardWidth / 2;
+      }
+    }
+
+    .player-deck-icon {
+      width: $cardWidth;
+      height: $cardHeight;
+      background-size: $cardWidth $cardHeight;
+      background-image: url(../images/player_card.png);
+    }
+
+    > .player-deck-icon {
+      transform: scale(0.2);
+      transform-origin: 0% 0%;
+      position: absolute;
+      top: 0;
+      left: 545px;
+
+      &.empty {
+        background-image: none;
+        border-radius: 16px;
+        box-shadow: inset 0 0 20px white;
       }
     }
 
@@ -781,6 +796,28 @@ body {
       width: 100%;
       height: 100%;
 
+      .flipper {
+        position: relative;
+        transform-style: preserve-3d;
+        transform-origin: 0% 0%;
+
+        div {
+          backface-visibility: hidden;
+          position: absolute;
+          top: 0;
+          left: 0;
+
+          &.front {
+            z-index: 1;
+            transform: scale(1);
+          }
+
+          &.back {
+            transform: rotateY(180deg);
+          }
+        }
+      }
+
       .card {
         &:not(:last-child) {
           margin-right: 10px;
@@ -790,6 +827,8 @@ body {
           background-size: $cardWidth $cardHeight;
           background-image: url(../images/player_card.png);
           margin-right: 0;
+          transform-origin: 0% 0%;
+          box-shadow: 0 0 8px rgba(0, 0, 0, 0.6);
 
           &.dealing {
             position: absolute;

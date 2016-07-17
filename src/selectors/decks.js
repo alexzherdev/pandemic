@@ -1,10 +1,27 @@
+import { partialRight } from 'lodash';
+
 import cities from '../constants/cities';
 import events from '../constants/events';
 import { getCityColor } from './cities';
 
 
+export function enhanceCard(card, state) {
+  const res = { ...card };
+  switch (card.cardType) {
+    case 'city':
+      res.color = getCityColor(state, card.id);
+      res.name = cities[card.id].name;
+      break;
+    case 'event':
+      res.name = events[card.id].name;
+      break;
+  }
+
+  return res;
+}
+
 export function getPlayerCardsToDraw(state) {
-  return state.playerCards.deck.slice(0, 2);
+  return state.playerCards.deck.slice(0, 2).map(partialRight(enhanceCard, state));
 }
 
 export function getInfectionDeckBottom(state) {
@@ -21,16 +38,7 @@ export function getPlayerDeck(state) {
 }
 
 export function getPlayerDiscard(state) {
-  return state.playerCards.discard.map((c) => {
-    switch (c.cardType) {
-    case 'city':
-      return { ...c, color: getCityColor(state, c.id) };
-    case 'event':
-      return { ...c, name: events[c.id].name };
-    default:
-      return c;
-    }
-  });
+  return state.playerCards.discard.map(partialRight(enhanceCard, state));
 }
 
 function getInfectionDeck(state) {

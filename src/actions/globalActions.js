@@ -53,6 +53,10 @@ export function animationMoveComplete() {
   return { type: types.ANIMATION_MOVE_COMPLETE };
 }
 
+export function animationDrawCardsInitComplete() {
+  return { type: types.ANIMATION_DRAW_CARDS_INIT_COMPLETE };
+}
+
 export function animationDrawInfectionCardComplete() {
   return { type: types.ANIMATION_DRAW_INFECTION_CARD_COMPLETE };
 }

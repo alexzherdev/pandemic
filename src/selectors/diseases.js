@@ -23,7 +23,7 @@ export function areAllDiseasesCured(state) {
 }
 
 export function cardsNeededToCure(state) {
-  return getCurrentRole(state) === 'scientist' ? 4 : 3;
+  return getCurrentRole(state) === 'scientist' ? 4 : 5;
 }
 
 export function getCurableDisease(state) {

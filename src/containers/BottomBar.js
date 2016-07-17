@@ -11,10 +11,9 @@ import MultiCardPicker from '../components/MultiCardPicker';
 import PlayerPicker from '../components/PlayerPicker';
 import DiseasePicker from '../components/DiseasePicker';
 import ForecastBar from './ForecastBar';
-import Hand from '../components/Hand';
-import { getPlayerToDiscard, getPlayerHand, getTreatableDiseases, canTreatAllOfColor, canTreatAll,
+import { getPlayerToDiscard, getTreatableDiseases, canTreatAllOfColor, canTreatAll,
   getCurrentCityId, getCurrentPlayer, isDispatcher, getPlayers, getEventsInHands, getInfectionDiscard,
-  cardsNeededToCure } from '../selectors';
+  getPlayerHand, cardsNeededToCure } from '../selectors';
 import * as mapActions from '../actions/mapActions';
 import * as cardActions from '../actions/cardActions';
 import * as diseaseActions from '../actions/diseaseActions';
@@ -154,8 +153,7 @@ class BottomBar extends React.Component {
   }
 
   render() {
-    const { playerToDiscard, players, treatableDiseases, infectionDiscard, cardsNeededToCure,
-      getPlayerHand, currentPlayer } = this.props;
+    const { playerToDiscard, players, treatableDiseases, infectionDiscard, cardsNeededToCure } = this.props;
     const { shareCandidates, curingDisease, airlift, opsMoveAbility, contPlannerEvents,
       availableCities, govGrantCities, resPop, forecastCards } = this.props.currentMove;
     let content;
@@ -244,17 +242,14 @@ class BottomBar extends React.Component {
           onSubmit={this.props.actions.forecastShuffle} />
       );
     } else {
-      content = ([
-        <Hand
-          key="hand"
-          hand={getPlayerHand(currentPlayer.id)} />,
+      content = (
         <Actions
           key="actions"
           onShowTreatColors={this.onShowTreatColors}
           onTreatColorPicked={this.onTreatColorPicked}
           onMoveInit={this.onMoveInit}
           onPlayEventClicked={this.chooseEvent} />
-      ]);
+      );
     }
 
     const classes = classnames(['bottom-bar', { 'hide': !isEmpty(availableCities) || !isEmpty(govGrantCities) }]);

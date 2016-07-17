@@ -92,8 +92,8 @@ describe('Hand selector', () => {
 
   it('selects the cities a player has in hand', () => {
     expect(sel.getCitiesInPlayersHand(getState(), '0')).to.eql([
-      { id: '0', name: 'San Francisco', color: 'blue' },
-      { id: '13', name: 'Mexico City', color: 'yellow' }
+      { id: '0', name: 'San Francisco', color: 'blue', cardType: 'city' },
+      { id: '13', name: 'Mexico City', color: 'yellow', cardType: 'city' }
     ]);
   });
 
