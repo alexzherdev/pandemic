@@ -1,5 +1,6 @@
 import cities from '../constants/cities';
 import events from '../constants/events';
+import { getCityColor } from './cities';
 
 
 export function getPlayerCardsToDraw(state) {
@@ -19,12 +20,26 @@ export function getPlayerDeck(state) {
   return state.playerCards.deck;
 }
 
+export function getPlayerDiscard(state) {
+  return state.playerCards.discard.map((c) => {
+    switch (c.cardType) {
+    case 'city':
+      return { ...c, color: getCityColor(state, c.id) };
+    case 'event':
+      return { ...c, name: events[c.id].name };
+    default:
+      return c;
+    }
+  });
+}
+
 function getInfectionDeck(state) {
   return state.infectionCards.deck;
 }
 
 export function getInfectionDiscard(state) {
-  return state.infectionCards.discard.map((id) => ({ id, name: cities[id].name, cardType: 'city' }));
+  return state.infectionCards.discard.map((id) =>
+    ({ id, name: cities[id].name, cardType: 'city', color: getCityColor(state, id) }));
 }
 
 export function getCardsForForecast(state) {

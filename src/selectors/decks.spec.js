@@ -37,10 +37,10 @@ describe('Decks selector', () => {
   });
 
   describe('getInfectionDiscard', () => {
-    it('gets ids from the infection discard together with the names', () => {
+    it('gets ids from the infection discard together with the names and colors', () => {
       expect(sel.getInfectionDiscard(getState())).to.eql([
-        { id: '1', name: 'Chicago', cardType: 'city' },
-        { id: '3', name: 'Montreal', cardType: 'city' }
+        { id: '1', name: 'Chicago', cardType: 'city', color: 'blue' },
+        { id: '3', name: 'Montreal', cardType: 'city', color: 'blue' }
       ]);
     });
   });

@@ -14,7 +14,7 @@ export default {
     discard: [
       { cardType: 'event', id: 'one_quiet_night' },
       { cardType: 'event', id: 'gov_grant' },
-      { cardType: 'event', id: 'res_pop' }
+      { cardType: 'epidemic', id: 'epidemic' }
     ]
   },
 

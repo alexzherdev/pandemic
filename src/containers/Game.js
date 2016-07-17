@@ -9,6 +9,7 @@ import Map from './Map';
 import TeamPanel from '../components/TeamPanel';
 import BottomBar from './BottomBar';
 import CardLayer from './CardLayer';
+import DiscardPanel from './DiscardPanel';
 import IntroDialog from '../components/IntroDialog';
 import * as mapActions from '../actions/mapActions';
 import * as globalActions from '../actions/globalActions';
@@ -107,6 +108,7 @@ class Game extends React.Component {
     const { status } = this.props;
     return (
       <div className="game">
+        <DiscardPanel />
         <TopBar />
         {status !== 'prepare' &&
           <TeamPanel

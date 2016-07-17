@@ -26,6 +26,10 @@ body {
   margin: 0;
 }
 
+.btn:focus, a:focus {
+  outline: none;
+}
+
 @font-face {
   font-family: Phage;
   src: url(../fonts/Phage.otf) format("opentype");
@@ -325,6 +329,34 @@ body {
     }
   }
 
+  .card-list {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-left: 3px solid #485563;
+
+    .list-group-item {
+      padding: 0 5px;
+      font-size: 0.9em;
+
+      .event {
+        color: darkorange;
+
+        .event-name {
+          cursor: help;
+          border-bottom: 1px dotted darkorange;
+        }
+      }
+
+      .epidemic {
+        color: #37c400;
+
+        .e {
+          font-family: 'Phage';
+        }
+      }
+    }
+  }
+
   .team-panel {
     position: absolute;
     right: 0;
@@ -340,15 +372,6 @@ body {
 
     .team-player {
       margin-bottom: 0;
-
-      .event {
-        color: darkorange;
-
-        .event-name {
-          cursor: help;
-          border-bottom: 1px dotted darkorange;
-        }
-      }
 
       .panel-heading {
         padding: 1px 9px;
@@ -369,18 +392,6 @@ body {
           border-bottom: 1px dotted black;
         }
       }
-
-      .list-group {
-        padding-top: 5px;
-        padding-bottom: 5px;
-        border-left: 3px solid #485563;
-
-        .list-group-item {
-          padding: 0 5px;
-          font-size: 0.9em;
-        }
-      }
-
 
       &.team-player-cont_planner {
         .panel-heading {
@@ -424,7 +435,84 @@ body {
         }
       }
     }
+  }
 
+
+
+  .discard-drawer {
+    position: fixed;
+    left: 0;
+    top: 100px;
+    width: 200px;
+    height: 100%;
+
+    .btn {
+      position: absolute;
+      left: 0;
+      top: 10px;
+      transform: rotate(270deg);
+      transform-origin: 50% 100%;
+      line-height: 1;
+      padding: 9px 16px 2px;
+      z-index: 1;
+    }
+
+    .discard-tabs {
+      border: 2px solid #485563;
+
+      .nav-tabs {
+        display: flex;
+        justify-content: center;
+
+        background: #4e5d6c;
+
+        > li {
+          > a {
+            padding: 8px 8px 4px;
+            border: 0;
+
+            > span {
+              display: inline-block;
+              width: 25px;
+              height: 35px;
+              background-size: 25px 35px;
+            }
+
+            .player-discard {
+              background-image: url(../images/player_card.png);
+            }
+
+            .infection-discard {
+              background-image: url(../images/infection_card.png);
+            }
+          }
+
+          &.active > a {
+            background: rgba(0, 0, 0, 0.1);
+          }
+        }
+      }
+
+      .tab-content {
+        max-height: 200px;
+        overflow-y: scroll;
+
+        .empty {
+          padding: 5px 0 5px 30px;
+        }
+
+        .card-list {
+          padding-top: 0;
+          padding-bottom: 0;
+          margin-bottom: 0;
+
+          .list-group-item {
+            padding-left: 30px;
+            background: #485563;
+          }
+        }
+      }
+    }
   }
 
   .map {
@@ -803,10 +891,6 @@ body {
     align-items: center;
   }
 
-  button:focus {
-    outline: none;
-  }
-
   .dropdown {
     button, .dropdown-menu {
       width: 100%;
@@ -891,6 +975,24 @@ body {
       top: 5px;
     }
   }
+}
+
+.fade-enter {
+  opacity: 0.01;
+}
+
+.fade-enter.fade-enter-active {
+  opacity: 1;
+  transition: opacity 300ms ease-in;
+}
+
+.fade-leave {
+  opacity: 1;
+}
+
+.fade-leave.fade-leave-active {
+  opacity: 0.01;
+  transition: opacity 300ms ease-in;
 }
 
 .rates-popover {
