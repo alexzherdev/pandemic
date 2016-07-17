@@ -15,11 +15,12 @@ const TeamPlayerHand = ({ player, hand, isCurrent }) => {
           isCurrent={isCurrent} />
       }
       className={`team-player team-player-${player.role}`}>
-      <ListGroup fill>
+      <ListGroup fill className="card-list">
         {hand.map((c, i) =>
           <PlayerCard
             key={i}
-            card={c} />
+            card={c}
+            popoverPlacement="left" />
         )}
       </ListGroup>
     </Panel>

@@ -16,7 +16,7 @@ import { getLocationOrigin } from '../utils';
 
 class CardLayer extends React.Component {
   static propTypes = {
-    map: PropTypes.element,
+    map: PropTypes.object,
     cardsDrawn: PropTypes.arrayOf(PropTypes.shape({
       ...cardProps,
       handling: PropTypes.bool
