@@ -161,18 +161,16 @@ describe('ActionSagas', function() {
         { cardType: 'city', id: '1' },
         { cardType: 'epidemic', id: 'epidemic' }
       ];
-      this.generator.next([...cards]);
-      this.next = this.generator.next();
+      this.next = this.generator.next([...cards]);
       expect(this.next.value).to.eql(put(drawCardsInit([...cards].reverse())));
-      this.generator.next();
-      this.generator.next();
+      this.next = this.generator.next();
+      expect(this.next.value).to.eql(take(types.ANIMATION_DRAW_CARDS_INIT_COMPLETE));
       this.next = this.generator.next();
       expect(this.next.value).to.eql(put(drawCardsHandleInit(cards[1], '0')));
       this.next = this.generator.next();
       expect(this.next.value).to.eql(take(types.CARD_DRAW_CARDS_HANDLE));
       this.next = this.generator.next();
       expect(this.next.value).to.eql(call(yieldEpidemic));
-      this.generator.next();
       this.next = this.generator.next();
       expect(this.next.value).to.eql(put(drawCardsHandleInit(cards[0], '0')));
     });

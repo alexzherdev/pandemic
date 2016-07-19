@@ -20,7 +20,7 @@ export default class PlayersLayer extends React.Component {
       { left: playerEl.style.left, top: playerEl.style.top, opacity: .01, offset: .49 },
       { left: coords[1] + 'px', top: coords[0] + 'px', opacity: .01, offset: .5 },
       { left: coords[1] + 'px', top: coords[0] + 'px', opacity: 1 }
-    ], 1000);
+    ], 500);
     anim.onfinish = callback;
   }
 

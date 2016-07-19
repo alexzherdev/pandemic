@@ -32,7 +32,7 @@ class Game extends React.Component {
     currentCityId: PropTypes.string.isRequired,
     getPlayerCityId: PropTypes.func.isRequired,
     getPlayerHand: PropTypes.func.isRequired,
-    status: PropTypes.oneOf(['prepare', 'playing']).isRequired,
+    status: PropTypes.oneOf(['prepare', 'playing', 'defeat', 'victory']).isRequired,
     initialInfectedCity: PropTypes.string,
     actions: PropTypes.object.isRequired,
     route: PropTypes.object.isRequired,

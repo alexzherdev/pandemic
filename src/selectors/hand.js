@@ -2,24 +2,17 @@ import _ from 'lodash';
 
 import { getCurrentPlayer } from './gameplay';
 import { getCurrentCityId, getCityColor } from './cities';
-import cities from '../constants/cities';
+import { enhanceCard } from './decks';
 import events from '../constants/events';
 
 
-function sortHand(hand) {
+export function sortHand(hand) {
   return _.sortBy(hand, ['cardType', 'color', 'name']);
 }
 
 export function getCitiesInPlayersHand(state, playerId) {
   const hand = getPlayerHand(state, playerId);
-  return getCitiesInHand(state, hand);
-}
-
-function getCitiesInHand(state, hand) {
-  return _.chain(hand)
-    .filter({ cardType: 'city' })
-    .map((c) => cities[c.id])
-    .value();
+  return _.filter(hand, { cardType: 'city' });
 }
 
 export function getCurrentPlayerHand(state) {
@@ -27,13 +20,7 @@ export function getCurrentPlayerHand(state) {
 }
 
 export function getPlayerHand(state, playerId) {
-  return sortHand(state.players[playerId].hand.map((card) => {
-    const res = { ...card, name: card.cardType === 'city' ? cities[card.id].name : events[card.id].name };
-    if (card.cardType === 'city') {
-      res.color = getCityColor(state, card.id);
-    }
-    return res;
-  }));
+  return sortHand(state.players[playerId].hand.map(_.partialRight(enhanceCard, state)));
 }
 
 export function isOverHandLimit(state, playerId) {

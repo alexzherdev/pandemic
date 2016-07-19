@@ -19,7 +19,7 @@ describe('Decks selector', () => {
   describe('getPlayerCardsToDraw', () => {
     it('gets top two player cards to draw', () => {
       expect(sel.getPlayerCardsToDraw(getState())).to.eql(
-        [{ cardType: 'city', id: '1' }, { cardType: 'event', id: 'airlift' }]
+        [{ cardType: 'city', id: '1', color: 'blue', name: 'Chicago' }, { cardType: 'event', id: 'airlift', name: 'Airlift' }]
       );
     });
   });
