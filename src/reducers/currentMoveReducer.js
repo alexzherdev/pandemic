@@ -63,11 +63,6 @@ function infectionCardDrawn(state, action) {
   switch (action.type) {
     case types.CARD_DRAW_INFECTION_CARD:
       return { id: action.cityId };
-    case types.CARD_DRAW_INFECTION_CARD_HANDLE:
-      return {
-        ...state,
-        handling: true
-      };
     case types.ANIMATION_DRAW_INFECTION_CARD_COMPLETE:
       return {};
     default:

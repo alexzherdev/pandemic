@@ -99,7 +99,7 @@ export function* dealCardsToPlayers() {
       yield put(useDiseaseCubes(color, i));
       yield put(infectCity(topInfectionCard, color, i, true));
       yield put(discardTopInfectionCard());
-      yield call(delay, 2000);
+      // yield call(delay, 2000);
     }
   }
   yield put(startGame());

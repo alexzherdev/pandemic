@@ -25,7 +25,6 @@ class TopBar extends React.Component {
     return (
       <Panel className="top-bar">
         <span className="player-deck">
-          <span className="top-icon player-deck-icon" />
           <span>{this.props.playerDeckCount}</span>
         </span>
         {DISEASES.map((c) =>
@@ -64,8 +63,6 @@ class TopBar extends React.Component {
             </span>
           </span>
         </OverlayTrigger>
-
-        <span className="top-icon infection-deck-icon" />
       </Panel>
     );
   }
