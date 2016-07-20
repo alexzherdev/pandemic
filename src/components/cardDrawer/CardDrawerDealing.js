@@ -63,38 +63,38 @@ export default class CardDrawerDealing extends React.Component {
       animateFn();
     } else if (this.props.startingEpidemicInsertion) {
       this.epidemics.forEach((el, i) => {
-        const cardOffset = $(el).offset();
-        setTimeout(function(offset, j) {
-          const animation = el.animate([
-            { transform: 'translate(0, 0)', opacity: 1 },
-            { transform: `translate(${deckOffset.left - offset.left}px,
-              ${deckOffset.top - offset.top}px)`, opacity: 0 }
-          ], {
-            duration: 300,
-            fill: 'forwards'
-          });
+        const offset = $(el).offset();
+        const animation = el.animate([
+          { transform: 'translate(0, 0)', opacity: 0, offset: 0 },
+          { transform: 'translate(0, 0)', opacity: 1, offset: 0.4 },
+          { transform: `translate(${deckOffset.left - offset.left}px,
+            ${deckOffset.top - offset.top}px)`, opacity: 0, offset: 1 }
+        ], {
+          duration: 800,
+          delay: 100 * i,
+          fill: 'forwards'
+        });
 
-          if (j === this.epidemics.length - 1) {
-            animation.onfinish = () => {
-              setTimeout(() => {
-                const playerDeck = this.props.getPlayerDeck();
-                const playerDeckOffset = $(playerDeck).offset();
-                const src = $(this.refs.dealDeck).offset();
-                const anim = this.refs.dealDeck.animate([
-                  { transform: `translate(0, 0) scale(1)` },
-                  { transform: `translate(${playerDeckOffset.left - src.left}px, ${playerDeckOffset.top - src.top}px) scale(0.2)` }
-                ], {
-                  duration: 500,
-                  fill: 'forwards'
-                });
-                anim.onfinish = () => {
-                  $(playerDeck).removeClass('empty');
-                  this.props.onInsertEpidemicCardsComplete();
-                };
-              }, 500);
-            };
-          }
-        }.bind(this, cardOffset, i), 300 * (i + 1));
+        if (i === this.epidemics.length - 1) {
+          animation.onfinish = () => {
+            setTimeout(() => {
+              const playerDeck = this.props.getPlayerDeck();
+              const playerDeckOffset = $(playerDeck).offset();
+              const src = $(this.refs.dealDeck).offset();
+              const anim = this.refs.dealDeck.animate([
+                { transform: `translate(0, 0) scale(1)` },
+                { transform: `translate(${playerDeckOffset.left - src.left}px, ${playerDeckOffset.top - src.top}px) scale(0.2)` }
+              ], {
+                duration: 500,
+                fill: 'forwards'
+              });
+              anim.onfinish = () => {
+                $(playerDeck).removeClass('empty');
+                this.props.onInsertEpidemicCardsComplete();
+              };
+            }, 500);
+          };
+        }
       });
     }
   }
@@ -114,7 +114,8 @@ export default class CardDrawerDealing extends React.Component {
           <div
             key={i}
             ref={(el) => el !== null && this.epidemics.push(el)}
-            className="card epidemic" />)
+            className="card epidemic"
+            style={{ opacity: 0 }} />)
         }
       </div>
     ] : [
