@@ -1,17 +1,18 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import classnames from 'classnames';
 
 import { cardType } from '../constants/propTypes';
 
 
-export default class PlayerDiscard extends React.Component {
+export default class DiscardPile extends React.Component {
   static propTypes = {
-    discardTop: cardType
+    discardTop: cardType,
+    className: PropTypes.string
   }
 
   render() {
     const card = this.props.discardTop;
-    const classes = ['card', 'deck-icon', 'player-discard',
+    const classes = ['card', 'deck-icon', this.props.className,
       { 'empty': !card }];
     if (card) {
       classes.push(`${card.cardType} ${card.cardType}-${card.id}`);

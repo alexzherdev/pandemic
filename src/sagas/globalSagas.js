@@ -98,8 +98,8 @@ export function* dealCardsToPlayers() {
       const color = yield select(sel.getCityColor, topInfectionCard);
       yield put(useDiseaseCubes(color, i));
       yield put(infectCity(topInfectionCard, color, i, true));
+      yield take(types.ANIMATION_DRAW_INFECTION_CARD_COMPLETE);
       yield put(discardTopInfectionCard());
-      yield call(delay, 2000);
     }
   }
   yield put(startGame());

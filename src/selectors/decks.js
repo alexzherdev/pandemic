@@ -51,7 +51,11 @@ function getInfectionDeck(state) {
 
 export function getInfectionDiscard(state) {
   return state.infectionCards.discard.map((id) =>
-    ({ id, name: cities[id].name, cardType: 'city', color: getCityColor(state, id) }));
+    enhanceCard({ cardType: 'city', id }, state));
+}
+
+export function getInfectionDiscardTop(state) {
+  return getInfectionDiscard(state)[0];
 }
 
 export function getCardsForForecast(state) {
