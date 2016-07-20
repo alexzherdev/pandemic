@@ -91,6 +91,7 @@ export default {
     actionsLeft: 4,
     cardsDrawn: [],
     infectionCardDrawn: {},
+    discardingCard: {},
     epidemicInProgress: false,
     outbreak: {
       color: null,

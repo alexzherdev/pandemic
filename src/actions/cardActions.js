@@ -1,7 +1,8 @@
 import * as types from '../constants/actionTypes';
 
-export function discardFromHand(cardType, playerId, id) {
-  return { type: types.CARD_DISCARD_FROM_HAND, cardType, id, playerId };
+
+export function discardFromHandInit(cardType, playerId, id) {
+  return { type: types.CARD_DISCARD_FROM_HAND_INIT, cardType, id, playerId };
 }
 
 export function drawCardsInit(cards) {

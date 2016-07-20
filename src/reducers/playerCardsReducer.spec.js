@@ -18,8 +18,8 @@ describe('PlayerCardsReducer', () => {
     expect(reducer(initial, action)).to.eql(expected);
   });
 
-  it('puts cards on top of the discard pile on CARD_DISCARD_FROM_HAND', () => {
-    const action = { type: types.CARD_DISCARD_FROM_HAND, cardType: 'city', id: '4' };
+  it('puts cards on top of the discard pile on ANIMATION_CARD_DISCARD_FROM_HAND_COMPLETE', () => {
+    const action = { type: types.ANIMATION_CARD_DISCARD_FROM_HAND_COMPLETE, cardType: 'city', id: '4' };
 
     const initial = getInitialState();
     const expected = { ...initial, discard: [{ cardType: 'city', id: '4' }, ...initial.discard]};

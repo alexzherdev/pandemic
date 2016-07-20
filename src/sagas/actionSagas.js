@@ -3,7 +3,7 @@ import { select, put, take, fork, cancel, call } from 'redux-saga/effects';
 
 import { moveShowCities } from '../actions/mapActions';
 import { cureDiseaseShowCards } from '../actions/diseaseActions';
-import { shareCardsShowCandidates, discardFromHand, chooseCardsToDiscard,
+import { shareCardsShowCandidates, discardFromHandInit, chooseCardsToDiscard,
   cardOverLimitComplete, drawCardsInit, drawCardsHandleInit } from '../actions/cardActions';
 import { passTurn } from '../actions/globalActions';
 import * as sel from '../selectors';
@@ -13,6 +13,8 @@ import { yieldDefeat } from './globalSagas';
 import { opsChooseCardToDiscard } from './roleSagas';
 
 
+const MAX_PLAYER_CARDS_LEFT = 2;
+
 export function* showCitiesAndMove(cities) {
   yield put(moveShowCities(cities));
   const action = yield take([types.PLAYER_MOVE_TO_CITY, types.PLAYER_MOVE_CANCEL]);
@@ -20,10 +22,10 @@ export function* showCitiesAndMove(cities) {
     const currentPlayer = yield select(sel.getCurrentPlayer);
     switch (action.source) {
       case 'direct':
-        yield put(discardFromHand('city', currentPlayer.id, action.destinationId));
+        yield put(discardFromHandInit('city', currentPlayer.id, action.destinationId));
         break;
       case 'charter':
-        yield put(discardFromHand('city', currentPlayer.id, action.originId));
+        yield put(discardFromHandInit('city', currentPlayer.id, action.originId));
         break;
       case 'ops':
         yield call(opsChooseCardToDiscard, currentPlayer.id);
@@ -83,7 +85,7 @@ function* checkIfHandWentUnderLimit() {
 
 export function* waitToDiscardIfOverLimit(playerId) {
   function* watchOverLimitDiscardComplete() {
-    yield* takeEvery([types.CARD_DISCARD_FROM_HAND, types.PLAYER_PLAY_EVENT_COMPLETE], checkIfHandWentUnderLimit);
+    yield* takeEvery([types.ANIMATION_CARD_DISCARD_FROM_HAND_COMPLETE, types.PLAYER_PLAY_EVENT_COMPLETE], checkIfHandWentUnderLimit);
   }
 
   if (yield select(sel.isOverHandLimit, playerId)) {
@@ -96,7 +98,7 @@ export function* waitToDiscardIfOverLimit(playerId) {
 
 export function* drawPlayerCards() {
   const cards = yield select(sel.getPlayerCardsToDraw);
-  if (cards.length < 2) {
+  if (cards.length < MAX_PLAYER_CARDS_LEFT) {
     yield call(yieldDefeat);
   } else {
     if (cards[1].cardType === 'epidemic') {
@@ -122,7 +124,8 @@ export function* showCardsToCure({ color }) {
     const { cityIds } = action;
     const currentPlayer = yield select(sel.getCurrentPlayer);
     for (let i = 0; i < cityIds.length; i++) {
-      yield put(discardFromHand('city', currentPlayer.id, cityIds[i]));
+      yield put(discardFromHandInit('city', currentPlayer.id, cityIds[i]));
+      yield take(types.ANIMATION_CARD_DISCARD_FROM_HAND_COMPLETE);
     }
   }
 }
@@ -130,7 +133,7 @@ export function* showCardsToCure({ color }) {
 export function* maybeDiscardStationCity(action) {
   if ((yield select(sel.getCurrentRole)) !== 'ops_expert') {
     const currentPlayer = yield select(sel.getCurrentPlayer);
-    yield put(discardFromHand('city', currentPlayer.id, action.cityId));
+    yield put(discardFromHandInit('city', currentPlayer.id, action.cityId));
   }
 }
 

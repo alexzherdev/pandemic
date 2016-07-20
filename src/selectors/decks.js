@@ -41,6 +41,10 @@ export function getPlayerDiscard(state) {
   return state.playerCards.discard.map(partialRight(enhanceCard, state));
 }
 
+export function getPlayerDiscardTop(state) {
+  return getPlayerDiscard(state)[0];
+}
+
 function getInfectionDeck(state) {
   return state.infectionCards.deck;
 }

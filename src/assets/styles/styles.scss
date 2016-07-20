@@ -706,6 +706,7 @@ body {
     background-size: $cardWidth $cardHeight;
     border: none;
     border-radius: 4px;
+    transform-origin: 0% 0%;
 
     @for $id from 0 through 47 {
       &.city-#{$id} {
@@ -772,6 +773,11 @@ body {
       &.infection-deck {
         top: 0;
         left: 885px;
+      }
+
+      &.player-discard {
+        top: 0;
+        left: 510px;
       }
 
       &.empty {
@@ -866,7 +872,7 @@ body {
       display: block;
       position: absolute;
       left: ($citySize - 76px) / 2;
-      top: -23px;
+      top: -22px;
       width: 76px;
       height: 76px;
       background: url(../images/crosshair.png);
