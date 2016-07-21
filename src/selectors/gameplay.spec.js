@@ -149,18 +149,6 @@ describe('Gameplay selector', function() {
         }
       };
     });
-    describe('isInfectionRateOutOfBounds', () => {
-      it('returns false if infection rate is in bounds', () => {
-        expect(sel.isInfectionRateOutOfBounds(this.state)).to.be.false;
-      });
-
-      it('returns true if infection rate is out of bounds', () => {
-        expect(sel.isInfectionRateOutOfBounds({
-          ...this.state,
-          infectionRate: { ...this.state.infectionRate, index: 3 }
-        })).to.be.true;
-      });
-    });
 
     describe('getInfectionRate', () => {
       it('returns the current infection rate', () => {

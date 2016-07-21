@@ -151,7 +151,7 @@ describe('ActionSagas', function() {
 
     it('yields defeat if not enough cards in the deck', () => {
       this.next = this.generator.next([{ cardType: 'city', id: '0' }]);
-      expect(this.next.value).to.eql(call(yieldDefeat));
+      expect(this.next.value).to.eql(call(yieldDefeat, 'You have run out of player cards.'));
       this.next = this.generator.next();
       expect(this.next.done).to.be.true;
     });

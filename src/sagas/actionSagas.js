@@ -8,6 +8,7 @@ import { shareCardsShowCandidates, discardFromHandInit, chooseCardsToDiscard,
 import { passTurn } from '../actions/globalActions';
 import * as sel from '../selectors';
 import * as types from '../constants/actionTypes';
+import defeatMessages from '../constants/defeatMessages';
 import { infections, yieldEpidemic } from './diseaseSagas';
 import { yieldDefeat } from './globalSagas';
 import { opsChooseCardToDiscard } from './roleSagas';
@@ -99,7 +100,7 @@ export function* waitToDiscardIfOverLimit(playerId) {
 export function* drawPlayerCards() {
   const cards = yield select(sel.getPlayerCardsToDraw);
   if (cards.length < MAX_PLAYER_CARDS_LEFT) {
-    yield call(yieldDefeat);
+    yield call(yieldDefeat, defeatMessages.OUT_OF_PLAYER_CARDS);
   } else {
     if (cards[1].cardType === 'epidemic') {
       cards.reverse();

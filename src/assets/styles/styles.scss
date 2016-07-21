@@ -9,6 +9,7 @@ $cubeFlashColor: #ebebeb;
 $cardWidth: 144px;
 $cardHeight: 200px;
 $bottomBarMinHeight: 110px;
+$crossHairSize: 76px;
 
 $events-list: airlift forecast gov_grant res_pop one_quiet_night;
 $diseases-list: yellow red blue black;
@@ -418,8 +419,6 @@ body {
       }
     }
   }
-
-
 
   .discard-drawer {
     position: fixed;
@@ -876,10 +875,10 @@ body {
     .crosshair {
       display: block;
       position: absolute;
-      left: ($citySize - 76px) / 2;
-      top: -22px;
-      width: 76px;
-      height: 76px;
+      left: ($citySize - $crossHairSize) / 2;
+      top: ($citySize - $crossHairSize) / 2;
+      width: $crossHairSize;
+      height: $crossHairSize;
       background: url(../images/crosshair.png);
       background-size: 76px 76px;
       border-radius: 38px;
@@ -911,6 +910,78 @@ body {
 
     .modal-footer {
       text-align: center;
+    }
+  }
+
+  .defeat-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    mix-blend-mode: hard-light;
+    background: darkred;
+    z-index: 99999;
+    animation-name: fadeIn;
+    animation-duration: 12s;
+  }
+
+  .defeat-message {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 100000;
+
+    .header-container {
+      margin: 200px auto;
+      position: relative;
+      width: 400px;
+      animation-name: zoomIn;
+      animation-duration: 6s;
+      animation-timing-function: ease-out;
+      transform-origin: 50% 30px;
+
+      .shadow {
+        float: left;
+        width: 100%;
+        height: 300px;
+        transform: translateY(-118px) scale(1, 0.2);
+        background: lighten(darkred, 10%);
+        border-radius: 50%;
+        -webkit-filter: blur(20px);
+      }
+
+      .header {
+        position: absolute;
+        width: 100%;
+        font-family: 'Phage';
+        font-size: 3em;
+        color: black;
+        text-align: center;
+      }
+    }
+
+    .message {
+      position: absolute;
+      top: 400px;
+      width: 100%;
+      text-align: center;
+      animation-name: fadeIn;
+      animation-duration: 10s;
+
+      span {
+        background: black;
+        padding: 10px;
+        box-shadow: 0 0 3px white;
+      }
+    }
+
+    .btn {
+      position: fixed;
+      bottom: 50px;
+      right: 50px;
     }
   }
 }
