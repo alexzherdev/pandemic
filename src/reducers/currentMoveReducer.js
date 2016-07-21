@@ -70,6 +70,17 @@ function infectionCardDrawn(state, action) {
   }
 }
 
+function discardingCard(state, action) {
+  switch (action.type) {
+    case types.CARD_DISCARD_FROM_HAND_INIT:
+      return { cardType: action.cardType, id: action.id, playerId: action.playerId };
+    case types.ANIMATION_CARD_DISCARD_FROM_HAND_COMPLETE:
+      return {};
+    default:
+      return state;
+  }
+}
+
 function outbreak(state, action) {
   switch (action.type) {
     case types.CREATE_GAME:
@@ -235,7 +246,7 @@ function opsMoveAbility(state, action) {
         ...state,
         cards: action.cards
       };
-    case types.CARD_DISCARD_FROM_HAND:
+    case types.ANIMATION_CARD_DISCARD_FROM_HAND_COMPLETE:
       if (state.cards.length > 0) {
         return {
           ...state,
@@ -285,6 +296,7 @@ export default function currentMoveReducer(state = initialState.currentMove, act
     actionsLeft: actionsLeft(state.actionsLeft, action),
     cardsDrawn: cardsDrawn(state.cardsDrawn, action),
     infectionCardDrawn: infectionCardDrawn(state.infectionCardDrawn, action),
+    discardingCard: discardingCard(state.discardingCard, action),
     outbreak: outbreak(state.outbreak, action),
     playerToDiscard: playerToDiscard(state.playerToDiscard, action),
     playerToMove: playerToMove(state.playerToMove, action),

@@ -24,8 +24,8 @@ describe('PlayersReducer', () => {
     }
   });
 
-  it('discards one card on CARD_DISCARD_FROM_HAND', () => {
-    const action = { type: types.CARD_DISCARD_FROM_HAND, cardType: 'city', id: '0', playerId: '0' };
+  it('discards one card on ANIMATION_CARD_DISCARD_FROM_HAND_COMPLETE', () => {
+    const action = { type: types.ANIMATION_CARD_DISCARD_FROM_HAND_COMPLETE, cardType: 'city', id: '0', playerId: '0' };
 
     const initial = getInitialState();
     const expected = { ...initial,

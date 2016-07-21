@@ -12,6 +12,7 @@ describe('CurrentMoveReducer', () => {
     actionsLeft: 3,
     cardsDrawn: [],
     infectionCardDrawn: {},
+    discardingCard: {},
     outbreak: {
       color: null,
       complete: [],
@@ -326,15 +327,15 @@ describe('CurrentMoveReducer', () => {
       expect(reducer(initial, action)).to.eql(expected);
     });
 
-    it('marks the ability as used on CARD_DISCARD_FROM_HAND', () => {
-      const action = { type: types.CARD_DISCARD_FROM_HAND, cards: [{ id: '0', name: 'London', color: 'red' }]};
+    it('marks the ability as used on ANIMATION_CARD_DISCARD_FROM_HAND_COMPLETE', () => {
+      const action = { type: types.ANIMATION_CARD_DISCARD_FROM_HAND_COMPLETE, cards: [{ id: '0', name: 'London', color: 'red' }]};
       const initial = { ...getInitialState(), opsMoveAbility: { used: false, cards: [{ id: '0', name: 'London', color: 'red' }]}};
       const expected = { ...initial, opsMoveAbility: { used: true, cards: []}};
       expect(reducer(initial, action)).to.eql(expected);
     });
 
-    it('does not care about CARD_DISCARD_FROM_HAND actions that happen when the ability is not being used', () => {
-      const action = { type: types.CARD_DISCARD_FROM_HAND, cards: [{ id: '0', name: 'London', color: 'red' }]};
+    it('does not care about ANIMATION_CARD_DISCARD_FROM_HAND_COMPLETE actions that happen when the ability is not being used', () => {
+      const action = { type: types.ANIMATION_CARD_DISCARD_FROM_HAND_COMPLETE, cards: [{ id: '0', name: 'London', color: 'red' }]};
       const initial = { ...getInitialState(), opsMoveAbility: { used: false, cards: []}};
       const expected = initial;
       expect(reducer(initial, action)).to.eql(expected);

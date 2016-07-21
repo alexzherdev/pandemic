@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import { select, put, call, take } from 'redux-saga/effects';
 
 import { moveShowCities, moveCancel, moveToCity } from '../actions/mapActions';
-import { discardFromHand, shareCardsShowCandidates, shareCardsCancel, shareCard, drawCardsInit,
+import { discardFromHandInit, shareCardsShowCandidates, shareCardsCancel, shareCard, drawCardsInit,
   drawCardsHandleInit } from '../actions/cardActions';
 import { cureDiseaseShowCards } from '../actions/diseaseActions';
 import { showAvailableCities, showCitiesAndMove, showShareCandidates, drawIfNoActionsLeft,
@@ -33,14 +33,14 @@ describe('ActionSagas', function() {
       this.next = this.generator.next(moveToCity('0', '0', '1', 'direct'));
       expect(this.next.value).to.eql(select(sel.getCurrentPlayer));
       this.next = this.generator.next({ id: '0' });
-      expect(this.next.value).to.eql(put(discardFromHand('city', '0', '1')));
+      expect(this.next.value).to.eql(put(discardFromHandInit('city', '0', '1')));
     });
 
     it('discards the origin card for a charter flight', () => {
       this.next = this.generator.next(moveToCity('0', '0', '1', 'charter'));
       expect(this.next.value).to.eql(select(sel.getCurrentPlayer));
       this.next = this.generator.next({ id: '0' });
-      expect(this.next.value).to.eql(put(discardFromHand('city', '0', '0')));
+      expect(this.next.value).to.eql(put(discardFromHandInit('city', '0', '0')));
     });
 
     it('chooses a card to discard for an ops special move', () => {
@@ -196,9 +196,13 @@ describe('ActionSagas', function() {
       this.next = this.generator.next({ type: types.PLAYER_CURE_DISEASE_COMPLETE, cityIds: ['0', '1']});
       expect(this.next.value).to.eql(select(sel.getCurrentPlayer));
       this.next = this.generator.next({ id: '0' });
-      expect(this.next.value).to.eql(put(discardFromHand('city', '0', '0')));
+      expect(this.next.value).to.eql(put(discardFromHandInit('city', '0', '0')));
       this.next = this.generator.next();
-      expect(this.next.value).to.eql(put(discardFromHand('city', '0', '1')));
+      expect(this.next.value).to.eql(take(types.ANIMATION_CARD_DISCARD_FROM_HAND_COMPLETE));
+      this.next = this.generator.next();
+      expect(this.next.value).to.eql(put(discardFromHandInit('city', '0', '1')));
+      this.next = this.generator.next();
+      expect(this.next.value).to.eql(take(types.ANIMATION_CARD_DISCARD_FROM_HAND_COMPLETE));
       this.next = this.generator.next();
       expect(this.next.done).to.be.true;
     });

@@ -76,3 +76,7 @@ export function animationDealCardsInitComplete() {
 export function animationInsertEpidemicCardsComplete() {
   return { type: types.ANIMATION_INSERT_EPIDEMIC_CARDS_COMPLETE };
 }
+
+export function animationCardDiscardFromHandComplete(cardType, playerId, id) {
+  return { type: types.ANIMATION_CARD_DISCARD_FROM_HAND_COMPLETE, cardType, id, playerId };
+}

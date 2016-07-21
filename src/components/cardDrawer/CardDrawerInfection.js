@@ -39,7 +39,7 @@ export default class CardDrawerInfection extends React.Component {
 
     const animation = infectedCity.animate([
       { transform: `translate(${deckOffset.left - src.left}px, ${deckOffset.top - src.top}px) scale(0.2)`},
-      { transform: `translate(${infectedCity.offsetWidth}px, 0) scale(1) rotateY(180deg)` }
+      { transform: `translate(0, 0) scale(1) rotateY(180deg)` }
     ], {
       duration: 500,
       fill: 'forwards'

@@ -150,3 +150,7 @@ export function getCardsDealtCount(state) {
 export function getInitialInfectedCity(state) {
   return state.initialInfectedCity;
 }
+
+export function getDiscardingCard(state) {
+  return state.currentMove.discardingCard;
+}

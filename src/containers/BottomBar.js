@@ -13,12 +13,12 @@ import DiseasePicker from '../components/DiseasePicker';
 import ForecastBar from './ForecastBar';
 import { getPlayerToDiscard, getTreatableDiseases, canTreatAllOfColor, canTreatAll,
   getCurrentCityId, getCurrentPlayer, isDispatcher, getPlayers, getEventsInHands, getInfectionDiscard,
-  getPlayerHand, cardsNeededToCure } from '../selectors';
+  getPlayerHand, cardsNeededToCure, getDiscardingCard } from '../selectors';
 import * as mapActions from '../actions/mapActions';
 import * as cardActions from '../actions/cardActions';
 import * as diseaseActions from '../actions/diseaseActions';
 import * as globalActions from '../actions/globalActions';
-import { playerType, playerProps, cardProps, eventCardType } from '../constants/propTypes';
+import { playerType, playerProps, cardType, cardProps, eventCardType } from '../constants/propTypes';
 
 
 class BottomBar extends React.Component {
@@ -27,6 +27,7 @@ class BottomBar extends React.Component {
     currentPlayer: playerType.isRequired,
     currentMove: PropTypes.object.isRequired,
     playerToDiscard: PropTypes.string,
+    discardingCard: cardType,
     getPlayerHand: PropTypes.func.isRequired,
     treatableDiseases: PropTypes.objectOf(PropTypes.number.isRequired),
     canTreatAll: PropTypes.bool.isRequired,
@@ -88,7 +89,7 @@ class BottomBar extends React.Component {
 
   onDiscardCardPicked(cardType, id) {
     if (cardType === 'city') {
-      this.props.actions.discardFromHand('city', this.props.playerToDiscard, id);
+      this.props.actions.discardFromHandInit('city', this.props.playerToDiscard, id);
     } else {
       this.props.actions.playEventInit(this.props.playerToDiscard, id);
     }
@@ -111,7 +112,7 @@ class BottomBar extends React.Component {
   }
 
   onOpsCardPicked(cardType, id) {
-    this.props.actions.discardFromHand('city', this.props.currentPlayer.id, id);
+    this.props.actions.discardFromHandInit('city', this.props.currentPlayer.id, id);
   }
 
   onContPlannerCardPicked(cardType, id) {
@@ -153,17 +154,21 @@ class BottomBar extends React.Component {
   }
 
   render() {
-    const { playerToDiscard, players, treatableDiseases, infectionDiscard, cardsNeededToCure } = this.props;
+    const { playerToDiscard, players, treatableDiseases, infectionDiscard, cardsNeededToCure, discardingCard } = this.props;
     const { shareCandidates, curingDisease, airlift, opsMoveAbility, contPlannerEvents,
       availableCities, govGrantCities, resPop, forecastCards } = this.props.currentMove;
     let content;
     if (playerToDiscard !== null) {
-      content = (
-        <SingleCardPicker
-          title="Discard a city card or play an event:"
-          hand={this.props.getPlayerHand(playerToDiscard)}
-          onCardPicked={this.onDiscardCardPicked} />
-      );
+      if (isEmpty(discardingCard)) {
+        content = (
+          <SingleCardPicker
+            title="Discard a city card or play an event:"
+            hand={this.props.getPlayerHand(playerToDiscard)}
+            onCardPicked={this.onDiscardCardPicked} />
+        );
+      } else {
+        content = null;
+      }
     } else if (!isEmpty(shareCandidates)) {
       content = (
         <PlayerPicker
@@ -266,6 +271,7 @@ const mapStateToProps = (state) => ({
   currentPlayer: getCurrentPlayer(state),
   currentMove: state.currentMove,
   playerToDiscard: getPlayerToDiscard(state),
+  discardingCard: getDiscardingCard(state),
   getPlayerHand: partial(getPlayerHand, state),
   treatableDiseases: getTreatableDiseases(state),
   canTreatAll: canTreatAll(state),

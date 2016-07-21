@@ -6,6 +6,8 @@ import { enhanceCard } from './decks';
 import events from '../constants/events';
 
 
+const HAND_LIMIT = 7;
+
 export function sortHand(hand) {
   return _.sortBy(hand, ['cardType', 'color', 'name']);
 }
@@ -24,7 +26,7 @@ export function getPlayerHand(state, playerId) {
 }
 
 export function isOverHandLimit(state, playerId) {
-  return state.players[playerId].hand.length > 7;
+  return state.players[playerId].hand.length > HAND_LIMIT;
 }
 
 export function hasCurrentCityInHand(state, playerId = null) {
