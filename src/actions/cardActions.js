@@ -28,10 +28,6 @@ export function drawInfectionCard(cityId) {
   return { type: types.CARD_DRAW_INFECTION_CARD, cityId };
 }
 
-export function drawInfectionCardHandle() {
-  return { type: types.CARD_DRAW_INFECTION_CARD_HANDLE };
-}
-
 export function epidemicIncrease() {
   return { type: types.EPIDEMIC_INCREASE };
 }

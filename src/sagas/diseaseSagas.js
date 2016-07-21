@@ -1,10 +1,10 @@
-import { takeEvery, delay } from 'redux-saga';
+import { takeEvery } from 'redux-saga';
 import { put, select, call, take } from 'redux-saga/effects';
 
 import { initOutbreak, infectCities, infectCity, infectNeighbor, queueOutbreak,
   completeOutbreak, useDiseaseCubes, eradicateDisease, medicPreventInfection, quarSpecPreventInfection } from '../actions/diseaseActions';
 import { discardTopInfectionCard, discardBottomInfectionCard, epidemicIncrease,
-  epidemicInfect, epidemicIntensify, resPopSuggest, drawInfectionCard, drawInfectionCardHandle } from '../actions/cardActions';
+  epidemicInfect, epidemicIntensify, resPopSuggest, drawInfectionCard } from '../actions/cardActions';
 import * as sel from '../selectors';
 import * as types from '../constants/actionTypes';
 import { yieldDefeat } from './globalSagas';
@@ -111,10 +111,8 @@ export function* infections() {
     const color = yield select(sel.getCityColor, city);
     const status = yield select(sel.getDiseaseStatus, color);
     yield put(drawInfectionCard(city));
-    yield call(delay, 1000);
-    yield put(drawInfectionCardHandle());
     yield take(types.ANIMATION_DRAW_INFECTION_CARD_COMPLETE);
-    yield call(delay, 500);
+
     if (status !== 'eradicated') {
       yield call(infectOrOutbreak, city, color, 1);
     }

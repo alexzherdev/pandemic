@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import { put, select, call, take } from 'redux-saga/effects';
 
 import { epidemicIncrease, epidemicInfect, epidemicIntensify, discardBottomInfectionCard,
-  discardTopInfectionCard, resPopSuggest, drawInfectionCard, drawInfectionCardHandle } from '../actions/cardActions';
+  discardTopInfectionCard, resPopSuggest, drawInfectionCard } from '../actions/cardActions';
 import { infectCities, initOutbreak, queueOutbreak, completeOutbreak, infectCity,
   useDiseaseCubes, eradicateDisease, medicPreventInfection, quarSpecPreventInfection } from '../actions/diseaseActions';
 import { yieldEpidemic, infectOrOutbreak, infections, yieldOutbreak, useCubes,
@@ -89,13 +89,10 @@ describe('DiseaseSagas', function() {
         expect(this.next.value).to.eql(select(sel.peekAtInfectionDeck));
         this.generator.next();
         this.generator.next();
-        this.generator.next();
-        this.generator.next();
         this.next = this.generator.next();
-        expect(this.next.value).to.eql(put(drawInfectionCardHandle()));
+        expect(this.next.value).to.eql(put(drawInfectionCard()));
         this.next = this.generator.next();
         expect(this.next.value).to.eql(take(types.ANIMATION_DRAW_INFECTION_CARD_COMPLETE));
-        this.generator.next();
         this.generator.next();
         this.generator.next();
         this.next = this.generator.next();
@@ -110,12 +107,8 @@ describe('DiseaseSagas', function() {
       this.generator.next('blue');
       this.next = this.generator.next('eradicated');
       expect(this.next.value).to.eql(put(drawInfectionCard('0')));
-      this.generator.next();
-      this.next = this.generator.next();
-      expect(this.next.value).to.eql(put(drawInfectionCardHandle()));
       this.next = this.generator.next();
       expect(this.next.value).to.eql(take(types.ANIMATION_DRAW_INFECTION_CARD_COMPLETE));
-      this.generator.next();
       this.next = this.generator.next();
       expect(this.next.value).to.eql(put(discardTopInfectionCard()));
       this.next = this.generator.next();
