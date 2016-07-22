@@ -10,7 +10,7 @@ export default class PlayersLayer extends React.Component {
       id: PropTypes.string.isRequired,
       coords: PropTypes.arrayOf(PropTypes.number.isRequired).isRequired
     })).isRequired,
-    currentPlayerId: PropTypes.string.isRequired
+    currentPlayerId: PropTypes.string
   }
 
   transitionPlayerMove(playerId, coords, callback) {
