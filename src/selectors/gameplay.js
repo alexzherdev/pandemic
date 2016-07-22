@@ -35,10 +35,6 @@ export function getActionsLeft(state) {
   return state.currentMove.actionsLeft;
 }
 
-export function isInfectionRateOutOfBounds(state) {
-  return state.infectionRate.index >= state.infectionRate.values.length;
-}
-
 export function getInfectionRate(state) {
   return state.infectionRate.values[state.infectionRate.index];
 }
@@ -153,4 +149,8 @@ export function getInitialInfectedCity(state) {
 
 export function getDiscardingCard(state) {
   return state.currentMove.discardingCard;
+}
+
+export function getDefeatMessage(state) {
+  return state.defeatMessage;
 }

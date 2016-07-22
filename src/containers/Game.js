@@ -10,11 +10,12 @@ import TeamPanel from '../components/TeamPanel';
 import BottomBar from './BottomBar';
 import CardLayer from './CardLayer';
 import DiscardPanel from './DiscardPanel';
+import DefeatMessage from '../components/DefeatMessage';
 import IntroDialog from '../components/IntroDialog';
 import * as mapActions from '../actions/mapActions';
 import * as globalActions from '../actions/globalActions';
 import { getPlayers, getCurrentCityId, getPlayerCityId, getPlayerHand,
-  getInitialInfectedCity } from '../selectors';
+  getInitialInfectedCity, getDefeatMessage } from '../selectors';
 
 
 class Game extends React.Component {
@@ -34,6 +35,7 @@ class Game extends React.Component {
     getPlayerHand: PropTypes.func.isRequired,
     status: PropTypes.oneOf(['prepare', 'playing', 'defeat', 'victory']).isRequired,
     initialInfectedCity: PropTypes.string,
+    defeatMessage: PropTypes.string,
     actions: PropTypes.object.isRequired,
     route: PropTypes.object.isRequired,
     router: PropTypes.object.isRequired
@@ -105,7 +107,7 @@ class Game extends React.Component {
   }
 
   render() {
-    const { status } = this.props;
+    const { status, defeatMessage } = this.props;
     return (
       <div className="game">
         <DiscardPanel />
@@ -132,6 +134,12 @@ class Game extends React.Component {
             players={this.props.players}
             onClosed={this.onIntroClosed} />
         }
+        {status === 'defeat' &&
+          <div className="defeat-overlay" />
+        }
+        {status === 'defeat' &&
+          <DefeatMessage message={defeatMessage} />
+        }
       </div>
     );
   }
@@ -145,7 +153,8 @@ const mapStateToProps = (state) => ({
   getPlayerCityId: partial(getPlayerCityId, state),
   getPlayerHand: partial(getPlayerHand, state),
   status: state.status,
-  initialInfectedCity: getInitialInfectedCity(state)
+  initialInfectedCity: getInitialInfectedCity(state),
+  defeatMessage: getDefeatMessage(state)
 });
 
 const mapDispatchToProps = (dispatch) => ({

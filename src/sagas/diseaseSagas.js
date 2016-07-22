@@ -7,6 +7,7 @@ import { discardTopInfectionCard, discardBottomInfectionCard, epidemicIncrease,
   epidemicInfect, epidemicIntensify, resPopSuggest, drawInfectionCard } from '../actions/cardActions';
 import * as sel from '../selectors';
 import * as types from '../constants/actionTypes';
+import defeatMessages from '../constants/defeatMessages';
 import { yieldDefeat } from './globalSagas';
 
 
@@ -71,7 +72,7 @@ export function* infectOrOutbreak(cityId, color, count) {
 export function* useCubes(cityId, color, count) {
   const actualCubesToUse = yield call(getActualCubesToUse, cityId, color, count);
   if (yield select(sel.isOutOfCubes, actualCubesToUse, color)) {
-    yield call(yieldDefeat);
+    yield call(yieldDefeat, defeatMessages.OUT_OF_CUBES(color));
   } else {
     yield put(useDiseaseCubes(color, actualCubesToUse));
   }

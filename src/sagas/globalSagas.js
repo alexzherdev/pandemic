@@ -8,6 +8,7 @@ import * as types from '../constants/actionTypes';
 import ROLES from '../constants/roles';
 import NAMES from '../constants/names';
 import { PLAYER_DECK, INFECTION_DECK } from '../constants/decks';
+import defeatMessages from '../constants/defeatMessages';
 import { createGame, dealCards, insertEpidemicCardsInit, insertPlayerCard, startGame,
   defeat, victory } from '../actions/globalActions';
 import { useDiseaseCubes, infectCity } from '../actions/diseaseActions';
@@ -113,20 +114,14 @@ export function* checkForVictory() {
   }
 }
 
-export function* checkForInfectionRateDefeat() {
-  if (yield select(sel.isInfectionRateOutOfBounds)) {
-    yield call(yieldDefeat);
-  }
-}
-
 export function* checkForOutbreaksDefeat() {
   if (yield select(sel.isOutbreaksCountOutOfBounds)) {
-    yield call(yieldDefeat);
+    yield call(yieldDefeat, defeatMessages.OUTBREAKS);
   }
 }
 
-export function* yieldDefeat() {
-  yield put(defeat());
+export function* yieldDefeat(reason) {
+  yield put(defeat(reason));
   yield put(END);
 }
 
@@ -137,10 +132,6 @@ export function* yieldVictory() {
 
 export function* watchVictory() {
   yield* takeEvery(types.PLAYER_CURE_DISEASE_COMPLETE, checkForVictory);
-}
-
-export function* watchInfectionRateDefeat() {
-  yield* takeEvery(types.EPIDEMIC_INCREASE, checkForInfectionRateDefeat);
 }
 
 export function* watchOutbreaksDefeat() {

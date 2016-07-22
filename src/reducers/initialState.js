@@ -1,5 +1,6 @@
 export default {
   status: 'prepare',
+  defeatMessage: null,
   difficulty: null,
 
   dealingCards: {},
@@ -125,10 +126,10 @@ export default {
 
   infectionRate: {
     values: [2, 2, 2, 3, 3, 4, 4],
-    index: 4
+    index: 0
   },
 
-  outbreaks: 3,
+  outbreaks: 0,
 
   map: {
     matrix: [

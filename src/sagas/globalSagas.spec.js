@@ -1,8 +1,7 @@
 import { expect } from 'chai';
 import { select, call } from 'redux-saga/effects';
 
-import { checkForVictory, yieldVictory, checkForInfectionRateDefeat, yieldDefeat,
-  checkForOutbreaksDefeat } from './globalSagas';
+import { checkForVictory, yieldVictory, yieldDefeat, checkForOutbreaksDefeat } from './globalSagas';
 import * as sel from '../selectors';
 
 
@@ -25,24 +24,6 @@ describe('GlobalSagas', () => {
     });
   });
 
-  describe('checkForInfectionRateDefeat', () => {
-    it('does not yield defeat when infection rate has not reached limit', () => {
-      const generator = checkForInfectionRateDefeat();
-      let next = generator.next();
-      expect(next.value).to.eql(select(sel.isInfectionRateOutOfBounds));
-      next = generator.next(false);
-      expect(next.done).to.be.true;
-    });
-
-    it('yields defeat when infection rate has reached limit', () => {
-      const generator = checkForInfectionRateDefeat();
-      let next = generator.next();
-      expect(next.value).to.eql(select(sel.isInfectionRateOutOfBounds));
-      next = generator.next(true);
-      expect(next.value).to.eql(call(yieldDefeat));
-    });
-  });
-
   describe('checkForOutbreaksDefeat', () => {
     it('does not yield defeat when outbreak count has not reached limit', () => {
       const generator = checkForOutbreaksDefeat();
@@ -57,7 +38,7 @@ describe('GlobalSagas', () => {
       let next = generator.next();
       expect(next.value).to.eql(select(sel.isOutbreaksCountOutOfBounds));
       next = generator.next(true);
-      expect(next.value).to.eql(call(yieldDefeat));
+      expect(next.value).to.eql(call(yieldDefeat, 'Eight outbreaks have occurred.'));
     });
   });
 });

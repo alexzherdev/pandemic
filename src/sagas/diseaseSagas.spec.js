@@ -298,7 +298,7 @@ describe('DiseaseSagas', function() {
     it('yields defeat if there are not enough cubes', () => {
       this.generator.next(1);
       this.next = this.generator.next(true);
-      expect(this.next.value).to.eql(call(yieldDefeat));
+      expect(this.next.value).to.eql(call(yieldDefeat, 'You have run out of blue disease cubes.'));
     });
 
     it('does not yield defeat if there are enough cubes', () => {

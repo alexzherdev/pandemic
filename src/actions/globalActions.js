@@ -37,8 +37,8 @@ export function victory() {
   return { type: types.VICTORY };
 }
 
-export function defeat() {
-  return { type: types.DEFEAT };
+export function defeat(message) {
+  return { type: types.DEFEAT, message };
 }
 
 export function continueTurn() {
