@@ -11,6 +11,7 @@ import BottomBar from './BottomBar';
 import CardLayer from './CardLayer';
 import DiscardPanel from './DiscardPanel';
 import DefeatMessage from '../components/DefeatMessage';
+import VictoryMessage from '../components/VictoryMessage';
 import IntroDialog from '../components/IntroDialog';
 import * as mapActions from '../actions/mapActions';
 import * as globalActions from '../actions/globalActions';
@@ -139,6 +140,9 @@ class Game extends React.Component {
         }
         {status === 'defeat' &&
           <DefeatMessage message={defeatMessage} />
+        }
+        {status === 'victory' &&
+          <VictoryMessage />
         }
       </div>
     );

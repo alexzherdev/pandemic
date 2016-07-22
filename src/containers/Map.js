@@ -11,7 +11,7 @@ import PathsLayer from '../components/map/PathsLayer';
 import CubesLayer from '../components/map/CubesLayer';
 import * as mapActions from '../actions/mapActions';
 import * as globalActions from '../actions/globalActions';
-import { isDriveAvailable, getInfectionCardDrawn } from '../selectors';
+import { isDriveAvailable, getInfectionCardDrawn, isPlaying } from '../selectors';
 import { getCubeOrigin } from '../utils';
 import * as styles from '../styles';
 
@@ -31,6 +31,7 @@ class Map extends React.Component {
     infectionCardDrawn: PropTypes.shape({
       id: PropTypes.string
     }),
+    isPlaying: PropTypes.bool.isRequired,
     actions: PropTypes.object.isRequired
   }
 
@@ -76,7 +77,7 @@ class Map extends React.Component {
   }
 
   render() {
-    const { map, availableCities, players, currentPlayerId, isDriveAvailable } = this.props;
+    const { map, availableCities, players, currentPlayerId, isDriveAvailable, isPlaying } = this.props;
     const { govGrantCities, airlift, outbreak: { infectingCube }, actionsLeft } = this.props.currentMove;
 
     const playersPositions = this.calculatePlayersPositions();
@@ -106,7 +107,7 @@ class Map extends React.Component {
           ref="players"
           players={players}
           playersPositions={playersPositions}
-          currentPlayerId={currentPlayerId} />
+          currentPlayerId={isPlaying ? currentPlayerId : undefined} />
         <CubesLayer
           locations={map.locations}
           infectingCube={isEmpty(infectingCube) ? undefined : { origin, destination, color }}
@@ -125,7 +126,8 @@ const mapStateToProps = (state) => ({
   availableCities: state.currentMove.availableCities,
   currentPlayerId: state.currentMove.player,
   isDriveAvailable: partial(isDriveAvailable, state),
-  infectionCardDrawn: getInfectionCardDrawn(state)
+  infectionCardDrawn: getInfectionCardDrawn(state),
+  isPlaying: isPlaying(state)
 });
 
 const mapDispatchToProps = (dispatch) => {

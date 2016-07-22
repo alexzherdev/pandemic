@@ -79,9 +79,9 @@ export default {
   },
 
   diseases: {
-    red: 'active',
-    blue: 'active',
-    yellow: 'active',
+    red: 'cured',
+    blue: 'cured',
+    yellow: 'cured',
     black: 'active'
   },
 
