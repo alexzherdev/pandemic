@@ -1,5 +1,6 @@
 import initialState from './initialState';
 import * as types from '../constants/actionTypes';
+import continueMessages from '../constants/continueMessages';
 
 
 function actionsLeft(state, action) {
@@ -288,6 +289,28 @@ function epidemicInProgress(state, action) {
   }
 }
 
+function epidemicInfectionCard(state, action) {
+  switch (action.type) {
+    case types.EPIDEMIC_INFECT_INIT:
+      return action.card;
+    case types.CONTINUE:
+      return {};
+    default:
+      return state;
+  }
+}
+
+function continueMessage(state, action) {
+  switch (action.type) {
+    case types.EPIDEMIC_INTENSIFY_INIT:
+      return continueMessages.TO_INTENSITY_STEP;
+    case types.CONTINUE:
+      return null;
+    default:
+      return state;
+  }
+}
+
 export default function currentMoveReducer(state = initialState.currentMove, action) {
   return {
     ...state,
@@ -309,6 +332,8 @@ export default function currentMoveReducer(state = initialState.currentMove, act
     airlift: airlift(state.airlift, action),
     opsMoveAbility: opsMoveAbility(state.opsMoveAbility, action),
     contPlannerEvents: contPlannerEvents(state.contPlannerEvents, action),
-    epidemicInProgress: epidemicInProgress(state.epidemicInProgress, action)
+    epidemicInProgress: epidemicInProgress(state.epidemicInProgress, action),
+    epidemicInfectionCard: epidemicInfectionCard(state.epidemicInfectionCard, action),
+    continueMessage: continueMessage(state.continueMessage, action)
   };
 }

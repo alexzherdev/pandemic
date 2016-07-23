@@ -11,7 +11,7 @@ import PathsLayer from '../components/map/PathsLayer';
 import CubesLayer from '../components/map/CubesLayer';
 import * as mapActions from '../actions/mapActions';
 import * as globalActions from '../actions/globalActions';
-import { isDriveAvailable, getInfectionCardDrawn, isPlaying } from '../selectors';
+import { isDriveAvailable, getInfectionCardDrawn, getEpidemicInfectionCard, isPlaying } from '../selectors';
 import { getCubeOrigin } from '../utils';
 import * as styles from '../styles';
 
@@ -29,6 +29,9 @@ class Map extends React.Component {
     isDriveAvailable: PropTypes.func.isRequired,
     initialInfectedCity: PropTypes.string,
     infectionCardDrawn: PropTypes.shape({
+      id: PropTypes.string
+    }),
+    epidemicInfectionCard: PropTypes.shape({
       id: PropTypes.string
     }),
     isPlaying: PropTypes.bool.isRequired,
@@ -102,12 +105,12 @@ class Map extends React.Component {
           onCityClicked={this.props.onCityClicked}
           onCityDoubleClicked={this.props.onCityDoubleClicked}
           isDriveAvailable={isDriveAvailable}
-          infectedCity={this.props.initialInfectedCity || this.props.infectionCardDrawn.id} />
+          infectedCity={this.props.initialInfectedCity || this.props.infectionCardDrawn.id || this.props.epidemicInfectionCard.id} />
         <PlayersLayer
           ref="players"
           players={players}
           playersPositions={playersPositions}
-          currentPlayerId={isPlaying ? currentPlayerId : undefined} />
+          currentPlayerId={(isPlaying && actionsLeft > 0) ? currentPlayerId : undefined} />
         <CubesLayer
           locations={map.locations}
           infectingCube={isEmpty(infectingCube) ? undefined : { origin, destination, color }}
@@ -127,6 +130,7 @@ const mapStateToProps = (state) => ({
   currentPlayerId: state.currentMove.player,
   isDriveAvailable: partial(isDriveAvailable, state),
   infectionCardDrawn: getInfectionCardDrawn(state),
+  epidemicInfectionCard: getEpidemicInfectionCard(state),
   isPlaying: isPlaying(state)
 });
 
