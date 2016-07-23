@@ -546,6 +546,7 @@ body {
         white-space: nowrap;
         user-select: none;
         cursor: default;
+        z-index: 1;
       }
 
       .selection-container {
@@ -597,6 +598,7 @@ body {
         animation-iteration-count: infinite;
         animation-timing-function: linear;
         animation-direction: alternate;
+        z-index: 1;
       }
     }
 
@@ -653,6 +655,7 @@ body {
       animation-name: cube;
       animation-timing-function: linear;
       animation-iteration-count: infinite;
+      z-index: 1;
 
       @each $disease in $diseases-list {
         &.#{$disease} {
@@ -807,6 +810,14 @@ body {
       width: 100%;
       height: 100%;
 
+      &.infection-drawer {
+        display: block;
+      }
+
+      .flash {
+        animation-iteration-count: 2;
+      }
+
       .flipper {
         position: relative;
         transform-style: preserve-3d;
@@ -831,9 +842,17 @@ body {
             transform: rotateY(180deg);
           }
         }
+
+        &.deck-copy {
+          .flipper {
+            &.back {
+              transform: rotateY(0deg);
+            }
+          }
+        }
       }
 
-      .card {
+      > .card {
         &:not(:last-child) {
           margin-right: 10px;
         }
@@ -913,12 +932,32 @@ body {
     }
   }
 
-  .defeat-overlay {
+  .overlay {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
+  }
+
+  .continue-overlay {
+    z-index: 20000;
+
+    .btn {
+      position: absolute;
+      bottom: 180px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+  }
+
+  .epidemic-overlay {
+    mix-blend-mode: hard-light;
+    background: darkgreen;
+    z-index: 0;
+  }
+
+  .defeat-overlay {
     mix-blend-mode: hard-light;
     background: darkred;
     z-index: 99999;
@@ -1215,5 +1254,9 @@ body {
         background-image: url(../images/outbreaks_filled.png);
       }
     }
+  }
+
+  .flash {
+    animation-iteration-count: 2;
   }
 }

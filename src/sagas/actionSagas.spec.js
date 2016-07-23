@@ -156,10 +156,10 @@ describe('ActionSagas', function() {
       expect(this.next.done).to.be.true;
     });
 
-    it('first draws an epidemic card and then a city card', () => {
+    it('first draws a city card and then an epidemic card', () => {
       const cards = [
-        { cardType: 'city', id: '1' },
-        { cardType: 'epidemic', id: 'epidemic' }
+        { cardType: 'epidemic', id: 'epidemic' },
+        { cardType: 'city', id: '1' }
       ];
       this.next = this.generator.next([...cards]);
       expect(this.next.value).to.eql(put(drawCardsInit([...cards].reverse())));
@@ -170,9 +170,11 @@ describe('ActionSagas', function() {
       this.next = this.generator.next();
       expect(this.next.value).to.eql(take(types.CARD_DRAW_CARDS_HANDLE));
       this.next = this.generator.next();
-      expect(this.next.value).to.eql(call(yieldEpidemic));
-      this.next = this.generator.next();
       expect(this.next.value).to.eql(put(drawCardsHandleInit(cards[0], '0')));
+      this.next = this.generator.next();
+      expect(this.next.value).to.eql(take(types.CARD_DRAW_CARDS_HANDLE));
+      this.next = this.generator.next();
+      expect(this.next.value).to.eql(call(yieldEpidemic));
     });
   });
 

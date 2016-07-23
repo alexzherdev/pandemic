@@ -102,7 +102,8 @@ export function* drawPlayerCards() {
   if (cards.length < MAX_PLAYER_CARDS_LEFT) {
     yield call(yieldDefeat, defeatMessages.OUT_OF_PLAYER_CARDS);
   } else {
-    if (cards[1].cardType === 'epidemic') {
+    // cards[0] = { cardType: 'epidemic', id: 'epidemic', name: 'Epidemic' };
+    if (cards[0].cardType === 'epidemic') {
       cards.reverse();
     }
     yield put(drawCardsInit(cards));

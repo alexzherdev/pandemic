@@ -154,3 +154,11 @@ export function getDiscardingCard(state) {
 export function getDefeatMessage(state) {
   return state.defeatMessage;
 }
+
+export function getEpidemicInfectionCard(state) {
+  return state.currentMove.epidemicInfectionCard;
+}
+
+export function getContinueMessage(state) {
+  return state.currentMove.continueMessage;
+}

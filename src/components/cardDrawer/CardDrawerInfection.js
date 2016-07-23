@@ -39,11 +39,12 @@ export default class CardDrawerInfection extends React.Component {
     const deckOffset = $(this.props.getInfectionDeck()).offset();
     const discardOffset = $(findDOMNode(this.props.getInfectionDiscard())).offset();
 
+    $(infectedCity).addClass('flipper').removeClass('invisible');
     const animation = infectedCity.animate([
-      { transform: `translate(${deckOffset.left - src.left}px, ${deckOffset.top - src.top}px) scale(0.2)`, offset: 0 },
+      { transform: `translate(${deckOffset.left - src.left}px, ${deckOffset.top - src.top}px) scale(0.2) rotateY(0deg)`, offset: 0 },
       { transform: `translate(${deckOffset.left - src.left}px, ${deckOffset.top - src.top}px) scale(0.2) rotateY(180deg)`, offset: 0.2 },
-      { transform: `translate(0, 0) scale(1) rotateY(180deg)`, offset: 0.5 },
-      { transform: `translate(0, 0) scale(1) rotateY(180deg)`, offset: 0.7 },
+      { transform: `translate(0, 0) scale(1) rotateY(180deg)`, offset: 0.4 },
+      { transform: `translate(0, 0) scale(1) rotateY(180deg)`, offset: 0.8 },
       { transform: `translate(${discardOffset.left - src.left}px, ${discardOffset.top - src.top}px)
         scale(0.2) rotateY(180deg)`, offset: 1 }
     ], {
@@ -51,16 +52,15 @@ export default class CardDrawerInfection extends React.Component {
       fill: 'forwards'
     });
     animation.onfinish = () => setTimeout(this.props.onAnimationComplete, 500);
-    $(infectedCity).removeClass('invisible');
   }
 
   render() {
     const { infectedCity } = this.props;
     return (
-      <div className="card-drawer">
+      <div className="card-drawer infection-drawer">
         <div
           ref="infectedCity"
-          className="card flipper invisible absolute">
+          className="card invisible">
           <div className="card front infection-deck" />
           <Card
             cardType="city"

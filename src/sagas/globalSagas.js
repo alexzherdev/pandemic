@@ -87,7 +87,7 @@ export function* dealCardsToPlayers() {
   for (let i = 0; i < difficulty; i++) {
     const epidemicIndex = getRandomInt(Math.floor(i / difficulty * deckLength),
       Math.floor((i + 1) / difficulty * deckLength));
-    yield put(insertPlayerCard(epidemicIndex, { cardType: 'epidemic', id: 'epidemic' }));
+    yield put(insertPlayerCard(epidemicIndex, { cardType: 'epidemic', id: `epidemic-${i}` }));
   }
 
   yield take(types.ANIMATION_INSERT_EPIDEMIC_CARDS_COMPLETE);

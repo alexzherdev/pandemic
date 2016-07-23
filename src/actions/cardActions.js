@@ -33,8 +33,16 @@ export function epidemicIncrease() {
   return { type: types.EPIDEMIC_INCREASE };
 }
 
-export function epidemicInfect(cityId) {
-  return { type: types.EPIDEMIC_INFECT, cityId };
+export function epidemicInfectInit(card) {
+  return { type: types.EPIDEMIC_INFECT_INIT, card };
+}
+
+export function epidemicInfect(card) {
+  return { type: types.EPIDEMIC_INFECT, card };
+}
+
+export function epidemicIntensifyInit() {
+  return { type: types.EPIDEMIC_INTENSIFY_INIT };
 }
 
 export function epidemicIntensify() {

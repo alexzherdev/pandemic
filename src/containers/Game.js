@@ -3,6 +3,7 @@ import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { isEmpty, partial } from 'lodash';
+import classnames from 'classnames';
 
 import TopBar from './TopBar';
 import Map from './Map';
@@ -10,13 +11,14 @@ import TeamPanel from '../components/TeamPanel';
 import BottomBar from './BottomBar';
 import CardLayer from './CardLayer';
 import DiscardPanel from './DiscardPanel';
+import ContinueOverlay from '../components/ContinueOverlay';
 import DefeatMessage from '../components/DefeatMessage';
 import VictoryMessage from '../components/VictoryMessage';
 import IntroDialog from '../components/IntroDialog';
 import * as mapActions from '../actions/mapActions';
 import * as globalActions from '../actions/globalActions';
 import { getPlayers, getCurrentCityId, getPlayerCityId, getPlayerHand,
-  getInitialInfectedCity, getDefeatMessage } from '../selectors';
+  getInitialInfectedCity, getDefeatMessage, isEpidemicInProgress, getContinueMessage } from '../selectors';
 
 
 class Game extends React.Component {
@@ -37,6 +39,8 @@ class Game extends React.Component {
     status: PropTypes.oneOf(['prepare', 'playing', 'defeat', 'victory']).isRequired,
     initialInfectedCity: PropTypes.string,
     defeatMessage: PropTypes.string,
+    continueMessage: PropTypes.string,
+    isEpidemicInProgress: PropTypes.bool.isRequired,
     actions: PropTypes.object.isRequired,
     route: PropTypes.object.isRequired,
     router: PropTypes.object.isRequired
@@ -108,16 +112,17 @@ class Game extends React.Component {
   }
 
   render() {
-    const { status, defeatMessage } = this.props;
+    const { status, defeatMessage, isEpidemicInProgress, players, getPlayerHand, currentPlayerId,
+      continueMessage } = this.props;
     return (
-      <div className="game">
+      <div className={classnames(['game', { 'epidemic' : isEpidemicInProgress }])}>
         <DiscardPanel />
         <TopBar />
         {status !== 'prepare' &&
           <TeamPanel
-            players={this.props.players}
-            getPlayerHand={this.props.getPlayerHand}
-            currentPlayerId={this.props.currentPlayerId} />
+            players={players}
+            getPlayerHand={getPlayerHand}
+            currentPlayerId={currentPlayerId} />
         }
         {status !== 'prepare' &&
           <BottomBar />
@@ -132,11 +137,16 @@ class Game extends React.Component {
           initialInfectedCity={this.state.initialInfectedCity} />
         {status === 'prepare' && this.state.showIntro &&
           <IntroDialog
-            players={this.props.players}
+            players={players}
             onClosed={this.onIntroClosed} />
         }
+        {continueMessage &&
+          <ContinueOverlay
+            message={continueMessage}
+            onContinue={this.props.actions.continueTurn} />
+        }
         {status === 'defeat' &&
-          <div className="defeat-overlay" />
+          <div className="overlay defeat-overlay" />
         }
         {status === 'defeat' &&
           <DefeatMessage message={defeatMessage} />
@@ -158,7 +168,9 @@ const mapStateToProps = (state) => ({
   getPlayerHand: partial(getPlayerHand, state),
   status: state.status,
   initialInfectedCity: getInitialInfectedCity(state),
-  defeatMessage: getDefeatMessage(state)
+  defeatMessage: getDefeatMessage(state),
+  continueMessage: getContinueMessage(state),
+  isEpidemicInProgress: isEpidemicInProgress(state)
 });
 
 const mapDispatchToProps = (dispatch) => ({

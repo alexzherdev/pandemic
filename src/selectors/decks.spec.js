@@ -26,7 +26,7 @@ describe('Decks selector', () => {
 
   describe('getInfectionDeckBottom', () => {
     it('gets a card from the infection deck bottom', () => {
-      expect(sel.getInfectionDeckBottom(getState())).to.equal('2');
+      expect(sel.getInfectionDeckBottom(getState())).to.eql({ cardType: 'city', id: '2', color: 'blue', name: 'Atlanta' });
     });
   });
 

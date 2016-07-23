@@ -26,7 +26,7 @@ export function getPlayerCardsToDraw(state) {
 
 export function getInfectionDeckBottom(state) {
   const deck = getInfectionDeck(state);
-  return deck[deck.length - 1];
+  return enhanceCard({ cardType: 'city', id: deck[deck.length - 1] }, state);
 }
 
 export function peekAtInfectionDeck(state) {

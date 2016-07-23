@@ -5,6 +5,7 @@ import { OverlayTrigger, Panel, Popover } from 'react-bootstrap';
 import RatesPopover from '../components/RatesPopover';
 import { getPlayerDeckCount, getInfectionRate, getInfectionRateValues } from '../selectors';
 import DISEASES from '../constants/diseases';
+import { continueTurn } from '../actions/globalActions';
 
 
 class TopBar extends React.Component {
@@ -17,7 +18,36 @@ class TopBar extends React.Component {
       index: PropTypes.number.isRequired,
       values: PropTypes.arrayOf(PropTypes.number.isRequired).isRequired
     }),
-    outbreaks: PropTypes.number.isRequired
+    outbreaks: PropTypes.number.isRequired,
+    dispatch: PropTypes.func.isRequired
+  }
+
+  constructor(props) {
+    super(props);
+    this.onPopoverAnimationEnd = this.onPopoverAnimationEnd.bind(this);
+  }
+
+  state = {
+    showNewInfectionRate: false,
+    showNewOutbreaks: false
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({ showNewInfectionRate: nextProps.infectionRateValues.index !== this.props.infectionRateValues.index,
+      showNewOutbreaks: nextProps.outbreaks !== this.props.outbreaks });
+  }
+
+  componentDidUpdate() {
+    if (this.state.showNewInfectionRate || this.state.showNewOutbreaks) {
+      this.refs.popoverTrigger.show();
+    } else {
+      this.refs.popoverTrigger.hide();
+    }
+  }
+
+  onPopoverAnimationEnd() {
+    this.setState({ showNewInfectionRate: false, showNewOutbreaks: false });
+    this.props.dispatch(continueTurn());
   }
 
   render() {
@@ -41,6 +71,7 @@ class TopBar extends React.Component {
 
         <OverlayTrigger
           id="rates-trigger"
+          ref="popoverTrigger"
           trigger={['hover', 'focus']}
           placement="bottom"
           overlay={
@@ -49,7 +80,10 @@ class TopBar extends React.Component {
               className="rates-popover">
               <RatesPopover
                 infectionRateValues={infectionRateValues}
-                outbreaks={this.props.outbreaks} />
+                outbreaks={this.props.outbreaks}
+                showNewInfectionRate={this.state.showNewInfectionRate}
+                showNewOutbreaks={this.state.showNewOutbreaks}
+                onAnimationEnd={this.onPopoverAnimationEnd} />
             </Popover>
           }>
           <span className="rates">

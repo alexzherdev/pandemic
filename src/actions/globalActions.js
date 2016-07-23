@@ -80,3 +80,7 @@ export function animationInsertEpidemicCardsComplete() {
 export function animationCardDiscardFromHandComplete(cardType, playerId, id) {
   return { type: types.ANIMATION_CARD_DISCARD_FROM_HAND_COMPLETE, cardType, id, playerId };
 }
+
+export function animationEpidemicInfectComplete() {
+  return { type: types.ANIMATION_EPIDEMIC_INFECT_COMPLETE };
+}

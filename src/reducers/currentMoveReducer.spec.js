@@ -31,7 +31,9 @@ describe('CurrentMoveReducer', () => {
       used: false
     },
     contPlannerEvents: [],
-    epidemicInProgress: false
+    epidemicInProgress: false,
+    epidemicInfectionCard: {},
+    continueMessage: null
   });
 
   it('resets move counter and switches players on PASS_TURN', () => {

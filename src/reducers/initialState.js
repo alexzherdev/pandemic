@@ -94,6 +94,7 @@ export default {
     infectionCardDrawn: {},
     discardingCard: {},
     epidemicInProgress: false,
+    epidemicInfectionCard: {},
     outbreak: {
       color: null,
       complete: [],
@@ -112,7 +113,8 @@ export default {
       used: false,
       cards: []
     },
-    contPlannerEvents: []
+    contPlannerEvents: [],
+    continueMessage: null
   },
 
   stationsLeft: 5,
