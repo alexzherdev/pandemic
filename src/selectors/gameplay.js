@@ -121,8 +121,12 @@ export function getInfectionCardDrawn(state) {
   return state.currentMove.infectionCardDrawn;
 }
 
+export function getEpidemicStep(state) {
+  return state.currentMove.epidemicStep;
+}
+
 export function isEpidemicInProgress(state) {
-  return state.currentMove.epidemicInProgress;
+  return !!getEpidemicStep(state);
 }
 
 export function isDealingPlayerCards(state) {

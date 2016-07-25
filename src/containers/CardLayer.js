@@ -9,16 +9,17 @@ import Hand from '../components/Hand';
 import CardDrawerDealing from '../components/cardDrawer/CardDrawerDealing';
 import CardDrawerInfection from '../components/cardDrawer/CardDrawerInfection';
 import CardDrawerEpidemicInfection from '../components/cardDrawer/CardDrawerEpidemicInfection';
+import CardDrawerEpidemicIntensify from '../components/cardDrawer/CardDrawerEpidemicIntensify';
 import CardDrawerDiscardingPlayerCard from '../components/cardDrawer/CardDrawerDiscardingPlayerCard';
 import DiscardPile from '../components/DiscardPile';
-import { drawCardsHandle } from '../actions/cardActions';
+import { drawCardsHandle, epidemicIntensify } from '../actions/cardActions';
 import { animationDrawInfectionCardComplete, animationDealCardsComplete,
   animationDealCardsInitComplete, animationInsertEpidemicCardsComplete, animationDrawCardsInitComplete,
   animationCardDiscardFromHandComplete, continueTurn } from '../actions/globalActions';
 import { getCardsDrawn, getInfectionCardDrawn, isDealingPlayerCards,
   getPlayerDealtToIndex, getCardsDealtCount, isDealingEpidemicCards, getPlayers, getDifficulty,
   getCurrentPlayerHand, sortHand, isPlaying, getDiscardingCard, getPlayerDiscardTop, getInfectionDiscardTop,
-  getEpidemicInfectionCard } from '../selectors';
+  getEpidemicInfectionCard, getEpidemicStep } from '../selectors';
 import { cardProps, cardType, playerType } from '../constants/propTypes';
 
 
@@ -44,6 +45,7 @@ class CardLayer extends React.Component {
     epidemicInfectionCard: PropTypes.shape({
       id: PropTypes.string
     }),
+    epidemicStep: PropTypes.string,
     players: PropTypes.arrayOf(playerType.isRequired).isRequired,
     isPlaying: PropTypes.bool.isRequired,
     hand: PropTypes.arrayOf(cardType.isRequired).isRequired,
@@ -154,7 +156,7 @@ class CardLayer extends React.Component {
   render() {
     const { cardsDrawn, infectionCardDrawn, isDealingPlayerCards, playerIndex,
       isDealingEpidemicCards, difficulty, initialInfectedCity, isPlaying, discardingCard, playerDiscardTop,
-      infectionDiscardTop, epidemicInfectionCard } = this.props;
+      infectionDiscardTop, epidemicInfectionCard, epidemicStep } = this.props;
     const isDrawingInfectionCard = !isEmpty(infectionCardDrawn);
     const cards = isDrawingInfectionCard && [{ cardType: 'city', ...infectionCardDrawn }] || cardsDrawn;
     let items = null;
@@ -163,6 +165,13 @@ class CardLayer extends React.Component {
     let hand = this.props.hand;
 
     let drawer;
+
+    const infectionDiscard = (
+      <DiscardPile
+        ref="infectionDiscard"
+        className="infection-discard"
+        discardTop={infectionDiscardTop} />
+    );
     if (isDealingPlayerCards || isDealingEpidemicCards) {
       drawer = (
         <CardDrawerDealing
@@ -205,6 +214,14 @@ class CardLayer extends React.Component {
           infectionCard={epidemicInfectionCard}
           onAnimationComplete={partial(this.props.dispatch, continueTurn())} />
       );
+    } else if (epidemicStep === 'intensify') {
+      drawer = (
+        <CardDrawerEpidemicIntensify
+          getInfectionDeck={this.getInfectionDeck}
+          infectionDiscard={infectionDiscard}
+          getInfectionDiscard={this.getInfectionDiscard}
+          onAnimationComplete={partial(this.props.dispatch, epidemicIntensify())} />
+      );
     }
     if (!isEmpty(cards)) {
       items = flatten(cards.map((c, i) => {
@@ -215,7 +232,7 @@ class CardLayer extends React.Component {
             }
             return (
               <CardWrapper
-                key={i}
+                key={c.id}
                 {...c}
                 className={classnames({
                   'move-to-hand': c.handling && c.cardType !== 'epidemic',
@@ -263,10 +280,7 @@ class CardLayer extends React.Component {
         <span
           ref="infectionDeck"
           className="card infection-deck deck-icon" />
-        <DiscardPile
-          ref="infectionDiscard"
-          className="infection-discard"
-          discardTop={infectionDiscardTop} />
+        {infectionDiscard}
         {drawer}
         {isPlaying && <Hand hand={hand} />}
       </div>
@@ -292,7 +306,8 @@ const mapStateToProps = (state, ownProps) => {
     isPlaying: isPlaying(state),
     playerDiscardTop: getPlayerDiscardTop(state),
     infectionDiscardTop: getInfectionDiscardTop(state),
-    epidemicInfectionCard: getEpidemicInfectionCard(state)
+    epidemicInfectionCard: getEpidemicInfectionCard(state),
+    epidemicStep: getEpidemicStep(state)
   };
 };
 

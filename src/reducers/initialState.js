@@ -93,7 +93,7 @@ export default {
     cardsDrawn: [],
     infectionCardDrawn: {},
     discardingCard: {},
-    epidemicInProgress: false,
+    epidemicStep: null,
     epidemicInfectionCard: {},
     outbreak: {
       color: null,

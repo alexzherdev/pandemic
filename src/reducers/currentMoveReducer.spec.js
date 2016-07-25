@@ -33,6 +33,7 @@ describe('CurrentMoveReducer', () => {
     contPlannerEvents: [],
     epidemicInProgress: false,
     epidemicInfectionCard: {},
+    epidemicStep: null,
     continueMessage: null
   });
 

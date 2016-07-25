@@ -827,7 +827,7 @@ body {
           position: absolute;
         }
 
-        div {
+        div, span {
           backface-visibility: hidden;
           position: absolute;
           top: 0;
@@ -852,8 +852,43 @@ body {
         }
       }
 
+      .shuffle-card {
+        position: absolute;
+        z-index: 10000;
+      }
+
+      .result-deck {
+        margin-left: 100px;
+        margin-right: 100px;
+      }
+
+      .high-deck-container {
+        position: relative;
+
+        @for $i from 0 through 7 {
+          &.high-#{$i} {
+            top: -$i * 2px;
+          }
+        }
+      }
+      .high-deck {
+        position: relative;
+        width: $cardWidth;
+        height: $cardHeight;
+        background: linear-gradient(90deg, black, gray, black);
+        border-radius: 4px;
+        z-index: -1;
+
+        @for $i from 0 through 7 {
+          &.high-#{$i} {
+            top: $i * 2px;
+          }
+        }
+      }
+
+
       > .card {
-        &:not(:last-child) {
+        &:not(:last-child):not(.result-deck) {
           margin-right: 10px;
         }
 

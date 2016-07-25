@@ -4,7 +4,7 @@ import { put, select, call, take } from 'redux-saga/effects';
 import { initOutbreak, infectCities, infectCity, infectNeighbor, queueOutbreak,
   completeOutbreak, useDiseaseCubes, eradicateDisease, medicPreventInfection, quarSpecPreventInfection } from '../actions/diseaseActions';
 import { discardTopInfectionCard, discardBottomInfectionCard, epidemicIncrease, epidemicInfectInit,
-  epidemicInfect, epidemicIntensifyInit, epidemicIntensify, resPopSuggest, drawInfectionCard } from '../actions/cardActions';
+  epidemicInfect, epidemicIntensifyInit, resPopSuggest, drawInfectionCard } from '../actions/cardActions';
 import * as sel from '../selectors';
 import * as types from '../constants/actionTypes';
 import defeatMessages from '../constants/defeatMessages';
@@ -106,8 +106,7 @@ export function* yieldEpidemic() {
     yield take([types.PLAYER_PLAY_EVENT_COMPLETE, types.CONTINUE]);
   }
   yield put(epidemicIntensifyInit());
-  yield take(types.CONTINUE);
-  yield put(epidemicIntensify());
+  yield take(types.EPIDEMIC_INTENSIFY);
 }
 
 export function* infections() {

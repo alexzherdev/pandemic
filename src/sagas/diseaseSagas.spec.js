@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { put, select, call, take } from 'redux-saga/effects';
 
-import { epidemicIncrease, epidemicInfect, epidemicInfectInit, epidemicIntensify, epidemicIntensifyInit, discardBottomInfectionCard,
+import { epidemicIncrease, epidemicInfect, epidemicInfectInit, epidemicIntensifyInit, discardBottomInfectionCard,
   discardTopInfectionCard, resPopSuggest, drawInfectionCard } from '../actions/cardActions';
 import { infectCities, initOutbreak, queueOutbreak, completeOutbreak, infectCity,
   useDiseaseCubes, eradicateDisease, medicPreventInfection, quarSpecPreventInfection } from '../actions/diseaseActions';
@@ -30,10 +30,8 @@ describe('DiseaseSagas', function() {
       this.next = this.generator.next(null);
       expect(this.next.value).to.eql(put(epidemicIntensifyInit()));
       this.next = this.generator.next();
-      expect(this.next.value).to.eql(take(types.CONTINUE));
-      this.next = this.generator.next({ type: types.CONTINUE });
-      expect(this.next.value).to.eql(put(epidemicIntensify()));
-      this.next = this.generator.next();
+      expect(this.next.value).to.eql(take(types.EPIDEMIC_INTENSIFY));
+      this.next = this.generator.next({ type: types.EPIDEMIC_INTENSIFY });
       expect(this.next.done).to.be.true;
     });
 

@@ -278,12 +278,16 @@ function contPlannerEvents(state, action) {
   }
 }
 
-function epidemicInProgress(state, action) {
+function epidemicStep(state, action) {
   switch (action.type) {
     case types.EPIDEMIC_INCREASE:
-      return true;
+      return 'increase';
+    case types.EPIDEMIC_INFECT_INIT:
+      return 'infect';
+    case types.EPIDEMIC_INTENSIFY_CONTINUE:
+      return 'intensify';
     case types.EPIDEMIC_INTENSIFY:
-      return false;
+      return null;
     default:
       return state;
   }
@@ -303,8 +307,9 @@ function epidemicInfectionCard(state, action) {
 function continueMessage(state, action) {
   switch (action.type) {
     case types.EPIDEMIC_INTENSIFY_INIT:
-      return continueMessages.TO_INTENSITY_STEP;
+      return continueMessages.TO_INTENSIFY_STEP;
     case types.CONTINUE:
+    case types.EPIDEMIC_INTENSIFY_CONTINUE:
       return null;
     default:
       return state;
@@ -332,7 +337,7 @@ export default function currentMoveReducer(state = initialState.currentMove, act
     airlift: airlift(state.airlift, action),
     opsMoveAbility: opsMoveAbility(state.opsMoveAbility, action),
     contPlannerEvents: contPlannerEvents(state.contPlannerEvents, action),
-    epidemicInProgress: epidemicInProgress(state.epidemicInProgress, action),
+    epidemicStep: epidemicStep(state.epidemicStep, action),
     epidemicInfectionCard: epidemicInfectionCard(state.epidemicInfectionCard, action),
     continueMessage: continueMessage(state.continueMessage, action)
   };

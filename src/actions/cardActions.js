@@ -45,6 +45,10 @@ export function epidemicIntensifyInit() {
   return { type: types.EPIDEMIC_INTENSIFY_INIT };
 }
 
+export function epidemicIntensifyContinue() {
+  return { type: types.EPIDEMIC_INTENSIFY_CONTINUE };
+}
+
 export function epidemicIntensify() {
   return { type: types.EPIDEMIC_INTENSIFY };
 }
