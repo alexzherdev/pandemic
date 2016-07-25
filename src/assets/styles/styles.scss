@@ -12,7 +12,7 @@ $bottomBarMinHeight: 110px;
 $crossHairSize: 76px;
 
 $events-list: airlift forecast gov_grant res_pop one_quiet_night;
-$diseases-list: yellow red blue black;
+$diseases-list: 'yellow' 'red' 'blue' 'black';
 $roles-list: cont_planner dispatcher medic ops_expert quar_spec researcher scientist;
 
 
@@ -162,7 +162,7 @@ body {
 
       @each $disease in $diseases-list {
         .cube-icon-#{$disease} {
-          background-image: url(../images/cube_#{$disease}.png);
+          background-image: url('../images/cube_#{$disease}.png');
         }
       }
 
@@ -530,7 +530,7 @@ body {
 
         @each $disease in $diseases-list {
           &.#{$disease} {
-            background-image: url(../images/city_#{$disease}.png);
+            background-image: url('../images/city_#{$disease}.png');
           }
         }
       }

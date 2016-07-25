@@ -4,6 +4,7 @@
   "description": "A Redux-based implementation of the board game Pandemic",
   "scripts": {
     "start-message": "babel-node tools/startMessage.js",
+    "postinstall": "npm run build",
     "prestart": "npm-run-all --parallel start-message remove-dist",
     "start": "npm-run-all --parallel test:watch open:src lint:watch",
     "open:src": "babel-node tools/srcServer.js",
@@ -14,7 +15,7 @@
     "remove-dist": "rimraf ./dist",
     "build:html": "babel-node tools/buildHtml.js",
     "prebuild": "npm run clean-dist && npm run build:html && npm run lint && npm run test",
-    "build": "babel-node tools/build.js && npm run open:dist",
+    "build": "babel-node tools/build.js",
     "test": "mocha tools/testSetup.js \"src/**/*.spec.js\" --reporter progress",
     "test:cover": "babel-node node_modules/isparta/bin/isparta cover --include-all-sources --root src --report html node_modules/mocha/bin/_mocha -- --require ./tools/testSetup.js \"src/**/*.spec.js\" --reporter progress",
     "test:cover:travis": "babel-node isparta cover --include-all-sources --root src --report lcovonly _mocha -- --require ./tools/testSetup.js \"src/**/*.spec.js\" && cat ./coverage/lcov.info | coveralls.js",

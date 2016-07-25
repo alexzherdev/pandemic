@@ -7,10 +7,9 @@ import compression from 'compression';
 
 // Run Browsersync
 browserSync({
-  port: 3000,
-  ui: {
-    port: 3001
-  },
+  port: process.env.PORT || 3000,
+  ui: false,
+  open: false,
   server: {
     baseDir: 'dist'
   },
