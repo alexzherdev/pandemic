@@ -158,7 +158,7 @@ describe('ActionSagas', function() {
 
     it('first draws a city card and then an epidemic card', () => {
       const cards = [
-        { cardType: 'epidemic', id: 'epidemic' },
+        { cardType: 'epidemic', id: 'epidemic', name: 'Epidemic' },
         { cardType: 'city', id: '1' }
       ];
       this.next = this.generator.next([...cards]);

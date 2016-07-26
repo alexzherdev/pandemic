@@ -39,11 +39,12 @@ class Game extends React.Component {
     status: PropTypes.oneOf(['prepare', 'playing', 'defeat', 'victory']).isRequired,
     initialInfectedCity: PropTypes.string,
     defeatMessage: PropTypes.string,
-    continueMessage: PropTypes.string,
+    continueMessage: PropTypes.object,
     isEpidemicInProgress: PropTypes.bool.isRequired,
     actions: PropTypes.object.isRequired,
     route: PropTypes.object.isRequired,
-    router: PropTypes.object.isRequired
+    router: PropTypes.object.isRequired,
+    dispatch: PropTypes.func.isRequired
   }
 
   constructor(props) {
@@ -142,8 +143,8 @@ class Game extends React.Component {
         }
         {continueMessage &&
           <ContinueOverlay
-            message={continueMessage}
-            onContinue={this.props.actions.continueTurn} />
+            message={continueMessage.message}
+            onContinue={partial(this.props.dispatch, continueMessage.action)} />
         }
         {status === 'defeat' &&
           <div className="overlay defeat-overlay" />
@@ -174,7 +175,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  actions: bindActionCreators({ ...mapActions, ...globalActions }, dispatch)
+  actions: bindActionCreators({ ...mapActions, ...globalActions }, dispatch),
+  dispatch
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Game));
