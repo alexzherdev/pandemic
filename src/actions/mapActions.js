@@ -13,6 +13,10 @@ export function moveToCity(playerId, originId, destinationId, source) {
   return { type: types.PLAYER_MOVE_TO_CITY, playerId, originId, destinationId, source };
 }
 
+export function moveComplete() {
+  return { type: types.PLAYER_MOVE_COMPLETE };
+}
+
 export function moveCancel() {
   return { type: types.PLAYER_MOVE_CANCEL };
 }

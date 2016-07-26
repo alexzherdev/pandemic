@@ -1,11 +1,11 @@
 import { expect } from 'chai';
 import { select, put, call, take } from 'redux-saga/effects';
 
-import { moveShowCities, moveCancel, moveToCity } from '../actions/mapActions';
+import { moveShowCities, moveToCity } from '../actions/mapActions';
 import { discardFromHandInit, shareCardsShowCandidates, shareCardsCancel, shareCard, drawCardsInit,
   drawCardsHandleInit } from '../actions/cardActions';
 import { cureDiseaseShowCards } from '../actions/diseaseActions';
-import { showAvailableCities, showCitiesAndMove, showShareCandidates, drawIfNoActionsLeft,
+import { showAvailableCities, showCitiesAndMove, movedToCity, showShareCandidates, drawIfNoActionsLeft,
   drawPlayerCards, waitToDiscardIfOverLimit, showCardsToCure } from './actionSagas';
 import { yieldEpidemic } from './diseaseSagas';
 import { opsChooseCardToDiscard } from './roleSagas';
@@ -16,38 +16,47 @@ import * as sel from '../selectors';
 
 describe('ActionSagas', function() {
   describe('showCitiesAndMove', () => {
-    beforeEach(() => {
-      this.cities = [{ id: '0', name: 'London', color: 'red' }];
-      this.generator = showCitiesAndMove(this.cities);
-      this.next = this.generator.next();
-      expect(this.next.value).to.eql(put(moveShowCities(this.cities)));
-      this.generator.next();
+    it('shows cities and waits for move or cancel', () => {
+      const cities = [{ id: '0', name: 'London', color: 'red' }];
+      const generator = showCitiesAndMove(cities);
+      let next = generator.next();
+      expect(next.value).to.eql(put(moveShowCities(cities)));
+      next = generator.next();
+      expect(next.value).to.eql(take([types.PLAYER_MOVE_TO_CITY, types.PLAYER_MOVE_CANCEL]));
+      next = generator.next();
+      expect(next.done).to.be.true;
     });
+  });
 
-    it('does not do anything on move cancel', () => {
-      this.next = this.generator.next(moveCancel());
-      expect(this.next.done).to.be.true;
-    });
-
+  describe('movedToCity', () => {
     it('discards the destination card for a direct flight', () => {
-      this.next = this.generator.next(moveToCity('0', '0', '1', 'direct'));
-      expect(this.next.value).to.eql(select(sel.getCurrentPlayer));
-      this.next = this.generator.next({ id: '0' });
-      expect(this.next.value).to.eql(put(discardFromHandInit('city', '0', '1')));
+      const generator = movedToCity(moveToCity('0', '0', '1', 'direct'));
+      let next = generator.next();
+      expect(next.value).to.eql(take(types.ANIMATION_MOVE_COMPLETE));
+      next = generator.next();
+      expect(next.value).to.eql(select(sel.getCurrentPlayer));
+      next = generator.next({ id: '0' });
+      expect(next.value).to.eql(put(discardFromHandInit('city', '0', '1')));
     });
 
     it('discards the origin card for a charter flight', () => {
-      this.next = this.generator.next(moveToCity('0', '0', '1', 'charter'));
-      expect(this.next.value).to.eql(select(sel.getCurrentPlayer));
-      this.next = this.generator.next({ id: '0' });
-      expect(this.next.value).to.eql(put(discardFromHandInit('city', '0', '0')));
+      const generator = movedToCity(moveToCity('0', '0', '1', 'charter'));
+      let next = generator.next();
+      expect(next.value).to.eql(take(types.ANIMATION_MOVE_COMPLETE));
+      next = generator.next();
+      expect(next.value).to.eql(select(sel.getCurrentPlayer));
+      next = generator.next({ id: '0' });
+      expect(next.value).to.eql(put(discardFromHandInit('city', '0', '0')));
     });
 
     it('chooses a card to discard for an ops special move', () => {
-      this.next = this.generator.next(moveToCity('0', '0', '1', 'ops'));
-      expect(this.next.value).to.eql(select(sel.getCurrentPlayer));
-      this.next = this.generator.next({ id: '0' });
-      expect(this.next.value).to.eql(call(opsChooseCardToDiscard, '0'));
+      const generator = movedToCity(moveToCity('0', '0', '1', 'ops'));
+      let next = generator.next();
+      expect(next.value).to.eql(take(types.ANIMATION_MOVE_COMPLETE));
+      next = generator.next();
+      expect(next.value).to.eql(select(sel.getCurrentPlayer));
+      next = generator.next({ id: '0' });
+      expect(next.value).to.eql(call(opsChooseCardToDiscard, '0'));
     });
   });
 

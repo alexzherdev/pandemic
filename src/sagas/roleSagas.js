@@ -10,7 +10,6 @@ import * as sel from '../selectors';
 
 export function* treatCuredDiseasesOnMedicMove(action) {
   if ((yield select(sel.getPlayerRole, action.playerId)) === 'medic') {
-    yield take(types.ANIMATION_MOVE_COMPLETE);
     const curedDiseaseCubes = yield select(sel.getCuredDiseaseCubes);
     yield put(medicTreatCuredDiseases(action.destinationId, curedDiseaseCubes));
   }
@@ -19,6 +18,7 @@ export function* treatCuredDiseasesOnMedicMove(action) {
 export function* opsChooseCardToDiscard(playerId) {
   const cards = yield select(sel.getCitiesInPlayersHand, playerId);
   yield put(opsShowCardsToDiscard(cards));
+  yield take(types.ANIMATION_CARD_DISCARD_FROM_HAND_COMPLETE);
 }
 
 export function* contPlannerSpecial() {
@@ -47,8 +47,8 @@ export function* dispatcherMove(action) {
   yield call(showCitiesAndMove, cities);
 }
 
-export function* watchMedicMove() {
-  yield* takeEvery([types.PLAYER_MOVE_TO_CITY, types.EVENT_AIRLIFT_MOVE_TO_CITY], treatCuredDiseasesOnMedicMove);
+export function* watchMedicAirlift() {
+  yield* takeEvery(types.EVENT_AIRLIFT_MOVE_TO_CITY, treatCuredDiseasesOnMedicMove);
 }
 
 export function* watchContPlannerInit() {
