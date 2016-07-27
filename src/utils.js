@@ -1,3 +1,5 @@
+import path from 'path';
+
 import { map } from './styles';
 
 
@@ -45,3 +47,10 @@ export function constrainCubeMovement([xIn, yIn], [xOut, yOut]) {
   const newY = (yOut - yIn) / (xOut - xIn) * newX + yIn - xIn * (yOut - yIn) / (xOut - xIn);
   return [newX, newY];
 }
+
+export const IMAGES_TO_PRELOAD = (function() {
+  const context = require.context('./assets/images');
+  return Object.freeze(
+    context.keys().map((k) => path.basename(context(k)))
+  );
+})();
