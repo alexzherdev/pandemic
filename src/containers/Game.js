@@ -4,10 +4,12 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { isEmpty, partial } from 'lodash';
 import classnames from 'classnames';
+const Preload = require('react-preload').Preload;
 
 import TopBar from './TopBar';
 import Map from './Map';
 import TeamPanel from '../components/TeamPanel';
+import LoadingScreen from '../components/LoadingScreen';
 import BottomBar from './BottomBar';
 import CardLayer from './CardLayer';
 import DiscardPanel from './DiscardPanel';
@@ -19,6 +21,7 @@ import * as mapActions from '../actions/mapActions';
 import * as globalActions from '../actions/globalActions';
 import { getPlayers, getCurrentCityId, getPlayerCityId, getPlayerHand,
   getInitialInfectedCity, getDefeatMessage, isEpidemicInProgress, getContinueMessage } from '../selectors';
+import { IMAGES_TO_PRELOAD } from '../utils';
 
 
 class Game extends React.Component {
@@ -115,47 +118,55 @@ class Game extends React.Component {
   render() {
     const { status, defeatMessage, isEpidemicInProgress, players, getPlayerHand, currentPlayerId,
       continueMessage } = this.props;
+
     return (
-      <div className={classnames(['game', { 'epidemic' : isEpidemicInProgress }])}>
-        <DiscardPanel />
-        <TopBar />
-        {status !== 'prepare' &&
-          <TeamPanel
-            players={players}
-            getPlayerHand={getPlayerHand}
-            currentPlayerId={currentPlayerId} />
-        }
-        {status !== 'prepare' &&
-          <BottomBar />
-        }
-        <Map
-          ref="map"
-          onCityClicked={this.onCityClicked}
-          onCityDoubleClicked={this.onCityDoubleClicked}
-          initialInfectedCity={this.state.initialInfectedCity} />
-        <CardLayer
-          map={this.refs.map}
-          initialInfectedCity={this.state.initialInfectedCity} />
-        {status === 'prepare' && this.state.showIntro &&
-          <IntroDialog
-            players={players}
-            onClosed={this.onIntroClosed} />
-        }
-        {continueMessage &&
-          <ContinueOverlay
-            message={continueMessage.message}
-            onContinue={partial(this.props.dispatch, continueMessage.action)} />
-        }
-        {status === 'defeat' &&
-          <div className="overlay defeat-overlay" />
-        }
-        {status === 'defeat' &&
-          <DefeatMessage message={defeatMessage} />
-        }
-        {status === 'victory' &&
-          <VictoryMessage />
-        }
-      </div>
+      <Preload
+        loadingIndicator={<LoadingScreen />}
+        images={IMAGES_TO_PRELOAD}
+        autoResolveDelay={30000}
+        resolveOnError={true}
+        mountChildren={true}>
+        <div className={classnames(['game', { 'epidemic' : isEpidemicInProgress }])}>
+          <DiscardPanel />
+          <TopBar />
+          {status !== 'prepare' &&
+            <TeamPanel
+              players={players}
+              getPlayerHand={getPlayerHand}
+              currentPlayerId={currentPlayerId} />
+          }
+          {status !== 'prepare' &&
+            <BottomBar />
+          }
+          <Map
+            ref="map"
+            onCityClicked={this.onCityClicked}
+            onCityDoubleClicked={this.onCityDoubleClicked}
+            initialInfectedCity={this.state.initialInfectedCity} />
+          <CardLayer
+            map={this.refs.map}
+            initialInfectedCity={this.state.initialInfectedCity} />
+          {status === 'prepare' && this.state.showIntro &&
+            <IntroDialog
+              players={players}
+              onClosed={this.onIntroClosed} />
+          }
+          {continueMessage &&
+            <ContinueOverlay
+              message={continueMessage.message}
+              onContinue={partial(this.props.dispatch, continueMessage.action)} />
+          }
+          {status === 'defeat' &&
+            <div className="overlay defeat-overlay" />
+          }
+          {status === 'defeat' &&
+            <DefeatMessage message={defeatMessage} />
+          }
+          {status === 'victory' &&
+            <VictoryMessage />
+          }
+        </div>
+      </Preload>
     );
   }
 }
