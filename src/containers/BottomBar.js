@@ -10,6 +10,7 @@ import SingleCardPicker from '../components/SingleCardPicker';
 import MultiCardPicker from '../components/MultiCardPicker';
 import PlayerPicker from '../components/PlayerPicker';
 import DiseasePicker from '../components/DiseasePicker';
+import Card from '../components/Card';
 import ForecastBar from './ForecastBar';
 import { getPlayerToDiscard, getTreatableDiseases, canTreatAllOfColor, canTreatAll,
   getCurrentCityId, getCurrentPlayer, isDispatcher, getPlayers, getEventsInHands, getInfectionDiscard,
@@ -236,8 +237,13 @@ class BottomBar extends React.Component {
     } else if (resPop.suggestOwner) {
       content = (
         <div>
-          <Button onClick={this.onResPopUsed}>Use res pop</Button>
-          <Button onClick={this.onContinueTurn}>Continue</Button>
+          <Button onClick={this.onResPopUsed}>
+            <Card
+              cardType="event"
+              id="res_pop" /> <br />Play</Button>
+          or <Button
+            bsStyle="link"
+            onClick={this.onContinueTurn}>Continue</Button>
         </div>
       );
     } else if (!isEmpty(forecastCards)) {
