@@ -1,16 +1,15 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { find, flatten, isEmpty, partial } from 'lodash';
+import { find, isEmpty, partial } from 'lodash';
 import classnames from 'classnames';
 
-import CardWrapper from '../components/CardWrapper';
-import Card from '../components/Card';
 import Hand from '../components/Hand';
 import CardDrawerDealing from '../components/cardDrawer/CardDrawerDealing';
 import CardDrawerInfection from '../components/cardDrawer/CardDrawerInfection';
 import CardDrawerEpidemicInfection from '../components/cardDrawer/CardDrawerEpidemicInfection';
 import CardDrawerEpidemicIntensify from '../components/cardDrawer/CardDrawerEpidemicIntensify';
 import CardDrawerDiscardingPlayerCard from '../components/cardDrawer/CardDrawerDiscardingPlayerCard';
+import CardDrawerDrawingPlayerCards from '../components/cardDrawer/CardDrawerDrawingPlayerCards';
 import DiscardPile from '../components/DiscardPile';
 import { drawCardsHandle, epidemicIntensify } from '../actions/cardActions';
 import { animationDrawInfectionCardComplete, animationDealCardsComplete,
@@ -57,7 +56,7 @@ class CardLayer extends React.Component {
 
   constructor(props) {
     super(props);
-    this.onCardAnimationStart = this.onCardAnimationStart.bind(this);
+    this.onEpidemicHandle = this.onEpidemicHandle.bind(this);
     this.getPlayerDeck = this.getPlayerDeck.bind(this);
     this.getInfectionDeck = this.getInfectionDeck.bind(this);
     this.getPlayerDiscard = this.getPlayerDiscard.bind(this);
@@ -145,12 +144,8 @@ class CardLayer extends React.Component {
     return this.refs.infectionDiscard;
   }
 
-  onCardAnimationStart(cardType, id, e) {
-    if (e.animationName === 'flash') {
-      setTimeout(() => {
-        this.props.dispatch(drawCardsHandle({ cardType, id }, this.props.currentPlayerId));
-      }, 3000);
-    }
+  onEpidemicHandle(cardType, id) {
+    this.props.dispatch(drawCardsHandle({ cardType, id }, this.props.currentPlayerId));
   }
 
   render() {
@@ -158,8 +153,6 @@ class CardLayer extends React.Component {
       isDealingEpidemicCards, difficulty, initialInfectedCity, isPlaying, discardingCard, playerDiscardTop,
       infectionDiscardTop, epidemicInfectionCard, epidemicStep } = this.props;
     const isDrawingInfectionCard = !isEmpty(infectionCardDrawn);
-    const cards = isDrawingInfectionCard && [{ cardType: 'city', ...infectionCardDrawn }] || cardsDrawn;
-    let items = null;
     this.epidemics = [];
 
     let hand = this.props.hand;
@@ -222,47 +215,31 @@ class CardLayer extends React.Component {
           getInfectionDiscard={this.getInfectionDiscard}
           onAnimationComplete={partial(this.props.dispatch, epidemicIntensify())} />
       );
-    }
-    if (!isEmpty(cards)) {
-      items = flatten(cards.map((c, i) => {
-        if (!isDrawingInfectionCard) {
-          if (c.handling || !this.state.startingDraw) {
-            if (c.handling && c.cardType !== 'epidemic') {
-              hand = sortHand([...hand, c]);
-            }
-            return (
-              <CardWrapper
-                key={c.id}
-                {...c}
-                className={classnames({
-                  'move-to-hand': c.handling && c.cardType !== 'epidemic',
-                  'animated flash': c.cardType === 'epidemic'
-                })}
-                onAnimationStart={this.onCardAnimationStart} />
-            );
-          } else {
-            return (
-              <div className="card invisible" key={`flip-${c.id}-${i}`}>
-                <div className="card front player-deck" />
-                <Card
-                  {...c}
-                  className="back" />
-              </div>
-            );
-          }
-        }
-      }));
-    }
-
-    const empty = isEmpty(items) && !drawer;
-    if (!drawer) {
+    } else if (!isEmpty(cardsDrawn)) {
       drawer = (
-        <div className="card-drawer">
-          {items}
-        </div>
+        <CardDrawerDrawingPlayerCards
+          cards={cardsDrawn}
+          startingDraw={this.state.startingDraw}
+          onEpidemicHandle={this.onEpidemicHandle} />
       );
     }
 
+    const empty = !drawer;
+    if (empty) {
+      drawer = (
+        <div className="card-drawer" />
+      );
+    }
+
+    if (!isEmpty(cardsDrawn)) {
+      for (let i = 0; i < cardsDrawn.length; i++) {
+        const c = cardsDrawn[i];
+        if (c.handling && c.cardType !== 'epidemic') {
+          hand = sortHand([...hand, c]);
+          break;
+        }
+      }
+    }
     if (!isEmpty(discardingCard)) {
       hand = hand.filter((c) => c.id !== discardingCard.id || c.cardType !== discardingCard.cardType);
     }
