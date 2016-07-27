@@ -1,7 +1,7 @@
 import { takeEvery } from 'redux-saga';
 import { select, put, take, fork, cancel, call } from 'redux-saga/effects';
 
-import { moveShowCities } from '../actions/mapActions';
+import { moveShowCities, moveComplete } from '../actions/mapActions';
 import { cureDiseaseShowCards } from '../actions/diseaseActions';
 import { shareCardsShowCandidates, discardFromHandInit, chooseCardsToDiscard,
   cardOverLimitComplete, drawCardsInit, drawCardsHandleInit } from '../actions/cardActions';
@@ -11,33 +11,39 @@ import * as types from '../constants/actionTypes';
 import defeatMessages from '../constants/defeatMessages';
 import { infections, yieldEpidemic } from './diseaseSagas';
 import { yieldDefeat } from './globalSagas';
-import { opsChooseCardToDiscard } from './roleSagas';
+import { opsChooseCardToDiscard, treatCuredDiseasesOnMedicMove } from './roleSagas';
 
 
 const MAX_PLAYER_CARDS_LEFT = 2;
 
 export function* showCitiesAndMove(cities) {
   yield put(moveShowCities(cities));
-  const action = yield take([types.PLAYER_MOVE_TO_CITY, types.PLAYER_MOVE_CANCEL]);
-  if (action.type === types.PLAYER_MOVE_TO_CITY) {
-    const currentPlayer = yield select(sel.getCurrentPlayer);
-    switch (action.source) {
-      case 'direct':
-        yield put(discardFromHandInit('city', currentPlayer.id, action.destinationId));
-        break;
-      case 'charter':
-        yield put(discardFromHandInit('city', currentPlayer.id, action.originId));
-        break;
-      case 'ops':
-        yield call(opsChooseCardToDiscard, currentPlayer.id);
-        break;
-    }
-  }
+  yield take([types.PLAYER_MOVE_TO_CITY, types.PLAYER_MOVE_CANCEL]);
 }
 
 export function* showAvailableCities() {
   const cities = yield select(sel.getAvailableCities);
   yield call(showCitiesAndMove, cities);
+}
+
+export function* movedToCity(action) {
+  yield take(types.ANIMATION_MOVE_COMPLETE);
+  const currentPlayer = yield select(sel.getCurrentPlayer);
+  switch (action.source) {
+    case 'direct':
+      yield put(discardFromHandInit('city', currentPlayer.id, action.destinationId));
+      yield take(types.ANIMATION_CARD_DISCARD_FROM_HAND_COMPLETE);
+      break;
+    case 'charter':
+      yield put(discardFromHandInit('city', currentPlayer.id, action.originId));
+      yield take(types.ANIMATION_CARD_DISCARD_FROM_HAND_COMPLETE);
+      break;
+    case 'ops':
+      yield call(opsChooseCardToDiscard, currentPlayer.id);
+      break;
+  }
+  yield call(treatCuredDiseasesOnMedicMove, action);
+  yield put(moveComplete());
 }
 
 export function* showShareCandidates() {
@@ -142,6 +148,10 @@ export function* watchMoveInit() {
   yield* takeEvery(types.PLAYER_MOVE_INIT, showAvailableCities);
 }
 
+export function* watchMoveToCity() {
+  yield* takeEvery(types.PLAYER_MOVE_TO_CITY, movedToCity);
+}
+
 export function* watchShareInit() {
   yield* takeEvery(types.PLAYER_SHARE_INIT, showShareCandidates);
 }
@@ -156,4 +166,8 @@ export function* watchBuildStation() {
 
 export function* watchCureInit() {
   yield* takeEvery(types.PLAYER_CURE_DISEASE_INIT, showCardsToCure);
+}
+
+export function* watchForMoveComplete() {
+  yield* takeEvery(types.PLAYER_MOVE_TO_CITY, movedToCity);
 }

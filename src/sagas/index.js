@@ -1,9 +1,9 @@
-import { watchActionsLeft, watchMoveInit, watchShareInit, watchCureInit, watchBuildStation } from './actionSagas';
+import { watchActionsLeft, watchMoveInit, watchMoveToCity, watchShareInit, watchCureInit, watchBuildStation } from './actionSagas';
 import { watchTreatEradication, watchCureEradication } from './diseaseSagas';
 import { watchCreateQuickGame, watchCreateCustomGame, watchVictory, watchOutbreaksDefeat,
   watchDealCards } from './globalSagas';
 import { watchEvents } from './eventSagas';
-import { watchMedicMove, watchContPlannerInit, watchDispatcherMove, watchCureDisease } from './roleSagas';
+import { watchMedicAirlift, watchContPlannerInit, watchDispatcherMove, watchCureDisease } from './roleSagas';
 
 
 export default function* rootSaga() {
@@ -12,6 +12,7 @@ export default function* rootSaga() {
     watchCreateCustomGame(),
     watchDealCards(),
     watchMoveInit(),
+    watchMoveToCity(),
     watchShareInit(),
     watchActionsLeft(),
     watchCureInit(),
@@ -21,7 +22,7 @@ export default function* rootSaga() {
     watchVictory(),
     watchOutbreaksDefeat(),
     watchEvents(),
-    watchMedicMove(),
+    watchMedicAirlift(),
     watchContPlannerInit(),
     watchDispatcherMove(),
     watchCureDisease()
