@@ -55,7 +55,7 @@ function* shuffleDecksAndCreateGame(players, difficulty) {
   const infectionDeck = shuffle(INFECTION_DECK);
   yield put(createGame(players, playerDeck, infectionDeck, difficulty));
 
-  browserHistory.push('/');
+  browserHistory.push('/play');
 }
 
 export function* dealCardsToPlayers() {
@@ -155,7 +155,7 @@ export function* watchDealCards() {
 }
 
 function* cancelDealCards(task, action) {
-  if (action.payload.pathname === '/setup') {
+  if (action.payload.pathname === '/') {
     yield cancel(task);
   }
 }
