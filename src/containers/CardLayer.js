@@ -62,7 +62,6 @@ class CardLayer extends React.Component {
     this.getPlayerDiscard = this.getPlayerDiscard.bind(this);
     this.getInfectionDiscard = this.getInfectionDiscard.bind(this);
     this.state = { startingDraw: false, newPlayerDealing: false, cardsDrawnAnimated: false };
-    this.epidemics = [];
   }
 
   componentWillReceiveProps(nextProps) {
@@ -153,7 +152,6 @@ class CardLayer extends React.Component {
       isDealingEpidemicCards, difficulty, initialInfectedCity, isPlaying, discardingCard, playerDiscardTop,
       infectionDiscardTop, epidemicInfectionCard, epidemicStep } = this.props;
     const isDrawingInfectionCard = !isEmpty(infectionCardDrawn);
-    this.epidemics = [];
 
     let hand = this.props.hand;
 

@@ -106,7 +106,9 @@ export default class CardDrawerDealing extends React.Component {
       <div
         key="dealDeck"
         ref="dealDeck"
-        className="card player-deck" />,
+        className="card dealing-deck-container">
+        <div className="card player-deck dealing-deck high-7" />
+      </div>,
       <div
         key="epidemics"
         className="epidemics">
@@ -122,7 +124,9 @@ export default class CardDrawerDealing extends React.Component {
       <div
         key="dealDeck"
         ref="dealDeck"
-        className={classnames(['card', 'player-deck', { 'invisible': playerIndex === null }])} />,
+        className={classnames(['card', 'dealing-deck-container', { 'invisible': playerIndex === null }])}>
+        <div className="card player-deck dealing-deck high-7" />
+      </div>,
       playerIndex !== null &&
         <div
           key="dealCard"
