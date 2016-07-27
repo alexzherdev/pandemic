@@ -10,6 +10,8 @@ $cardWidth: 144px;
 $cardHeight: 200px;
 $bottomBarMinHeight: 110px;
 $crossHairSize: 76px;
+$smallEventWidth: 36px;
+$smallEventHeight: 50px;
 
 $events-list: airlift forecast gov_grant res_pop one_quiet_night;
 $diseases-list: 'yellow' 'red' 'blue' 'black';
@@ -216,6 +218,19 @@ body {
 
         .fa-plane {
           font-size: 1.1em;
+        }
+      }
+
+      .event-icon {
+        width: $smallEventWidth;
+        height: $smallEventHeight;
+        background-size: $smallEventWidth $smallEventHeight;
+        background-repeat: no-repeat;
+        margin: 0 7px;
+
+        &:hover {
+          box-shadow: 0 0 1px 1px white;
+          transition: all 0.2s;
         }
       }
 

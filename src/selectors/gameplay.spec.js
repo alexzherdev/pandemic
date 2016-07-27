@@ -6,6 +6,9 @@ import events from '../constants/events';
 
 describe('Gameplay selector', function() {
   const getState = () => ({
+    playerCards: {
+      discard: []
+    },
     players: {
       0: {
         id: '0',
@@ -304,10 +307,16 @@ describe('Gameplay selector', function() {
       expect(sel.isContingencyPlannerAbilityAvailable(state)).to.be.false;
     });
 
-    it('returns true if the current player is a contingency planner and an event has not been chosen', () => {
+    it('returns false if the current player is a contingency planner and an event has not been chosen but there are no events in the discard', () => {
       let state = getState();
       state = { ...state, players: { 0: { role: 'cont_planner', specialEvent: null }}};
-      expect(sel.isContingencyPlannerAbilityAvailable(state)).to.be.true;
+      expect(sel.isContingencyPlannerAbilityAvailable(state)).to.be.false;
+    });
+
+    it('returns true if the current player is a contingency planner and an event has not been chosen and there are events in the discard', () => {
+      let state = getState();
+      state = { ...state, playerCards: { discard: [{ cardType: 'event', id: 'res_pop' }]}};
+      expect(sel.isContingencyPlannerAbilityAvailable(state)).to.be.false;
     });
   });
 

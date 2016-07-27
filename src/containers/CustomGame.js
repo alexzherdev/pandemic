@@ -95,7 +95,9 @@ export default class CustomGame extends React.Component {
             title={DIFFICULTIES[this.state.difficulty]}
             onSelect={this.onDifficultySelected}>
             {map(DIFFICULTIES, (text, level) =>
-              <MenuItem eventKey={level}>{text}</MenuItem>
+              <MenuItem
+                key={level}
+                eventKey={level}>{text}</MenuItem>
             )}
           </DropdownButton>
         </div>

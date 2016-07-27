@@ -1,8 +1,9 @@
-import { chain, values, compact } from 'lodash';
+import { chain, values, compact, isEmpty } from 'lodash';
 
 import { isAtStation, getPlayerCityId } from './map';
 import { getCurrentCityId } from './cities';
 import { hasCurrentCityInHand } from './hand';
+import { getCardsForContPlanner } from './decks';
 import events from '../constants/events';
 
 
@@ -105,7 +106,8 @@ export function isDispatcher(state) {
 }
 
 export function isContingencyPlannerAbilityAvailable(state) {
-  return isContingencyPlanner(state) && !getContPlannerEvent(state);
+  return isContingencyPlanner(state) && !isEmpty(getCardsForContPlanner(state))
+    && !getContPlannerEvent(state);
 }
 
 export function getContPlannerEvent(state) {
