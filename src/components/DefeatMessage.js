@@ -15,7 +15,7 @@ const DefeatMessage = ({ message }) =>
     </div>
 
     <Button
-      onClick={() => { window.location.href = '/setup'; }}
+      onClick={() => { window.location.href = '/'; }}
       bsStyle="primary"
       bsSize="large">Back to Menu</Button>
   </div>;
