@@ -809,8 +809,23 @@ body {
       }
     }
 
+    .dealing-deck-container {
+      z-index: 1;
+    }
+
     .player-deck {
       background-image: url(../images/player_card.png);
+
+      &.dealing-deck {
+        position: static;
+
+        &::before {
+          @extend .high-deck;
+          top: 14px;
+          display: block;
+          content: '';
+        }
+      }
     }
 
     .infection-deck {
@@ -886,6 +901,7 @@ body {
           }
         }
       }
+
       .high-deck {
         position: relative;
         width: $cardWidth;
@@ -903,7 +919,7 @@ body {
 
 
       > .card {
-        &:not(:last-child):not(.result-deck) {
+        &:not(:last-child):not(.result-deck):not(.dealing-deck-container) {
           margin-right: 10px;
         }
 
