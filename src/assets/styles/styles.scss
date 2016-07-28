@@ -12,6 +12,8 @@ $bottomBarMinHeight: 110px;
 $crossHairSize: 76px;
 $smallEventWidth: 36px;
 $smallEventHeight: 50px;
+$diseaseIconWidth: 15px;
+$diseaseIconHeight: 20px;
 
 $events-list: airlift forecast gov_grant res_pop one_quiet_night;
 $diseases-list: 'yellow' 'red' 'blue' 'black';
@@ -165,6 +167,18 @@ body {
       @each $disease in $diseases-list {
         .cube-icon-#{$disease} {
           background-image: url('../images/cube_#{$disease}.png');
+        }
+
+        .cured-icon-#{$disease} {
+          background-size: $diseaseIconWidth $diseaseIconHeight;
+          background-repeat: no-repeat;
+          background-image: url('../images/#{$disease}_cured.png');
+        }
+
+        .eradicated-icon-#{$disease} {
+          background-size: $diseaseIconWidth $diseaseIconHeight;
+          background-repeat: no-repeat;
+          background-image: url('../images/#{$disease}_eradicated.png');
         }
       }
 
