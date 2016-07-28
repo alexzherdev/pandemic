@@ -96,11 +96,15 @@ class Actions extends React.Component {
 
         {isContingencyPlannerAbilityAvailable &&
           <Button
-            onClick={partial(this.props.actions.contPlannerInit, this.props.currentPlayer.id)}>Planner Special</Button>
+            onClick={partial(this.props.actions.contPlannerInit, this.props.currentPlayer.id)}>
+            <Glyphicon glyph="open" /><div>Retrieve</div>
+          </Button>
         }
         {!isEmpty(contPlannerEvent) &&
-          <Button onClick={partial(this.props.actions.playEventInit, this.props.currentPlayer.id,
-            contPlannerEvent.id)}>{contPlannerEvent.name}</Button>
+          <Button
+            className={`card event-icon event-${contPlannerEvent.id}`}
+            onClick={partial(this.props.actions.playEventInit, this.props.currentPlayer.id,
+            contPlannerEvent.id)} />
         }
         {!isEmpty(events) &&
           <Button
