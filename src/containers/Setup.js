@@ -6,6 +6,7 @@ import { Button } from 'react-bootstrap';
 import { createQuickGameInit, createCustomGameInit } from '../actions/globalActions';
 import QuickGame from '../components/setup/QuickGame';
 import CustomGame from '../containers/CustomGame';
+import Footer from '../components/setup/Footer';
 
 
 class Setup extends React.Component {
@@ -66,6 +67,7 @@ class Setup extends React.Component {
             onComplete={this.onCustomGameComplete}
             onBackClicked={this.showMenu} />
         }
+        <Footer />
       </div>
     );
   }
