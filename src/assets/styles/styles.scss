@@ -986,6 +986,16 @@ body {
     }
   }
 
+  .double-click-hint {
+    .popover-title {
+      .btn {
+        float: right;
+        padding: 0;
+        line-height: 0.8em;
+      }
+    }
+  }
+
   .intro-dialog {
     top: 100px;
 

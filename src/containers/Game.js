@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import { Button, Popover } from 'react-bootstrap';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -23,6 +24,8 @@ import { getPlayers, getCurrentCityId, getPlayerCityId, getPlayerHand,
   getInitialInfectedCity, getDefeatMessage, isEpidemicInProgress, getContinueMessage } from '../selectors';
 import { IMAGES_TO_PRELOAD } from '../utils';
 
+
+const HINT_STORAGE_KEY = 'DOUBLE_CLICK_HINT_DISMISSED';
 
 class Game extends React.Component {
   static propTypes = {
@@ -53,14 +56,15 @@ class Game extends React.Component {
   constructor(props) {
     super(props);
 
-    ['onCityClicked', 'onCityDoubleClicked', 'onIntroClosed'].forEach((meth) => {
+    ['onCityClicked', 'onCityDoubleClicked', 'onIntroClosed', 'onDoubleClickHintClosed'].forEach((meth) => {
       this[meth] = this[meth].bind(this);
     });
   }
 
   state = {
     showIntro: true,
-    initialInfectedCity: null
+    initialInfectedCity: null,
+    doubleClickHintDismissed: !!localStorage.getItem(HINT_STORAGE_KEY)
   }
 
   componentDidMount() {
@@ -115,6 +119,11 @@ class Game extends React.Component {
     this.doMovePlayer(id, 'drive');
   }
 
+  onDoubleClickHintClosed() {
+    localStorage.setItem(HINT_STORAGE_KEY, 'true');
+    this.setState({ doubleClickHintDismissed: true });
+  }
+
   render() {
     const { status, defeatMessage, isEpidemicInProgress, players, getPlayerHand, currentPlayerId,
       continueMessage } = this.props;
@@ -127,6 +136,23 @@ class Game extends React.Component {
         resolveOnError={true}
         mountChildren={true}>
         <div className={classnames(['game', { 'epidemic' : isEpidemicInProgress }])}>
+          {status === 'playing' && !this.state.doubleClickHintDismissed &&
+            <Popover
+              className="double-click-hint"
+              placement="bottom"
+              positionLeft={100}
+              positionTop={0}
+              title={
+                <div>
+                  Hint
+                  <Button
+                    bsStyle="link"
+                    onClick={this.onDoubleClickHintClosed}>&times;</Button>
+                </div>
+              }>
+              You can double-click on a neighbor city to drive to it.
+            </Popover>
+          }
           <DiscardPanel />
           <TopBar />
           {status !== 'prepare' &&
