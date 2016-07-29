@@ -1154,6 +1154,13 @@ body {
   width: 100%;
   height: 100vh;
 
+  footer {
+    position: absolute;
+    bottom: 5px;
+    width: 100%;
+    text-align: center;
+  }
+
   h1 {
     font-family: "Phage";
     font-size: 4em;
