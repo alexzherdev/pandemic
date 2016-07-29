@@ -2,16 +2,16 @@ import React, { PropTypes } from 'react';
 import { Button } from 'react-bootstrap';
 
 
-const DefeatMessage = ({ message }) =>
-  <div className="defeat-message">
+const VictoryMessage = () =>
+  <div className="overlay victory-message">
     <div className="header-container">
       <div className="shadow" />
       <div className="header">
-        Defeat
+        Victory
       </div>
     </div>
     <div className="message">
-      <span>{message}</span>
+      <span>Congratulations, you saved the world!</span>
     </div>
 
     <Button
@@ -20,8 +20,8 @@ const DefeatMessage = ({ message }) =>
       bsSize="large">Back to Menu</Button>
   </div>;
 
-DefeatMessage.propTypes = {
+VictoryMessage.propTypes = {
   message: PropTypes.string.isRequired
 };
 
-export default DefeatMessage;
+export default VictoryMessage;

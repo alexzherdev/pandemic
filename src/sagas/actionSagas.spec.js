@@ -205,6 +205,8 @@ describe('ActionSagas', function() {
 
     it('discards the cards used to cure', () => {
       this.next = this.generator.next({ type: types.PLAYER_CURE_DISEASE_COMPLETE, cityIds: ['0', '1']});
+      expect(this.next.value).to.eql(take(types.ANIMATION_CURE_DISEASE_COMPLETE));
+      this.next = this.generator.next({ type: types.ANIMATION_CURE_DISEASE_COMPLETE });
       expect(this.next.value).to.eql(select(sel.getCurrentPlayer));
       this.next = this.generator.next({ id: '0' });
       expect(this.next.value).to.eql(put(discardFromHandInit('city', '0', '0')));

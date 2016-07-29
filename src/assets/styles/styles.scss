@@ -14,6 +14,7 @@ $smallEventWidth: 36px;
 $smallEventHeight: 50px;
 $diseaseIconWidth: 15px;
 $diseaseIconHeight: 20px;
+$largeDiseaseSize: 300px;
 
 $events-list: airlift forecast gov_grant res_pop one_quiet_night;
 $diseases-list: 'yellow' 'red' 'blue' 'black';
@@ -124,6 +125,38 @@ body {
 
   100% {
     transform: rotate(360deg);
+    opacity: 0;
+  }
+}
+
+@keyframes banner-text {
+  0% {
+    transform: scale(1);
+  }
+
+  100% {
+    transform: scale(0.8);
+  }
+}
+
+@keyframes banner-fold {
+  0% {
+    transform: scaleY(1);
+  }
+
+  100% {
+    transform: scaleY(0);
+  }
+}
+
+@keyframes disease-fade {
+  95% {
+    transform: scale(1.5);
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(3);
     opacity: 0;
   }
 }
@@ -1056,11 +1089,6 @@ body {
   }
 
   .victory-message, .defeat-message {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
     z-index: 100000;
 
     .header-container {
@@ -1106,46 +1134,88 @@ body {
       right: 50px;
     }
   }
-}
 
-.defeat-message {
-  .header-container {
-    animation-name: zoomIn;
-    animation-duration: 6s;
-    animation-timing-function: ease-out;
+  .defeat-message {
+    .header-container {
+      animation-name: zoomIn;
+      animation-duration: 6s;
+      animation-timing-function: ease-out;
 
-    .shadow {
-      background: lighten(darkred, 10%);
+      .shadow {
+        background: lighten(darkred, 10%);
+      }
+    }
+
+    .message {
+      animation-name: fadeIn;
+      animation-duration: 10s;
+
+      span {
+        box-shadow: 0 0 3px white;
+      }
     }
   }
 
-  .message {
-    animation-name: fadeIn;
-    animation-duration: 10s;
+  .victory-message {
+    .header-container {
+      animation-name: zoomIn;
+      animation-duration: 2s;
+      animation-timing-function: ease-out;
 
-    span {
-      box-shadow: 0 0 3px white;
+      .shadow {
+        background: white;
+      }
+    }
+
+    .message {
+      animation-name: fadeIn;
+      animation-duration: 2s;
+
+      span {
+        box-shadow: 0 0 3px green;
+      }
     }
   }
-}
 
-.victory-message {
-  .header-container {
-    animation-name: zoomIn;
-    animation-duration: 2s;
-    animation-timing-function: ease-out;
+  .banner {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 100%;
+    background: white;
+    font-family: 'Phage';
+    font-size: 2.5em;
+    text-align: center;
+    color: black;
+    z-index: 10000;
+    animation: banner-fold 0.1s 4s linear forwards;
+    transform: translateY(-50%);
+    transform-origin: 0% 50%;
 
-    .shadow {
-      background: white;
+    .text {
+      animation: banner-text 4s linear forwards;
+      transform-origin: 50% 50%;
     }
   }
 
-  .message {
-    animation-name: fadeIn;
-    animation-duration: 2s;
+  .disease-status {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-    span {
-      box-shadow: 0 0 3px green;
+    .disease-image {
+      width: $largeDiseaseSize;
+      height: $largeDiseaseSize;
+      background-size: $largeDiseaseSize $largeDiseaseSize;
+      animation: disease-fade 4s linear forwards;
+      transform-origin: 50% 50%;
+      z-index: 9999;
+
+      @each $disease in $diseases-list {
+        &.disease-#{$disease} {
+          background-image: url(../images/disease_large_#{$disease}.png);
+        }
+      }
     }
   }
 }

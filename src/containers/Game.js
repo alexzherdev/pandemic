@@ -14,14 +14,16 @@ import LoadingScreen from '../components/LoadingScreen';
 import BottomBar from './BottomBar';
 import CardLayer from './CardLayer';
 import DiscardPanel from './DiscardPanel';
-import ContinueOverlay from '../components/ContinueOverlay';
-import DefeatMessage from '../components/DefeatMessage';
-import VictoryMessage from '../components/VictoryMessage';
+import ContinueOverlay from '../components/overlays/ContinueOverlay';
+import DefeatMessage from '../components/overlays/DefeatMessage';
+import VictoryMessage from '../components/overlays/VictoryMessage';
+import DiseaseStatus from '../components/overlays/DiseaseStatus';
 import IntroDialog from '../components/IntroDialog';
 import * as mapActions from '../actions/mapActions';
 import * as globalActions from '../actions/globalActions';
 import { getPlayers, getCurrentCityId, getPlayerCityId, getPlayerHand,
-  getInitialInfectedCity, getDefeatMessage, isEpidemicInProgress, getContinueMessage } from '../selectors';
+  getInitialInfectedCity, getDefeatMessage, isEpidemicInProgress, getContinueMessage,
+  getCureInProgress } from '../selectors';
 import { IMAGES_TO_PRELOAD } from '../utils';
 
 
@@ -47,6 +49,7 @@ class Game extends React.Component {
     defeatMessage: PropTypes.string,
     continueMessage: PropTypes.object,
     isEpidemicInProgress: PropTypes.bool.isRequired,
+    cureInProgress: PropTypes.bool.isRequired,
     actions: PropTypes.object.isRequired,
     route: PropTypes.object.isRequired,
     router: PropTypes.object.isRequired,
@@ -126,7 +129,7 @@ class Game extends React.Component {
 
   render() {
     const { status, defeatMessage, isEpidemicInProgress, players, getPlayerHand, currentPlayerId,
-      continueMessage } = this.props;
+      continueMessage, cureInProgress } = this.props;
 
     return (
       <Preload
@@ -191,6 +194,12 @@ class Game extends React.Component {
           {status === 'victory' &&
             <VictoryMessage />
           }
+          {cureInProgress &&
+            <DiseaseStatus
+              color={cureInProgress}
+              status="cured"
+              onAnimationComplete={this.props.actions.animationCureDiseaseComplete} />
+          }
         </div>
       </Preload>
     );
@@ -208,7 +217,8 @@ const mapStateToProps = (state) => ({
   initialInfectedCity: getInitialInfectedCity(state),
   defeatMessage: getDefeatMessage(state),
   continueMessage: getContinueMessage(state),
-  isEpidemicInProgress: isEpidemicInProgress(state)
+  isEpidemicInProgress: isEpidemicInProgress(state),
+  cureInProgress: getCureInProgress(state)
 });
 
 const mapDispatchToProps = (dispatch) => ({
