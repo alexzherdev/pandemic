@@ -159,16 +159,21 @@ describe('CurrentMoveReducer', () => {
       expect(reducer(initial, action)).to.eql(expected);
     });
 
-    it('cleans up the cards for curing disease on PLAYER_CURE_DISEASE_CANCEL or PLAYER_CURE_DISEASE_COMPLETE', () => {
+    it('cleans up the cards and stores progress for curing disease on PLAYER_CURE_DISEASE_COMPLETE', () => {
+      const initial = { ...getInitialState(),
+        curingDisease: { color: 'red', cards: [{ cardType: 'city', id: '0', name: 'London' }, { cardType: 'city', id: '1', name: 'Paris' }]}};
+
+      const completeAction = { type: types.PLAYER_CURE_DISEASE_COMPLETE, color: 'red' };
+      const expected = { ...getInitialState(), curingDisease: { cureInProgress: 'red' }};
+      expect(reducer(initial, completeAction)).to.eql(expected);
+    });
+
+    it('cleans up the cards on PLAYER_CURE_DISEASE_CANCEL', () => {
       const initial = { ...getInitialState(),
         curingDisease: { color: 'red', cards: [{ cardType: 'city', id: '0', name: 'London' }, { cardType: 'city', id: '1', name: 'Paris' }]}};
 
       const cancelAction = { type: types.PLAYER_CURE_DISEASE_CANCEL };
       expect(reducer(initial, cancelAction)).to.eql(getInitialState());
-
-      const completeAction = { type: types.PLAYER_CURE_DISEASE_COMPLETE };
-      const expected = { ...getInitialState(), actionsLeft: 2 };
-      expect(reducer(initial, completeAction)).to.eql(expected);
     });
   });
 

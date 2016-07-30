@@ -59,3 +59,7 @@ export function getCuredDiseaseCubes(state) {
     return acc;
   }, {});
 }
+
+export function getCureInProgress(state) {
+  return state.currentMove.curingDisease.cureInProgress;
+}

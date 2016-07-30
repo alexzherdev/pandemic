@@ -129,6 +129,7 @@ export function* showCardsToCure({ color }) {
   const action = yield take([types.PLAYER_CURE_DISEASE_COMPLETE, types.PLAYER_CURE_DISEASE_CANCEL]);
   if (action.type === types.PLAYER_CURE_DISEASE_COMPLETE) {
     const { cityIds } = action;
+    yield take(types.ANIMATION_CURE_DISEASE_COMPLETE);
     const currentPlayer = yield select(sel.getCurrentPlayer);
     for (let i = 0; i < cityIds.length; i++) {
       yield put(discardFromHandInit('city', currentPlayer.id, cityIds[i]));
