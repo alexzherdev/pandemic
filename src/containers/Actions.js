@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { partial, isEmpty, shuffle } from 'lodash';
+import { partial, isEmpty } from 'lodash';
 import { Button, Panel, Glyphicon } from 'react-bootstrap';
 import pluralize from 'pluralize';
 
@@ -39,7 +39,6 @@ class Actions extends React.Component {
   constructor(props) {
     super(props);
 
-    this.onForecastShuffled = this.onForecastShuffled.bind(this);
     this.onTreatClicked = this.onTreatClicked.bind(this);
   }
 
@@ -53,50 +52,43 @@ class Actions extends React.Component {
     }
   }
 
-  onForecastShuffled() {
-    this.props.actions.forecastShuffle(shuffle([...this.props.currentMove.forecastCards]));
-  }
-
-
   render() {
-    const { shareCandidates, forecastCards, actionsLeft } = this.props.currentMove;
-    const { isContingencyPlannerAbilityAvailable,
-      contPlannerEvent, treatableDiseases, canTreatAll, currentPlayer, events } = this.props;
+    const { shareCandidates, actionsLeft } = this.props.currentMove;
+    const { isContingencyPlannerAbilityAvailable, contPlannerEvent, treatableDiseases, canTreatAll,
+      currentPlayer, events } = this.props;
     return (
       <Panel
         className="actions"
         footer={`${currentPlayer.name}'s turn, ${pluralize('action', actionsLeft, true)} left`}>
         <Button
-          onClick={this.props.onMoveInit}>
+          onClick={this.props.onMoveInit}
+          disabled={actionsLeft === 0}>
             <i className="fa fa-car" /> / <i className="fa fa-plane" /><div>Move</div></Button>
         <Button
           onClick={partial(this.props.actions.buildStation, this.props.currentCityId)}
-          disabled={!this.props.canBuildStation}>
+          disabled={!this.props.canBuildStation || actionsLeft === 0}>
           <i className="fa fa-building" /><div>Build</div></Button>
         <Button
           onClick={this.props.actions.shareCardsInit}
-          disabled={!this.props.canShareCards || !isEmpty(shareCandidates)}>
+          disabled={!this.props.canShareCards || !isEmpty(shareCandidates) || actionsLeft === 0}>
           <Glyphicon glyph="book" /><div>Share</div></Button>
         <Button
           onClick={this.onTreatClicked}
-          disabled={isEmpty(treatableDiseases)}>
+          disabled={isEmpty(treatableDiseases) || actionsLeft === 0}>
           <i className="fa fa-medkit" />
           <div>{canTreatAll ? 'Treat All' : 'Treat'}</div>
         </Button>
         <Button
           onClick={partial(this.props.actions.cureDiseaseInit, this.props.curableDisease)}
-          disabled={!this.props.curableDisease}>
+          disabled={!this.props.curableDisease || actionsLeft === 0}>
           <i className="fa fa-flask" />
           <div>Cure</div>
         </Button>
 
-        {!isEmpty(forecastCards) &&
-          <Button onClick={this.onForecastShuffled}>Shuffle</Button>
-        }
-
         {isContingencyPlannerAbilityAvailable &&
           <Button
-            onClick={partial(this.props.actions.contPlannerInit, this.props.currentPlayer.id)}>
+            onClick={partial(this.props.actions.contPlannerInit, this.props.currentPlayer.id)}
+            disabled={actionsLeft === 0}>
             <Glyphicon glyph="open" /><div>Retrieve</div>
           </Button>
         }
@@ -104,11 +96,13 @@ class Actions extends React.Component {
           <Button
             className={`card event-icon event-${contPlannerEvent.id}`}
             onClick={partial(this.props.actions.playEventInit, this.props.currentPlayer.id,
-            contPlannerEvent.id)} />
+            contPlannerEvent.id)}
+            disabled={actionsLeft === 0} />
         }
         {!isEmpty(events) &&
           <Button
             onClick={this.props.onPlayEventClicked}
+            disabled={actionsLeft === 0}
             title="Play an event"
             className="play-event">
             <img />
