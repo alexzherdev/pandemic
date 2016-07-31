@@ -37,7 +37,9 @@ export default class ForecastBar extends React.Component {
         className="forecast-bar card-picker"
         footer={
           <div>
-            <Button onClick={partial(this.props.onSubmit, this.state.cards)}>OK</Button>
+            <Button
+              bsStyle="primary"
+              onClick={partial(this.props.onSubmit, this.state.cards)}>OK</Button>
           </div>
         }>
         {this.state.cards.map((c, i) =>

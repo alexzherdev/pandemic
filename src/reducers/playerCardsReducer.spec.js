@@ -26,24 +26,6 @@ describe('PlayerCardsReducer', () => {
     expect(reducer(initial, action)).to.eql(expected);
   });
 
-  it('discards an event card when flag is on on PLAYER_PLAY_EVENT_COMPLETE', () => {
-    const action = { type: types.PLAYER_PLAY_EVENT_COMPLETE, playerId: '0', id: '2',
-      needToDiscard: true };
-
-    const initial = getInitialState();
-    const expected = { ...initial, discard: [{ cardType: 'event', id: '2' }, ...initial.discard]};
-    expect(reducer(initial, action)).to.eql(expected);
-  });
-
-  it('does not discard an event card when flag is off on PLAYER_PLAY_EVENT_COMPLETE', () => {
-    const action = { type: types.PLAYER_PLAY_EVENT_COMPLETE, playerId: '0', id: '2',
-      needToDiscard: false };
-
-    const initial = getInitialState();
-    const expected = initial;
-    expect(reducer(initial, action)).to.eql(expected);
-  });
-
   it('fetches an event card from the discard pile on CONT_PLANNER_CHOOSE_EVENT', () => {
     const action = { type: types.CONT_PLANNER_CHOOSE_EVENT, eventId: '1', playerId: '0' };
 

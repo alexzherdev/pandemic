@@ -9,13 +9,14 @@ export default class CardDrawerDiscardingPlayerCard extends React.Component {
   static propTypes = {
     card: cardType.isRequired,
     getPlayerDiscard: PropTypes.func.isRequired,
+    isCurrentPlayerDiscarding: PropTypes.bool.isRequired,
     onAnimationComplete: PropTypes.func.isRequired
   }
 
   componentDidMount() {
     const card = findDOMNode(this.refs.card);
     card.addEventListener('animationend', (e) => {
-      if (e.animationName === 'fadeInUp') {
+      if (e.animationName === this.getAnimationName()) {
         const playerDiscard = findDOMNode(this.props.getPlayerDiscard());
         const src = $(card).offset();
         const discardOffset = $(playerDiscard).offset();
@@ -32,12 +33,16 @@ export default class CardDrawerDiscardingPlayerCard extends React.Component {
     });
   }
 
+  getAnimationName() {
+    return this.props.isCurrentPlayerDiscarding ? 'fadeInUp' : 'fadeInRightBig';
+  }
+
   render() {
     return (
       <div className="card-drawer">
         <CardWrapper
           ref="card"
-          className="animated fadeInUp"
+          className={`animated ${this.getAnimationName()}`}
           {...this.props.card} />
       </div>
     );

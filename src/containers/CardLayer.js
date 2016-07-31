@@ -150,7 +150,7 @@ class CardLayer extends React.Component {
   render() {
     const { cardsDrawn, infectionCardDrawn, isDealingPlayerCards, playerIndex,
       isDealingEpidemicCards, difficulty, initialInfectedCity, isPlaying, discardingCard, playerDiscardTop,
-      infectionDiscardTop, epidemicInfectionCard, epidemicStep } = this.props;
+      infectionDiscardTop, epidemicInfectionCard, epidemicStep, currentPlayerId } = this.props;
     const isDrawingInfectionCard = !isEmpty(infectionCardDrawn);
 
     let hand = this.props.hand;
@@ -194,6 +194,7 @@ class CardLayer extends React.Component {
         <CardDrawerDiscardingPlayerCard
           card={discardingCard}
           getPlayerDiscard={this.getPlayerDiscard}
+          isCurrentPlayerDiscarding={discardingCard.playerId === currentPlayerId}
           onAnimationComplete={partial(this.props.dispatch,
             animationCardDiscardFromHandComplete(discardingCard.cardType, discardingCard.playerId, discardingCard.id))} />
       );

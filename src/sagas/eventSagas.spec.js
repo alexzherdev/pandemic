@@ -3,7 +3,7 @@ import { select, put, take } from 'redux-saga/effects';
 
 import { processEvent } from './eventSagas';
 import { govGrantShowCities, airliftShowCities } from '../actions/mapActions';
-import { playEventComplete, forecastShowCards } from '../actions/cardActions';
+import { forecastShowCards, discardFromHandInit, contPlannerEventComplete } from '../actions/cardActions';
 import { oneQuietNightSkip } from '../actions/diseaseActions';
 import * as sel from '../selectors';
 import * as types from '../constants/actionTypes';
@@ -21,9 +21,9 @@ describe('EventSagas', () => {
         expect(next.value).to.eql(put(govGrantShowCities([{ id: '0', name: 'London', color: 'red' }])));
         generator.next();
         next = generator.next({ type: types.EVENT_GOV_GRANT_BUILD_STATION });
-        expect(next.value).to.eql(put(playEventComplete('0', 'gov_grant', true)));
+        expect(next.value).to.eql(put(discardFromHandInit('event', '0', 'gov_grant')));
         next = generator.next();
-        expect(next.done).to.be.true;
+        expect(next.value).to.eql(take(types.ANIMATION_CARD_DISCARD_FROM_HAND_COMPLETE));
       });
     });
 
@@ -34,9 +34,9 @@ describe('EventSagas', () => {
         let next = generator.next();
         expect(next.value).to.eql(put(oneQuietNightSkip()));
         next = generator.next();
-        expect(next.value).to.eql(put(playEventComplete('0', 'one_quiet_night', true)));
+        expect(next.value).to.eql(put(discardFromHandInit('event', '0', 'one_quiet_night')));
         next = generator.next();
-        expect(next.done).to.be.true;
+        expect(next.value).to.eql(take(types.ANIMATION_CARD_DISCARD_FROM_HAND_COMPLETE));
       });
     });
 
@@ -53,9 +53,9 @@ describe('EventSagas', () => {
         next = generator.next();
         expect(next.value).to.eql(take(types.EVENT_AIRLIFT_MOVE_TO_CITY));
         next = generator.next({ type: types.EVENT_AIRLIFT_MOVE_TO_CITY, playerId: '1', destinationId: '0' });
-        expect(next.value).to.eql(put(playEventComplete('0', 'airlift', true)));
+        expect(next.value).to.eql(put(discardFromHandInit('event', '0', 'airlift')));
         next = generator.next();
-        expect(next.done).to.be.true;
+        expect(next.value).to.eql(take(types.ANIMATION_CARD_DISCARD_FROM_HAND_COMPLETE));
       });
     });
 
@@ -70,9 +70,9 @@ describe('EventSagas', () => {
         next = generator.next();
         expect(next.value).to.eql(take(types.EVENT_FORECAST_SHUFFLE));
         next = generator.next();
-        expect(next.value).to.eql(put(playEventComplete('0', 'forecast', true)));
+        expect(next.value).to.eql(put(discardFromHandInit('event', '0', 'forecast')));
         next = generator.next();
-        expect(next.done).to.be.true;
+        expect(next.value).to.eql(take(types.ANIMATION_CARD_DISCARD_FROM_HAND_COMPLETE));
       });
     });
 
@@ -83,9 +83,9 @@ describe('EventSagas', () => {
         let next = generator.next();
         expect(next.value).to.eql(take(types.EVENT_RES_POP_REMOVE_CARD));
         next = generator.next();
-        expect(next.value).to.eql(put(playEventComplete('0', 'res_pop', true)));
+        expect(next.value).to.eql(put(discardFromHandInit('event', '0', 'res_pop')));
         next = generator.next();
-        expect(next.done).to.be.true;
+        expect(next.value).to.eql(take(types.ANIMATION_CARD_DISCARD_FROM_HAND_COMPLETE));
       });
     });
 
@@ -97,7 +97,7 @@ describe('EventSagas', () => {
         next = generator.next({ id: 'res_pop' });
         expect(next.value).to.eql(take(types.EVENT_RES_POP_REMOVE_CARD));
         next = generator.next();
-        expect(next.value).to.eql(put(playEventComplete('0', 'res_pop', false)));
+        expect(next.value).to.eql(put(contPlannerEventComplete('0', 'res_pop', false)));
       });
     });
   });
