@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Button, Glyphicon, Tabs, Tab } from 'react-bootstrap';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import classnames from 'classnames';
 
 import CardList from '../components/CardList';
 import { getPlayerDiscard, getInfectionDiscard } from '../selectors';
@@ -80,7 +81,7 @@ class DiscardPanel extends React.Component {
         transitionName="fade"
         transitionEnterTimeout={500}
         transitionLeaveTimeout={300}
-        className="discard-drawer">
+        className={classnames(['discard-drawer', { 'open': this.state.showDrawer }])}>
        {items}
       </ReactCSSTransitionGroup>
     );

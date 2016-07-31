@@ -161,8 +161,24 @@ body {
   }
 }
 
+@keyframes light-flash {
+  40%, 60% {
+    background-color: rgba(255, 255, 255, 0.9);
+  }
+
+  100% {
+    background-color: initial;
+  }
+}
+
 .game {
   display: flex;
+
+  &.epidemic {
+    .map {
+      background-image: url(../images/map_epidemic.png);
+    }
+  }
 
   .top-bar {
     position: fixed;
@@ -490,7 +506,11 @@ body {
     top: 100px;
     width: 200px;
     height: 100%;
-    z-index: 10000;
+    z-index: 1;
+
+    &.open {
+      z-index: 10000;
+    }
 
     .btn {
       position: absolute;
@@ -1080,9 +1100,16 @@ body {
   }
 
   .epidemic-overlay {
-    mix-blend-mode: hard-light;
-    background: darkgreen;
-    z-index: 0;
+    animation: light-flash 0.5s linear;
+
+    .banner {
+      animation-delay: 2s;
+      background: darkgreen;
+
+      .text {
+        animation-duration: 2s !important;
+      }
+    }
   }
 
   .defeat-overlay {
