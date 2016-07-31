@@ -12,7 +12,7 @@ import CubesLayer from '../components/map/CubesLayer';
 import * as mapActions from '../actions/mapActions';
 import * as globalActions from '../actions/globalActions';
 import { isDriveAvailable, getInfectionCardDrawn, getEpidemicInfectionCard, isPlaying } from '../selectors';
-import { getCubeOrigin } from '../utils';
+import { getCubeOrigin, getLocationOrigin, getPathCoords } from '../utils';
 import * as styles from '../styles';
 
 
@@ -40,10 +40,48 @@ class Map extends React.Component {
 
   constructor(props) {
     super(props);
+
+    this.onWindowResize = this.onWindowResize.bind(this);
+  }
+
+  state = {
+    width: styles.map.width,
+    height: styles.map.height
+  }
+
+  componentDidMount() {
+    window.addEventListener('resize', this.onWindowResize);
+    this.onWindowResize();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.isPlaying !== this.props.isPlaying) {
+      setTimeout(this.onWindowResize, 0); // seems like we need to wait until dimensions are up-to-date
+    }
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.onWindowResize);
+  }
+
+  getWidth() {
+    return this.state.width;
+  }
+
+  getHeight() {
+    return this.state.height;
+  }
+
+  onWindowResize() {
+    const { map } = this.refs;
+    this.setState({ width: map.offsetWidth, height: map.offsetHeight });
   }
 
   transitionPlayerMove(playerId, destinationId, fireCompleteAction = false) {
-    this.refs.players.transitionPlayerMove(playerId, this.props.map.locations[destinationId].coords,
+    const origin = getLocationOrigin(this.props.map.locations[destinationId], this.state.width, this.state.height);
+    this.refs.players.transitionPlayerMove(
+      playerId,
+      [origin.top, origin.left],
       fireCompleteAction && this.props.actions.animationMoveComplete);
   }
 
@@ -53,8 +91,8 @@ class Map extends React.Component {
     for (let i = 0; i < matrix.length; i++) {
       for (let j = 0; j < i; j++) {
         if (matrix[i][j] === 1) {
-          const begin = locations[i].coords;
-          const end = locations[j].coords;
+          const begin = getPathCoords(locations[i], this.state.width, this.state.height);
+          const end = getPathCoords(locations[j], this.state.width, this.state.height);
           paths.push([begin.slice().reverse(), end.slice().reverse()]);
         }
       }
@@ -72,8 +110,8 @@ class Map extends React.Component {
         playersToIterate.splice(currentPlayerIndex, 1);
         playersToIterate.unshift(this.props.currentPlayerId);
       }
-      const cityCoords = this.props.map.locations[cityId].coords;
-      const playerCoords = playersToIterate.map((id, i) => ({ id, coords: [cityCoords[0], cityCoords[1] + i * 4]}));
+      const cityCoords = getLocationOrigin(this.props.map.locations[cityId], this.state.width, this.state.height);
+      const playerCoords = playersToIterate.map((id, i) => ({ id, coords: [cityCoords.top, cityCoords.left + i * 4]}));
       playerCoords.reverse();
       return acc.concat(playerCoords);
     }, []);
@@ -82,22 +120,23 @@ class Map extends React.Component {
   render() {
     const { map, availableCities, players, currentPlayerId, isDriveAvailable, isPlaying } = this.props;
     const { govGrantCities, airlift, outbreak: { infectingCube }, actionsLeft } = this.props.currentMove;
-
     const playersPositions = this.calculatePlayersPositions();
     const paths = this.calculatePaths();
     const citiesToSelect = find([availableCities, govGrantCities, airlift && airlift.cities], (c) => !isEmpty(c));
 
     let origin, destination, color;
     if (!isEmpty(infectingCube)) {
-      origin = getCubeOrigin(map.locations[infectingCube.originId]),
-        destination = getCubeOrigin(map.locations[infectingCube.cityId]),
+      origin = getCubeOrigin(map.locations[infectingCube.originId], this.state.width, this.state.height),
+        destination = getCubeOrigin(map.locations[infectingCube.cityId], this.state.width, this.state.height),
         color = infectingCube.color;
     }
     return (
       <div
         className="map"
-        style={styles.map}>
-        <PathsLayer paths={paths} />
+        ref="map">
+        <PathsLayer
+          width={this.state.width}
+          paths={paths} />
         <LocationsLayer
           locations={map.locations}
           cities={cities}
@@ -105,7 +144,9 @@ class Map extends React.Component {
           onCityClicked={this.props.onCityClicked}
           onCityDoubleClicked={this.props.onCityDoubleClicked}
           isDriveAvailable={isDriveAvailable}
-          infectedCity={this.props.initialInfectedCity || this.props.infectionCardDrawn.id || this.props.epidemicInfectionCard.id} />
+          infectedCity={this.props.initialInfectedCity || this.props.infectionCardDrawn.id || this.props.epidemicInfectionCard.id}
+          width={this.state.width}
+          height={this.state.height} />
         <PlayersLayer
           ref="players"
           players={players}
@@ -113,6 +154,8 @@ class Map extends React.Component {
           currentPlayerId={(isPlaying && actionsLeft > 0) ? currentPlayerId : undefined} />
         <CubesLayer
           locations={map.locations}
+          width={this.state.width}
+          height={this.state.height}
           infectingCube={isEmpty(infectingCube) ? undefined : { origin, destination, color }}
           infectNeighborCallback={partial(this.props.actions.animationInfectNeighborComplete,
             infectingCube.cityId, infectingCube.originId, infectingCube.color)} />

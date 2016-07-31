@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { findDOMNode } from 'react-dom';
 
 import Card from '../Card';
-import { getLocationOrigin } from '../../utils';
+import { getInfectionCardOrigin } from '../../utils';
 import { locationType } from '../../constants/propTypes';
 
 
@@ -29,8 +29,9 @@ export default class CardDrawerInfection extends React.Component {
   }
 
   animateInfection() {
-    const mapNode = findDOMNode(this.props.map);
-    const origin = getLocationOrigin(this.props.infectedLocation);
+    const { map, infectedLocation } = this.props;
+    const mapNode = findDOMNode(map);
+    const origin = getInfectionCardOrigin(infectedLocation, map.getWidth(), map.getHeight());
     const mapOffset = $(mapNode).offset();
     const { infectedCity } = this.refs;
     infectedCity.style.top = `${mapOffset.top + origin.top}px`;

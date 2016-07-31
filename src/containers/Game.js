@@ -130,7 +130,6 @@ class Game extends React.Component {
   render() {
     const { status, defeatMessage, isEpidemicInProgress, players, getPlayerHand, currentPlayerId,
       continueMessage, cureInProgress } = this.props;
-
     return (
       <Preload
         loadingIndicator={<LoadingScreen />}
@@ -159,12 +158,6 @@ class Game extends React.Component {
           <DiscardPanel />
           <TopBar />
           {status !== 'prepare' &&
-            <TeamPanel
-              players={players}
-              getPlayerHand={getPlayerHand}
-              currentPlayerId={currentPlayerId} />
-          }
-          {status !== 'prepare' &&
             <BottomBar />
           }
           <Map
@@ -172,8 +165,14 @@ class Game extends React.Component {
             onCityClicked={this.onCityClicked}
             onCityDoubleClicked={this.onCityDoubleClicked}
             initialInfectedCity={this.state.initialInfectedCity} />
+          {status !== 'prepare' &&
+            <TeamPanel
+              players={players}
+              getPlayerHand={getPlayerHand}
+              currentPlayerId={currentPlayerId} />
+          }
           <CardLayer
-            map={this.refs.map}
+            map={this.refs.map && this.refs.map.getWrappedInstance()}
             initialInfectedCity={this.state.initialInfectedCity} />
           {status === 'prepare' && this.state.showIntro &&
             <IntroDialog

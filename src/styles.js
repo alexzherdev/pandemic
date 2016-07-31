@@ -1,4 +1,4 @@
 export const map = {
-  width: 1024,
-  height: 768
+  width: 1506,
+  height: 703
 };
