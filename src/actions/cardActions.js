@@ -81,10 +81,6 @@ export function playEventInit(playerId, id) {
   return { type: types.PLAYER_PLAY_EVENT_INIT, playerId, id };
 }
 
-export function playEventComplete(playerId, id, needToDiscard) {
-  return { type: types.PLAYER_PLAY_EVENT_COMPLETE, playerId, id, needToDiscard };
-}
-
 export function resPopRemoveCard(cityId) {
   return { type: types.EVENT_RES_POP_REMOVE_CARD, cityId };
 }

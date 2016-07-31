@@ -32,15 +32,6 @@ export default function playerCardsReducer(state = initialState.playerCards, act
         ...state,
         discard: [{ cardType: action.cardType, id: action.id }, ...state.discard]
       };
-    case types.PLAYER_PLAY_EVENT_COMPLETE:
-      if (action.needToDiscard) {
-        return {
-          ...state,
-          discard: [{ cardType: 'event', id: action.id }, ...state.discard]
-        };
-      } else {
-        return state;
-      }
     case types.CONT_PLANNER_CHOOSE_EVENT:
       return {
         ...state,

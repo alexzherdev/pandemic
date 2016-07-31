@@ -1,10 +1,10 @@
 import { expect } from 'chai';
-import { select, put, take, call } from 'redux-saga/effects';
+import { select, put, call } from 'redux-saga/effects';
 
 import { showCitiesAndMove } from './actionSagas';
 import { treatCuredDiseasesOnMedicMove, contPlannerSpecial, dispatcherMove, clearCubesNearMedic } from './roleSagas';
 import { medicTreatCuredDiseases } from '../actions/diseaseActions';
-import { contPlannerShowEventsFromDiscard, contPlannerEventComplete } from '../actions/cardActions';
+import { contPlannerShowEventsFromDiscard } from '../actions/cardActions';
 import * as sel from '../selectors';
 import * as types from '../constants/actionTypes';
 
@@ -34,28 +34,14 @@ describe('RoleSagas', function() {
   });
 
   describe('contPlannerSpecial', () => {
-    beforeEach(() => {
+    it('shows event cards to choose from', () => {
       this.generator = contPlannerSpecial();
       this.next = this.generator.next();
       expect(this.next.value).to.eql(select(sel.getCardsForContPlanner));
       this.next = this.generator.next([{ cardType: 'event', id: '0', name: 'Event' }]);
       expect(this.next.value).to.eql(put(contPlannerShowEventsFromDiscard([{ cardType: 'event', id: '0', name: 'Event' }])));
       this.next = this.generator.next();
-      expect(this.next.value).to.eql(take(types.PLAYER_PLAY_EVENT_COMPLETE));
-    });
-
-    it('does not complete an event different from the one chosen', () => {
-      this.next = this.generator.next({ type: types.PLAYER_PLAY_EVENT_COMPLETE, id: '1' });
-      expect(this.next.value).to.eql(select(sel.getContPlannerEvent));
-      this.next = this.generator.next('0');
-      expect(this.next.value).to.eql(take(types.PLAYER_PLAY_EVENT_COMPLETE));
-    });
-
-    it('completes the event chosen as the planner\'s special event', () => {
-      this.next = this.generator.next({ type: types.PLAYER_PLAY_EVENT_COMPLETE, id: '0', playerId: '0' });
-      expect(this.next.value).to.eql(select(sel.getContPlannerEvent));
-      this.next = this.generator.next({ id: '0' });
-      expect(this.next.value).to.eql(put(contPlannerEventComplete('0')));
+      expect(this.next.done).to.be.true;
     });
   });
 

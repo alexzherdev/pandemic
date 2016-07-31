@@ -9,8 +9,6 @@ function hand(state = [], action) {
       return action.cards;
     case types.ANIMATION_CARD_DISCARD_FROM_HAND_COMPLETE:
       return state.filter((c) => !(c.cardType === action.cardType && c.id === action.id));
-    case types.PLAYER_PLAY_EVENT_COMPLETE:
-      return state.filter((c) => !(c.cardType === 'event' && c.id === action.id));
     case types.CARD_DRAW_CARDS_HANDLE:
       return action.card.cardType !== 'epidemic' ? [...state, action.card] : state;
     case types.PLAYER_SHARE_CARD:
@@ -26,8 +24,7 @@ export default function playersReducer(state = initialState.players, action) {
   switch (action.type) {
     case types.DEAL_CARDS:
     case types.ANIMATION_CARD_DISCARD_FROM_HAND_COMPLETE:
-    case types.CARD_DRAW_CARDS_HANDLE:
-    case types.PLAYER_PLAY_EVENT_COMPLETE: {
+    case types.CARD_DRAW_CARDS_HANDLE: {
       const { playerId } = action;
       const newHand = hand(state[playerId].hand, action);
       return {

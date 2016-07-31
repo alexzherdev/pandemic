@@ -2,7 +2,7 @@ import { takeEvery } from 'redux-saga';
 import { put, select, take, call } from 'redux-saga/effects';
 
 import { medicTreatCuredDiseases } from '../actions/diseaseActions';
-import { opsShowCardsToDiscard, contPlannerShowEventsFromDiscard, contPlannerEventComplete } from '../actions/cardActions';
+import { opsShowCardsToDiscard, contPlannerShowEventsFromDiscard } from '../actions/cardActions';
 import { showCitiesAndMove } from './actionSagas';
 import * as types from '../constants/actionTypes';
 import * as sel from '../selectors';
@@ -24,13 +24,6 @@ export function* opsChooseCardToDiscard(playerId) {
 export function* contPlannerSpecial() {
   const cards = yield select(sel.getCardsForContPlanner);
   yield put(contPlannerShowEventsFromDiscard(cards));
-  while (true) { // eslint-disable-line no-constant-condition
-    const action = yield take(types.PLAYER_PLAY_EVENT_COMPLETE);
-    if (action.id === (yield select(sel.getContPlannerEvent)).id) {
-      yield put(contPlannerEventComplete(action.playerId));
-      break;
-    }
-  }
 }
 
 export function* clearCubesNearMedic(action) {

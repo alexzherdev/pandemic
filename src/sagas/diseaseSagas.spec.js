@@ -68,7 +68,7 @@ describe('DiseaseSagas', function() {
         this.next = this.generator.next('0');
         expect(this.next.value).to.eql(put(resPopSuggest('0')));
         this.next = this.generator.next();
-        expect(this.next.value).to.eql(take([types.PLAYER_PLAY_EVENT_COMPLETE, types.CONTINUE]));
+        expect(this.next.value).to.eql(take([types.ANIMATION_CARD_DISCARD_FROM_HAND_COMPLETE, types.CONTINUE]));
       });
 
       it('waits to continue turn', () => {
@@ -77,7 +77,7 @@ describe('DiseaseSagas', function() {
       });
 
       it('waits for event completion', () => {
-        this.next = this.generator.next({ type: types.PLAYER_PLAY_EVENT_COMPLETE });
+        this.next = this.generator.next({ type: types.ANIMATION_CARD_DISCARD_FROM_HAND_COMPLETE });
         expect(this.next.value).to.eql(put(epidemicIntensifyInit()));
       });
     });

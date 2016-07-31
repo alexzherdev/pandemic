@@ -40,22 +40,6 @@ describe('PlayersReducer', () => {
     expect(reducer(initial, action)).to.eql(expected);
   });
 
-  it('discards an event card on PLAYER_PLAY_EVENT_COMPLETE', () => {
-    const action = { type: types.PLAYER_PLAY_EVENT_COMPLETE, id: '0', playerId: '0' };
-
-    const initial = getInitialState();
-    const expected = { ...initial,
-      0: {
-        id: '0',
-        name: 'P1',
-        hand: [
-          { cardType: 'city', id: '0' },
-          { cardType: 'city', id: '2' }
-        ]
-      }};
-    expect(reducer(initial, action)).to.eql(expected);
-  });
-
   it('adds one card to the hand on CARD_DRAW_CARDS_HANDLE', () => {
     const action = { type: types.CARD_DRAW_CARDS_HANDLE, card: { cardType: 'city', id: '3'}, playerId: '0' };
 

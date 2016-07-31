@@ -103,7 +103,7 @@ export function* yieldEpidemic() {
   const resPopOwner = yield select(sel.getResPopOwner);
   if (resPopOwner) {
     yield put(resPopSuggest(resPopOwner));
-    yield take([types.PLAYER_PLAY_EVENT_COMPLETE, types.CONTINUE]);
+    yield take([types.ANIMATION_CARD_DISCARD_FROM_HAND_COMPLETE, types.CONTINUE]);
   }
   yield put(epidemicIntensifyInit());
   yield take(types.EPIDEMIC_INTENSIFY);
