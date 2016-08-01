@@ -14,13 +14,12 @@ const nonPropagatingHandler = (callback, id) => {
 };
 
 const LocationsLayer = ({ cities, locations, availableCities, onCityClicked, onCityDoubleClicked,
-  isDriveAvailable, infectedCity }) => {
+  isDriveAvailable, infectedCity, width, height }) => {
   const items = [];
-
   forOwn(cities, (c, id) => {
     const isAvailable = !!find(availableCities, { id });
     const loc = locations[id];
-    const coords = getLocationOrigin(loc);
+    const coords = getLocationOrigin(loc, width, height);
 
     const onClick = !isEmpty(availableCities) && nonPropagatingHandler(onCityClicked, id);
     const onDoubleClick = isEmpty(availableCities) && isDriveAvailable(id) &&
@@ -73,7 +72,9 @@ LocationsLayer.propTypes = {
   onCityDoubleClicked: PropTypes.func.isRequired,
   isDriveAvailable: PropTypes.func.isRequired,
   availableCities: PropTypes.objectOf(cityType.isRequired),
-  infectedCity: PropTypes.string
+  infectedCity: PropTypes.string,
+  width: PropTypes.number,
+  height: PropTypes.number
 };
 
 export default LocationsLayer;

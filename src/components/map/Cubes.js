@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 import { values, pick, isEqual } from 'lodash';
 import autoprefixer from 'autoprefixer';
@@ -13,11 +13,14 @@ const prefixer = postcssJs.sync([autoprefixer]);
 
 export default class Cubes extends React.Component {
   static propTypes = {
-    location: locationType.isRequired
+    location: locationType.isRequired,
+    width: PropTypes.number,
+    height: PropTypes.number
   }
 
   shouldComponentUpdate(nextProps) {
-    return !isEqual(pick(nextProps.location, DISEASES), pick(this.props.location, DISEASES));
+    return !isEqual(pick(nextProps.location, DISEASES), pick(this.props.location, DISEASES))
+      || nextProps.width !== this.props.width || nextProps.height !== this.props.height;
   }
 
   componentDidUpdate() {
@@ -29,7 +32,7 @@ export default class Cubes extends React.Component {
   }
 
   render() {
-    const { location } = this.props;
+    const { location, width, height } = this.props;
     const counts = values(pick(location, DISEASES));
     const maxCount = Math.max(...counts);
     const totalCubes = counts.reduce(function(sum, c) { return sum + c; }, 0);
@@ -50,7 +53,7 @@ export default class Cubes extends React.Component {
     return (
       <div
         className="cube-group"
-        style={getCubeOrigin(location)}>
+        style={getCubeOrigin(location, width, height)}>
         {cubes}
       </div>
     );

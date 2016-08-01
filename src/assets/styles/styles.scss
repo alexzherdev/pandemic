@@ -162,6 +162,8 @@ body {
 }
 
 .game {
+  display: flex;
+
   .top-bar {
     position: fixed;
     left: 0;
@@ -403,12 +405,12 @@ body {
   }
 
   .team-panel {
-    position: absolute;
+    position: relative;
     right: 0;
     top: 0;
     bottom: 110px;
     margin-bottom: 0;
-    min-width: 150px;
+    min-width: 170px;
     overflow-y: scroll;
 
     > .panel-body {
@@ -488,6 +490,7 @@ body {
     top: 100px;
     width: 200px;
     height: 100%;
+    z-index: 10000;
 
     .btn {
       position: absolute;
@@ -560,10 +563,12 @@ body {
 
   .map {
     position: relative;
-    background: url(../images/map.jpg);
-    background-size: cover;
-    margin: -120px auto 0;
+    flex: 1;
+    background: url(../images/map.png) #011533 no-repeat;
+    background-size: contain;
     overflow: hidden;
+    min-width: 1024px;
+    min-height: 768px;
 
     .mask {
       position: absolute;
@@ -680,8 +685,8 @@ body {
       height: $playerSize;
       background-size: cover;
       text-align: center;
-      transform: translate(-50%, -($citySize));
-      -webkit-transform: translate(-50%, -($citySize));
+      transform: translate(($citySize - $playerSize) / 2, -($citySize / 2));
+      -webkit-transform: translate(($citySize - $playerSize) / 2, -($citySize / 2));
       z-index: 50;
 
       @each $role in $roles-list {

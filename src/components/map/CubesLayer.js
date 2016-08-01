@@ -12,6 +12,8 @@ export default class CubesLayer extends React.Component {
   static propTypes = {
     locations: PropTypes.objectOf(locationType.isRequired).isRequired,
     infectNeighborCallback: PropTypes.func.isRequired,
+    width: PropTypes.number,
+    height: PropTypes.number,
     infectingCube: PropTypes.shape({
       origin: viewCoordsType.isRequired,
       destination: viewCoordsType.isRequired,
@@ -22,7 +24,8 @@ export default class CubesLayer extends React.Component {
   shouldComponentUpdate(nextProps) {
     return !isEqual(
       pick(nextProps, ['locations', 'infectingCube']),
-      pick(this.props, ['locations', 'infectingCube']));
+      pick(this.props, ['locations', 'infectingCube']))
+      || nextProps.width !== this.props.width;
   }
 
   componentDidUpdate() {
@@ -45,7 +48,7 @@ export default class CubesLayer extends React.Component {
   transitionNeighborInfection() {
     const { origin, destination } = this.props.infectingCube;
     const cubeEl = document.getElementById('infect-neighbor-cube');
-    const split = splitPath([origin.left, origin.top], [destination.left, destination.top]);
+    const split = splitPath([origin.left, origin.top], [destination.left, destination.top], this.props.width);
     const length = isEmpty(split)
       ? getLength([origin.left, origin.top], [destination.left, destination.top])
       : getLength(...split[0]) + getLength(...split[1]);
@@ -67,11 +70,11 @@ export default class CubesLayer extends React.Component {
       anim = this.animateMovement(cubeEl, [origin.left, origin.top], [destination.left, destination.top], length);
       anim.onfinish = onfinish;
     } else {
-      const trueSplit1 = [split[0][0], constrainCubeMovement(...split[0])];
+      const trueSplit1 = [split[0][0], constrainCubeMovement(...split[0], this.props.width)];
       const length1 = getLength(...trueSplit1);
       anim = this.animateMovement(cubeEl, ...trueSplit1, length1);
       anim.onfinish = () => {
-        const trueSplit2 = [constrainCubeMovement(...split[1].slice().reverse()), split[1][1]];
+        const trueSplit2 = [constrainCubeMovement(...split[1].slice().reverse(), this.props.width), split[1][1]];
         const length2 = getLength(...trueSplit2);
         const secondAnim = this.animateMovement(cubeEl, ...trueSplit2, length2);
         secondAnim.onfinish = onfinish;
@@ -80,11 +83,17 @@ export default class CubesLayer extends React.Component {
   }
 
   render() {
-    const { locations, infectingCube } = this.props;
+    const { locations, infectingCube, width, height } = this.props;
     const cubes = [];
 
     forOwn(locations, (loc, id) => {
-      cubes.push(<Cubes key={id} location={loc} />);
+      cubes.push(
+        <Cubes
+          key={id}
+          location={loc}
+          width={width}
+          height={height} />
+      );
     });
     if (!isEmpty(infectingCube)) {
       cubes.push(
