@@ -21,7 +21,7 @@ export default class DiseaseStatus extends React.Component {
     const { color, status } = this.props;
 
     return (
-      <div className="overlay disease-status">
+      <div className="overlay disease-status-overlay">
         <div className="banner">
           <div className="text">{status}</div>
         </div>

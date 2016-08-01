@@ -86,7 +86,7 @@ export default {
   },
 
   currentMove: {
-    player: '0',
+    player: null,
     availableCities: {},
     shareCandidates: [],
     actionsLeft: 4,

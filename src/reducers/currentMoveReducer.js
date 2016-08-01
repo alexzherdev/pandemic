@@ -147,6 +147,8 @@ function playerToMove(state, action) {
 
 function player(state, action) {
   switch (action.type) {
+    case types.START_GAME:
+      return '0';
     case types.PASS_TURN:
       return action.playerId;
     default:
