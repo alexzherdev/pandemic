@@ -16,6 +16,17 @@ $diseaseIconWidth: 15px;
 $diseaseIconHeight: 20px;
 $largeDiseaseSize: 300px;
 
+$contPlannerColor: #35acb3;
+$dispatcherColor: #b86291;
+$medicColor: darkorange;
+$opsExpertColor: #5fa73f;
+$quarSpecColor: #26734f;
+$researcherColor: #ad7457;
+$scientistColor: #c7c7c7;
+
+$role-colors-map: (cont_planner: $contPlannerColor, dispatcher: $dispatcherColor, medic: $medicColor,
+  ops_expert: $opsExpertColor, quar_spec: $quarSpecColor, researcher: $researcherColor, scientist: $scientistColor);
+
 $events-list: airlift forecast gov_grant res_pop one_quiet_night;
 $diseases-list: 'yellow' 'red' 'blue' 'black';
 $roles-list: cont_planner dispatcher medic ops_expert quar_spec researcher scientist;
@@ -87,11 +98,11 @@ body {
 
 @keyframes cur-player {
   0% {
-    transform: translate(-50%, -15px);
+    transform: translate(-50%, -20px);
   }
 
   100% {
-    transform: translate(-50%, -10px);
+    transform: translate(-50%, -15px);
   }
 }
 
@@ -456,45 +467,11 @@ body {
         }
       }
 
-      &.team-player-cont_planner {
-        .panel-heading {
-          background: #35acb3;
-        }
-      }
-
-      &.team-player-dispatcher {
-        .panel-heading {
-          background: #b86291;
-        }
-      }
-
-      &.team-player-medic {
-        .panel-heading {
-          background: darkorange;
-        }
-      }
-
-      &.team-player-ops_expert {
-        .panel-heading {
-          background: #5fa73f;
-        }
-      }
-
-      &.team-player-quar_spec {
-        .panel-heading {
-          background: #26734f;
-        }
-      }
-
-      &.team-player-researcher {
-        .panel-heading {
-          background: #ad7457;
-        }
-      }
-
-      &.team-player-scientist {
-        .panel-heading {
-          background: #c7c7c7;
+      @each $role, $color in $role-colors-map {
+        &.team-player-#{$role} {
+          .panel-heading {
+            background: $color;
+          }
         }
       }
     }
@@ -717,6 +694,7 @@ body {
 
       .cur-player {
         position: absolute;
+        font-size: 1.4em;
         animation-name: cur-player;
         animation-duration: 0.8s;
         animation-iteration-count: infinite;
@@ -1088,6 +1066,14 @@ body {
     height: 100%;
   }
 
+  .new-turn-overlay {
+    @each $role, $color in $role-colors-map {
+      .banner-#{$role} {
+        background: $color;
+      }
+    }
+  }
+
   .continue-overlay {
     z-index: 20000;
 
@@ -1103,12 +1089,7 @@ body {
     animation: light-flash 0.5s linear;
 
     .banner {
-      animation-delay: 2s;
       background: darkgreen;
-
-      .text {
-        animation-duration: 2s !important;
-      }
     }
   }
 
@@ -1220,20 +1201,29 @@ body {
     text-align: center;
     color: black;
     z-index: 10000;
-    animation: banner-fold 0.1s 4s linear forwards;
+    animation: banner-fold 0.1s 2s linear forwards;
     transform: translateY(-50%);
     transform-origin: 0% 50%;
 
     .text {
-      animation: banner-text 4s linear forwards;
+      animation: banner-text 2s linear forwards;
       transform-origin: 50% 50%;
     }
   }
 
-  .disease-status {
+  .disease-status-overlay {
     display: flex;
     justify-content: center;
     align-items: center;
+
+    .banner {
+      animation-delay: 4s;
+      background: darkgreen;
+
+      .text {
+        animation-duration: 4s;
+      }
+    }
 
     .disease-image {
       width: $largeDiseaseSize;

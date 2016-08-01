@@ -143,7 +143,7 @@ class Map extends React.Component {
           availableCities={citiesToSelect}
           onCityClicked={this.props.onCityClicked}
           onCityDoubleClicked={this.props.onCityDoubleClicked}
-          isDriveAvailable={isDriveAvailable}
+          isDriveAvailable={isPlaying ? isDriveAvailable : () => false}
           infectedCity={this.props.initialInfectedCity || this.props.infectionCardDrawn.id || this.props.epidemicInfectionCard.id}
           width={this.state.width}
           height={this.state.height} />

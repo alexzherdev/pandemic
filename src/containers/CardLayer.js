@@ -47,7 +47,7 @@ class CardLayer extends React.Component {
     epidemicStep: PropTypes.string,
     players: PropTypes.arrayOf(playerType.isRequired).isRequired,
     isPlaying: PropTypes.bool.isRequired,
-    hand: PropTypes.arrayOf(cardType.isRequired).isRequired,
+    hand: PropTypes.arrayOf(cardType.isRequired),
     discardingCard: cardType,
     playerDiscardTop: cardType,
     infectionDiscardTop: cardType,
@@ -266,7 +266,8 @@ class CardLayer extends React.Component {
 
 const mapStateToProps = (state, ownProps) => {
   const infectionCardDrawn = getInfectionCardDrawn(state);
-  return {
+
+  let props = {
     cardsDrawn: getCardsDrawn(state),
     infectionCardDrawn,
     discardingCard: getDiscardingCard(state),
@@ -278,13 +279,19 @@ const mapStateToProps = (state, ownProps) => {
     players: getPlayers(state),
     difficulty: getDifficulty(state),
     infectingLocation: state.map.locations[ownProps.initialInfectedCity || infectionCardDrawn.id],
-    hand: getCurrentPlayerHand(state),
     isPlaying: isPlaying(state),
     playerDiscardTop: getPlayerDiscardTop(state),
     infectionDiscardTop: getInfectionDiscardTop(state),
     epidemicInfectionCard: getEpidemicInfectionCard(state),
     epidemicStep: getEpidemicStep(state)
   };
+  if (props.isPlaying) {
+    props = {
+      ...props,
+      hand: getCurrentPlayerHand(state)
+    };
+  }
+  return props;
 };
 
 export default connect(mapStateToProps)(CardLayer);

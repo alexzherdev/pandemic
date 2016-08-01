@@ -7,7 +7,8 @@ import cities from '../constants/cities';
 
 
 export function getCurrentCityId(state) {
-  return getPlayerCityId(state, getCurrentPlayer(state).id);
+  const currentPlayer = getCurrentPlayer(state);
+  return currentPlayer ? getPlayerCityId(state, currentPlayer.id) : null;
 }
 
 export function getAvailableCities(state, cityId = undefined) {

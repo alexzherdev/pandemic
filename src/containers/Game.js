@@ -16,6 +16,7 @@ import CardLayer from './CardLayer';
 import DiscardPanel from './DiscardPanel';
 import ContinueOverlay from '../components/overlays/ContinueOverlay';
 import EpidemicOverlay from '../components/overlays/EpidemicOverlay';
+import NewTurnOverlay from '../components/overlays/NewTurnOverlay';
 import DefeatMessage from '../components/overlays/DefeatMessage';
 import VictoryMessage from '../components/overlays/VictoryMessage';
 import DiseaseStatus from '../components/overlays/DiseaseStatus';
@@ -24,7 +25,8 @@ import * as mapActions from '../actions/mapActions';
 import * as globalActions from '../actions/globalActions';
 import { getPlayers, getCurrentCityId, getPlayerCityId, getPlayerHand,
   getInitialInfectedCity, getDefeatMessage, isEpidemicInProgress, getContinueMessage,
-  getCureInProgress } from '../selectors';
+  getCureInProgress, getCurrentPlayer } from '../selectors';
+import { playerProps, playerType } from '../constants/propTypes';
 import { IMAGES_TO_PRELOAD } from '../utils';
 
 
@@ -35,14 +37,13 @@ class Game extends React.Component {
     currentMove: PropTypes.object.isRequired,
     players: PropTypes.arrayOf(
       PropTypes.shape({
-        id: PropTypes.string.isRequired,
-        name: PropTypes.string.isRequired,
-        role: PropTypes.string.isRequired,
+        ...playerProps,
         cityId: PropTypes.string.isRequired
       })
     ),
-    currentPlayerId: PropTypes.string.isRequired,
-    currentCityId: PropTypes.string.isRequired,
+    currentPlayerId: PropTypes.string,
+    currentPlayer: playerType,
+    currentCityId: PropTypes.string,
     getPlayerCityId: PropTypes.func.isRequired,
     getPlayerHand: PropTypes.func.isRequired,
     status: PropTypes.oneOf(['prepare', 'playing', 'defeat', 'victory']).isRequired,
@@ -68,6 +69,7 @@ class Game extends React.Component {
   state = {
     showIntro: true,
     initialInfectedCity: null,
+    isNewTurn: false,
     doubleClickHintDismissed: !!localStorage.getItem(HINT_STORAGE_KEY)
   }
 
@@ -80,6 +82,7 @@ class Game extends React.Component {
     if (this.props.initialInfectedCity !== nextProps.initialInfectedCity) {
       this.setState({ initialInfectedCity: nextProps.initialInfectedCity });
     }
+    this.setState({ isNewTurn: this.props.currentPlayerId !== nextProps.currentPlayerId });
   }
 
   doMovePlayer(destinationId, source) {
@@ -203,6 +206,9 @@ class Game extends React.Component {
           {isEpidemicInProgress &&
             <EpidemicOverlay onAnimationComplete={this.props.actions.continueTurn} />
           }
+          {this.state.isNewTurn &&
+            <NewTurnOverlay player={this.props.currentPlayer} />
+          }
         </div>
       </Preload>
     );
@@ -221,7 +227,8 @@ const mapStateToProps = (state) => ({
   defeatMessage: getDefeatMessage(state),
   continueMessage: getContinueMessage(state),
   isEpidemicInProgress: isEpidemicInProgress(state),
-  cureInProgress: getCureInProgress(state)
+  cureInProgress: getCureInProgress(state),
+  currentPlayer: getCurrentPlayer(state)
 });
 
 const mapDispatchToProps = (dispatch) => ({
