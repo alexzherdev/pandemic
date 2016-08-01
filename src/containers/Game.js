@@ -15,6 +15,7 @@ import BottomBar from './BottomBar';
 import CardLayer from './CardLayer';
 import DiscardPanel from './DiscardPanel';
 import ContinueOverlay from '../components/overlays/ContinueOverlay';
+import EpidemicOverlay from '../components/overlays/EpidemicOverlay';
 import DefeatMessage from '../components/overlays/DefeatMessage';
 import VictoryMessage from '../components/overlays/VictoryMessage';
 import DiseaseStatus from '../components/overlays/DiseaseStatus';
@@ -198,6 +199,9 @@ class Game extends React.Component {
               color={cureInProgress}
               status="cured"
               onAnimationComplete={this.props.actions.animationCureDiseaseComplete} />
+          }
+          {isEpidemicInProgress &&
+            <EpidemicOverlay onAnimationComplete={this.props.actions.continueTurn} />
           }
         </div>
       </Preload>
