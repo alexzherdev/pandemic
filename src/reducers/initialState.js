@@ -216,14 +216,14 @@ export default {
         station: true
       },
       3: {
-        coords: [195, 420],
+        coords: [195, 410],
         yellow: 0,
         red: 0,
         black: 0,
         blue: 0
       },
       4: {
-        coords: [245, 465],
+        coords: [255, 445],
         yellow: 0,
         red: 0,
         black: 0,
@@ -412,28 +412,28 @@ export default {
         blue: 0
       },
       31: {
-        coords: [310, 990],
+        coords: [310, 970],
         yellow: 0,
         red: 0,
         black: 0,
         blue: 0
       },
       32: {
-        coords: [360, 1020],
+        coords: [360, 990],
         yellow: 0,
         red: 0,
         black: 0,
         blue: 0
       },
       33: {
-        coords: [285, 1040],
+        coords: [285, 1030],
         yellow: 0,
         red: 0,
         black: 0,
         blue: 0
       },
       34: {
-        coords: [375, 1055],
+        coords: [375, 1040],
         yellow: 0,
         red: 0,
         black: 0,
@@ -447,7 +447,7 @@ export default {
         blue: 0
       },
       36: {
-        coords: [430, 1105],
+        coords: [440, 1095],
         yellow: 0,
         red: 0,
         black: 0,
@@ -482,14 +482,14 @@ export default {
         blue: 0
       },
       41: {
-        coords: [415, 1185],
+        coords: [425, 1185],
         yellow: 0,
         red: 0,
         black: 0,
         blue: 0
       },
       42: {
-        coords: [235, 1220],
+        coords: [205, 1220],
         yellow: 0,
         red: 0,
         black: 0,
@@ -510,14 +510,14 @@ export default {
         blue: 0
       },
       45: {
-        coords: [235, 1275],
+        coords: [225, 1270],
         yellow: 0,
         red: 0,
         black: 0,
         blue: 0
       },
       46: {
-        coords: [270, 1285],
+        coords: [280, 1285],
         yellow: 0,
         red: 0,
         black: 0,
