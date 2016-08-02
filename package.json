@@ -44,7 +44,8 @@
     "react-router": "^2.4.0",
     "react-router-redux": "^4.0.5",
     "redux": "^3.5.2",
-    "redux-saga": "^0.10.4"
+    "redux-saga": "^0.10.4",
+    "web-animations-js": "^2.2.1"
   },
   "devDependencies": {
     "autoprefixer": "^6.3.7",
