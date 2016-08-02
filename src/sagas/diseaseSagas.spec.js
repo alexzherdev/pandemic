@@ -131,6 +131,8 @@ describe('DiseaseSagas', function() {
       this.next = this.generator.next();
       expect(this.next.value).to.eql(put(initOutbreak('0', 'blue')));
       this.next = this.generator.next();
+      expect(this.next.value).to.eql(select(sel.isPlaying));
+      this.next = this.generator.next(true);
       expect(this.next.value).to.eql(take(types.CONTINUE));
       this.next = this.generator.next({ type: types.CONTINUE });
       expect(this.next.value).to.eql(select(sel.getNeighborCities, '0'));

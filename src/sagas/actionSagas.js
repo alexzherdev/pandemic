@@ -60,6 +60,10 @@ export function* drawIfNoActionsLeft() {
   function* continueTurn() {
     if (!(yield select(sel.shouldSkipInfectionsStep))) {
       yield call(infections);
+      if (!(yield select(sel.isPlaying))) {
+        // lost on outbreaks or cubes
+        return;
+      }
     }
     const nextPlayer = yield select(sel.getNextPlayer);
     yield put(passTurn(nextPlayer));

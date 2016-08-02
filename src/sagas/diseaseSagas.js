@@ -13,6 +13,10 @@ import { yieldDefeat } from './globalSagas';
 
 export function* yieldOutbreak(cityId, color) {
   yield put(initOutbreak(cityId, color));
+  if (!(yield select(sel.isPlaying))) {
+    // lost on outbreaks
+    return;
+  }
   yield take(types.CONTINUE);
   const neighbors = yield select(sel.getNeighborCities, cityId);
 
