@@ -85,7 +85,7 @@ class CardLayer extends React.Component {
         $(cardEls).addClass('flipper').removeClass('invisible');
 
         let animationCompleteCounter = 2;
-        cardEls.forEach((c, i) => {
+        Array.from(cardEls).forEach((c, i) => {
           const anim = c.animate([
             { transform: `translate(${playerDeckOffset.left - offsets[i].left}px, ${playerDeckOffset.top -
               offsets[i].top}px) scale(0.2)`},

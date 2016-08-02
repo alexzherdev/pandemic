@@ -16,6 +16,7 @@ import './assets/styles/font-awesome.min.css';
 import './assets/styles/styles.scss';
 
 import 'jquery';
+import 'web-animations-js/web-animations.min';
 
 const store = configureStore();
 const history = syncHistoryWithStore(browserHistory, store);
