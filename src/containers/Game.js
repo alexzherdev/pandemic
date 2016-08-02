@@ -21,6 +21,7 @@ import DefeatMessage from '../components/overlays/DefeatMessage';
 import VictoryMessage from '../components/overlays/VictoryMessage';
 import DiseaseStatus from '../components/overlays/DiseaseStatus';
 import IntroDialog from '../components/IntroDialog';
+import StateReporter from './StateReporter';
 import * as mapActions from '../actions/mapActions';
 import * as globalActions from '../actions/globalActions';
 import { getPlayers, getCurrentCityId, getPlayerCityId, getPlayerHand,
@@ -142,11 +143,12 @@ class Game extends React.Component {
         resolveOnError={true}
         mountChildren={true}>
         <div className={classnames(['game', { 'epidemic' : isEpidemicInProgress }])}>
+          <StateReporter />
           {status === 'playing' && !this.state.doubleClickHintDismissed &&
             <Popover
               className="double-click-hint"
               placement="bottom"
-              positionLeft={100}
+              positionLeft={10}
               positionTop={0}
               title={
                 <div>

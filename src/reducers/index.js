@@ -35,7 +35,8 @@ const combinedReducer = combineReducers({
   stationsLeft,
   cubesLeft,
   infectionRate,
-  routing: routerReducer
+  routing: routerReducer,
+  stateHistory: (state = {}) => state
 });
 
 export default (state, action) => {
@@ -62,7 +63,8 @@ export default (state, action) => {
           return acc;
         }, {})
       },
-      routing: routerReducer(state, action)
+      routing: routerReducer(state, action),
+      stateHistory: state => state
     };
   } else {
     return combinedReducer(state, action);

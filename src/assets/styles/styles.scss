@@ -1018,7 +1018,24 @@ body {
     }
   }
 
+  .state-reporter {
+    position: fixed;
+    left: 3px;
+    bottom: 3px;
+    z-index: 999999;
+
+    .reporter-button {
+      width: 33px;
+      height: 33px;
+      border-radius: 33px;
+    }
+  }
+
   .double-click-hint {
+    .arrow {
+      display: none;
+    }
+
     .popover-title {
       .btn {
         float: right;
@@ -1444,6 +1461,11 @@ body {
   .flash {
     animation-iteration-count: 2;
   }
+}
+
+.reporter-popover {
+  font-size: 0.8em;
+  z-index: 999999;
 }
 
 .loading-screen {

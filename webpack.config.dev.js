@@ -37,6 +37,7 @@ export default {
     })
   ],
   module: {
+    exprContextCritical: false, // To disable jsondiff warning
     loaders: [
       {test: /\.js$/, include: path.join(__dirname, 'src'), loaders: ['babel']},
       {test: /\.(eot|otf)(\?v=\d+.\d+.\d+)?$/, loader: 'file'},
