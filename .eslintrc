@@ -67,5 +67,6 @@
     "react/wrap-multilines": 1
   },
   "globals": {
+    "GIT_REVISION": false
   }
 }

@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Button, Modal, OverlayTrigger, Popover } from 'react-bootstrap';
 import Clipboard from 'clipboard';
+import platform from 'platform';
 
 
 class StateReporter extends React.Component {
@@ -19,7 +20,11 @@ class StateReporter extends React.Component {
 
   componentDidMount() {
     this.clipboard = new Clipboard('.reporter-button', {
-      text: () => JSON.stringify(this.props.history)
+      text: () => JSON.stringify({
+        platform,
+        revision: GIT_REVISION,
+        history: this.props.history
+      })
     });
     this.clipboard.on('success', () => {
       this.setState({ showModal: true });
@@ -57,12 +62,15 @@ class StateReporter extends React.Component {
             <i className="fa fa-bug"></i>
           </Button>
         </OverlayTrigger>
-        <Modal show={this.state.showModal} onHide={this.onModalClosed}>
+        <Modal
+          show={this.state.showModal}
+          onHide={this.onModalClosed}>
           <Modal.Header closeButton>
             <Modal.Title>Debugging data copied!</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            Please send the clipboard contents to <a href="mailto:epidemic.redux@gmail.com">epidemic.redux@gmail.com</a>.
+            Please send the clipboard contents to <a href="mailto:epidemic.redux@gmail.com">epidemic.redux@gmail.com</a>.<br />
+            It would help a lot if you include a short textual description of the unexpected behavior you observed.
           </Modal.Body>
         </Modal>
       </div>
