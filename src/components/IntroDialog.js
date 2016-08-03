@@ -5,9 +5,10 @@ import ROLES from '../constants/roles';
 import { playerType } from '../constants/propTypes';
 
 
-const IntroDialog = ({ players, onClosed }) =>
+const IntroDialog = ({ players, onClosed, container }) =>
   <Modal.Dialog
     bsSize={players.length > 4 ? 'large' : undefined}
+    container={container}
     className="intro-dialog">
     <Modal.Header>
       Fighting to save the humanity today:

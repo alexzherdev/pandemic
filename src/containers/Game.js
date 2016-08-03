@@ -142,7 +142,7 @@ class Game extends React.Component {
         autoResolveDelay={30000}
         resolveOnError={true}
         mountChildren={true}>
-        <div className={classnames(['game', { 'epidemic' : isEpidemicInProgress }])}>
+        <div className={classnames(['game modal-container animated fadeIn', { 'epidemic' : isEpidemicInProgress }])}>
           <StateReporter />
           {status === 'playing' && !this.state.doubleClickHintDismissed &&
             <Popover
@@ -183,6 +183,7 @@ class Game extends React.Component {
           {status === 'prepare' && this.state.showIntro &&
             <IntroDialog
               players={players}
+              container={this}
               onClosed={this.onIntroClosed} />
           }
           {continueMessage &&

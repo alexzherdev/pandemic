@@ -51,7 +51,7 @@ class StateReporter extends React.Component {
             <Popover
               className="reporter-popover"
               id="reporter-popover">
-              Epidemic is currently in beta.<br />
+              <strong>Epidemic</strong> is currently in beta.<br />
               If you think you saw a bug, click here.
             </Popover>
           }>
