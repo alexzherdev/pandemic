@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { flatten } from 'lodash';
+import { every, flatten } from 'lodash';
 import classnames from 'classnames';
 
 import Card from '../Card';
@@ -20,7 +20,7 @@ export default class CardDrawerDrawingPlayerCards extends React.Component {
   }
 
   onAnimationStart(cardType, id, e) {
-    if (e.animationName === 'flash') {
+    if (e.animationName === 'flash') { // special case for two epidemics drawn at once
       setTimeout(() => {
         this.props.onEpidemicHandle(cardType, id);
       }, 3000);
@@ -29,6 +29,7 @@ export default class CardDrawerDrawingPlayerCards extends React.Component {
 
   render() {
     const { cards, startingDraw } = this.props;
+    const bothEpidemics = every(cards, { cardType: 'epidemic' });
     const items = flatten(cards.map((c, i) => {
       if (c.handling || !startingDraw) {
         return (
@@ -39,7 +40,7 @@ export default class CardDrawerDrawingPlayerCards extends React.Component {
               'move-to-hand': c.handling && c.cardType !== 'epidemic',
               'animated flash': c.cardType === 'epidemic'
             })}
-            onAnimationStart={this.onAnimationStart} />
+            onAnimationStart={bothEpidemics ? undefined : this.onAnimationStart} />
         );
       } else {
         return (
