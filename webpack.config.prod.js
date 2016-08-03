@@ -3,13 +3,12 @@ import path from 'path';
 import autoprefixer from 'autoprefixer';
 import 'babel-polyfill';
 import ProvidePlugin from 'webpack/lib/ProvidePlugin';
-import GitRevisionPlugin from 'git-revision-webpack-plugin';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
+
 
 const GLOBALS = {
   'process.env.NODE_ENV': JSON.stringify('production'),
-  __DEV__: false,
-  'GIT_REVISION': JSON.stringify(new GitRevisionPlugin().commithash())
+  __DEV__: false
 };
 
 export default {

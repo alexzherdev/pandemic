@@ -1,13 +1,12 @@
 import webpack from 'webpack';
 import ProvidePlugin from 'webpack/lib/ProvidePlugin';
-import GitRevisionPlugin from 'git-revision-webpack-plugin';
 import path from 'path';
 import autoprefixer from 'autoprefixer';
 
+
 const GLOBALS = {
   'process.env.NODE_ENV': JSON.stringify('development'),
-  __DEV__: true,
-  'GIT_REVISION': JSON.stringify(new GitRevisionPlugin().commithash())
+  __DEV__: true
 };
 
 export default {
