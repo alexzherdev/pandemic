@@ -188,6 +188,11 @@ body {
   &.epidemic {
     .map {
       background-image: url(../images/map_epidemic.png);
+
+      .path {
+        background: #02940a;
+        box-shadow: 0 0 2px 1px #efefef;
+      }
     }
   }
 
