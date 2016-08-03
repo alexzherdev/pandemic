@@ -18,6 +18,7 @@ const QuickGame = ({ onNumberOfPlayersPicked, onBackClicked }) => {
           <Button
             key={n}
             bsSize="large"
+            bsStyle="primary"
             onClick={partial(onNumberOfPlayersPicked, n)}>{n}</Button>
         )}
       </div>

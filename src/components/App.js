@@ -1,10 +1,19 @@
 import React, { PropTypes } from 'react';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 
 const App = (props) => {
   return (
     <div>
-      {props.children}
+      <ReactCSSTransitionGroup
+        component="div"
+        transitionName="fade"
+        transitionEnterTimeout={500}
+        transitionLeaveTimeout={500}>
+        {React.cloneElement(props.children, {
+          key: props.location.pathname
+        })}
+      </ReactCSSTransitionGroup>
     </div>
   );
 };

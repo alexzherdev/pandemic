@@ -50,23 +50,25 @@ class Setup extends React.Component {
   render() {
     return (
       <div className="setup">
-        <h1 className="text-danger">Epidemic</h1>
-        {this.state.mode === null &&
-          <div className="menu">
-            <Button bsSize="large" onClick={this.onQuickGameClicked}>Quick Start</Button>
-            <Button bsSize="large" onClick={this.onCustomGameClicked}>Custom Game</Button>
-          </div>
-        }
-        {this.state.mode === 'quick' &&
-          <QuickGame
-            onNumberOfPlayersPicked={this.onQuickNumberOfPlayersPicked}
-            onBackClicked={this.showMenu} />
-        }
-        {this.state.mode === 'custom' &&
-          <CustomGame
-            onComplete={this.onCustomGameComplete}
-            onBackClicked={this.showMenu} />
-        }
+        <div className="container">
+          <h1 className="text-danger">Epidemic</h1>
+          {this.state.mode === null &&
+            <div className="menu">
+              <Button bsSize="large" onClick={this.onQuickGameClicked}>Quick Start</Button>
+              <Button bsSize="large" onClick={this.onCustomGameClicked}>Custom Game</Button>
+            </div>
+          }
+          {this.state.mode === 'quick' &&
+            <QuickGame
+              onNumberOfPlayersPicked={this.onQuickNumberOfPlayersPicked}
+              onBackClicked={this.showMenu} />
+          }
+          {this.state.mode === 'custom' &&
+            <CustomGame
+              onComplete={this.onCustomGameComplete}
+              onBackClicked={this.showMenu} />
+          }
+        </div>
         <Footer />
       </div>
     );
