@@ -17,22 +17,22 @@ export function mapCoords(coords, width = map.width, height = map.height) {
 }
 
 export function getPathCoords(loc, width = map.width, height = map.height) {
-  return mapCoords([loc.coords[0], loc.coords[1] + 4], width, height);
+  return mapCoords(loc.coords, width, height);
 }
 
 export function getLocationOrigin(loc, width = map.width, height = map.height) {
   const ratio = getMapRatio(width, height);
-  return { top: (loc.coords[0] - 16) * ratio, left: (loc.coords[1] - 16) * ratio };
+  return { top: loc.coords[0] * ratio - 16, left: loc.coords[1] * ratio - 16 };
 }
 
 export function getCubeOrigin(loc, width = map.width, height = map.height) {
   const ratio = getMapRatio(width, height);
-  return { top: (loc.coords[0] - 12) * ratio, left: (loc.coords[1] - 12) * ratio };
+  return { top: loc.coords[0] * ratio - 12, left: loc.coords[1] * ratio - 12 };
 }
 
 export function getInfectionCardOrigin(loc, width = map.width, height = map.height) {
   const ratio = getMapRatio(width, height);
-  return { top: (loc.coords[0] - 16) * ratio, left: (loc.coords[1] - 16 + 20) * ratio };
+  return { top: loc.coords[0] * ratio - 16, left: loc.coords[1] * ratio + 10 };
 }
 
 export function splitPath([x1, y1], [x2, y2], width) {

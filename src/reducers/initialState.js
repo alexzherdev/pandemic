@@ -216,7 +216,7 @@ export default {
         station: true
       },
       3: {
-        coords: [195, 410],
+        coords: [185, 410],
         yellow: 0,
         red: 0,
         black: 0,
@@ -398,7 +398,7 @@ export default {
         blue: 0
       },
       29: {
-        coords: [185, 900],
+        coords: [200, 900],
         yellow: 0,
         red: 0,
         black: 0,
