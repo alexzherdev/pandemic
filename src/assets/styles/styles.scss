@@ -65,13 +65,13 @@ body {
 @keyframes cube {
   0% {
     transform: rotate(0deg)
-               translate(14px)
+               translate(20px)
                rotate(0deg);
   }
 
   100% {
     transform: rotate(360deg)
-               translate(14px)
+               translate(20px)
                rotate(-720deg);
   }
 }
@@ -376,7 +376,7 @@ body {
 
         @each $disease in $diseases-list {
           &.disease-#{$disease} {
-            content: url('../images/city_#{$disease}.png');
+            content: url('../images/disease_large_#{$disease}.png');
           }
         }
       }
@@ -595,7 +595,7 @@ body {
 
         @each $disease in $diseases-list {
           &.#{$disease} {
-            background-image: url('../images/city_#{$disease}.png');
+            background-image: url('../images/disease_large_#{$disease}.png');
           }
         }
       }
