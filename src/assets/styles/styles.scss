@@ -317,7 +317,7 @@ body {
         border-radius: 1px;
         z-index: 10001;
 
-        &:hover {
+        &:not[disabled]:hover {
           box-shadow: 0 0 1px 1px white;
           transition: all 0.2s;
         }

@@ -1,10 +1,10 @@
-import { takeEvery } from 'redux-saga';
+import { takeEvery, delay } from 'redux-saga';
 import { select, put, take, fork, cancel, call } from 'redux-saga/effects';
 
 import { moveShowCities, moveComplete } from '../actions/mapActions';
 import { cureDiseaseShowCards } from '../actions/diseaseActions';
 import { shareCardsShowCandidates, discardFromHandInit, chooseCardsToDiscard,
-  cardOverLimitComplete, drawCardsInit, drawCardsHandleInit } from '../actions/cardActions';
+  cardOverLimitComplete, drawCardsInit, drawCardsHandleInit, drawCardsHandle } from '../actions/cardActions';
 import { passTurn } from '../actions/globalActions';
 import * as sel from '../selectors';
 import * as types from '../constants/actionTypes';
@@ -112,16 +112,32 @@ export function* drawPlayerCards() {
   if (cards.length < MAX_PLAYER_CARDS_LEFT) {
     yield call(yieldDefeat, defeatMessages.OUT_OF_PLAYER_CARDS);
   } else {
+    let bothEpidemics = false;
     if (cards[0].cardType === 'epidemic') {
-      cards.reverse();
+      if (cards[1].cardType === 'epidemic') {
+        bothEpidemics = true;
+      } else {
+        cards.reverse();
+      }
     }
     yield put(drawCardsInit(cards));
     yield take(types.ANIMATION_DRAW_CARDS_INIT_COMPLETE);
-    for (let i = 0; i < 2; i++) {
-      yield put(drawCardsHandleInit(cards[i]));
-      yield take(types.CARD_DRAW_CARDS_HANDLE);
-      if (cards[i].cardType === 'epidemic') {
-        yield call(yieldEpidemic);
+
+    if (bothEpidemics) {
+      const currentPlayer = yield select(sel.getCurrentPlayer);
+      yield call(delay, 3000);
+      yield put(drawCardsHandle(cards[0], currentPlayer.id));
+      yield put(drawCardsHandle(cards[1], currentPlayer.id));
+      yield call(yieldEpidemic);
+      yield call(yieldEpidemic);
+    } else {
+      for (let i = 0; i < 2; i++) {
+        yield put(drawCardsHandleInit(cards[i]));
+        yield take(types.CARD_DRAW_CARDS_HANDLE);
+
+        if (cards[i].cardType === 'epidemic') {
+          yield call(yieldEpidemic);
+        }
       }
     }
   }
