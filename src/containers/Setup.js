@@ -70,6 +70,12 @@ class Setup extends React.Component {
           }
         </div>
         <Footer />
+        <img
+          /*
+            Prefetch the loading image for the loading screen
+          */
+          src={require('../assets/images/infection_rate.png')}
+          className="hide" />
       </div>
     );
   }
