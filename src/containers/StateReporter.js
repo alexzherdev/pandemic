@@ -21,6 +21,7 @@ class StateReporter extends React.Component {
   componentDidMount() {
     this.clipboard = new Clipboard('.reporter-button', {
       text: () => JSON.stringify({
+        revision: GIT_REVISION,
         platform,
         history: this.props.history
       })

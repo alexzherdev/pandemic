@@ -8,7 +8,8 @@ import ExtractTextPlugin from 'extract-text-webpack-plugin';
 
 const GLOBALS = {
   'process.env.NODE_ENV': JSON.stringify('production'),
-  __DEV__: false
+  __DEV__: false,
+  'GIT_REVISION': JSON.stringify(process.env.HEROKU_SLUG_COMMIT)
 };
 
 export default {
