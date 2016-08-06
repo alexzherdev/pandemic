@@ -37,10 +37,6 @@ export function epidemicInfectInit(card) {
   return { type: types.EPIDEMIC_INFECT_INIT, card };
 }
 
-export function epidemicInfect(card) {
-  return { type: types.EPIDEMIC_INFECT, card };
-}
-
 export function epidemicIntensifyInit() {
   return { type: types.EPIDEMIC_INTENSIFY_INIT };
 }

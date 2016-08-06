@@ -25,7 +25,8 @@ export default class CubesLayer extends React.Component {
     return !isEqual(
       pick(nextProps, ['locations', 'infectingCube']),
       pick(this.props, ['locations', 'infectingCube']))
-      || nextProps.width !== this.props.width;
+      || nextProps.width !== this.props.width
+      || nextProps.height !== this.props.height;
   }
 
   componentDidUpdate() {

@@ -4,7 +4,7 @@ import { put, select, call, take } from 'redux-saga/effects';
 import { initOutbreak, infectCities, infectCity, infectNeighbor, queueOutbreak,
   completeOutbreak, useDiseaseCubes, eradicateDisease, medicPreventInfection, quarSpecPreventInfection } from '../actions/diseaseActions';
 import { discardTopInfectionCard, discardBottomInfectionCard, epidemicIncrease, epidemicInfectInit,
-  epidemicInfect, epidemicIntensifyInit, resPopSuggest, drawInfectionCard } from '../actions/cardActions';
+  epidemicIntensifyInit, resPopSuggest, drawInfectionCard } from '../actions/cardActions';
 import * as sel from '../selectors';
 import * as types from '../constants/actionTypes';
 import defeatMessages from '../constants/defeatMessages';
@@ -48,25 +48,39 @@ export function* yieldOutbreak(cityId, color) {
   }
 }
 
+function* discardInfectionCard() {
+  yield take(types.ANIMATION_DRAW_INFECTION_CARD_COMPLETE);
+  yield put(discardTopInfectionCard());
+}
+
 function* getActualCubesToUse(cityId, color, count) {
   const cubesInCity = yield select(sel.getCubesInCity, cityId, color);
   return Math.min(3 - cubesInCity, count);
 }
 
-export function* infectOrOutbreak(cityId, color, count) {
+export function* infectOrOutbreak(cityId, color, count, isDiscarding) {
   const cubesInCity = yield select(sel.getCubesInCity, cityId, color);
   const medic = yield select(sel.getMedicInCity, cityId);
   const actualCubesToUse = yield call(getActualCubesToUse, cityId, color, count);
   if (medic && (yield select(sel.getDiseaseStatus, color)) === 'cured') {
+    if (isDiscarding) {
+      yield call(discardInfectionCard);
+    }
     yield put(medicPreventInfection(medic, cityId, color, actualCubesToUse));
     return;
   } else {
     const quarSpec = yield select(sel.getQuarSpecInProximity, cityId);
     if (quarSpec) {
+      if (isDiscarding) {
+        yield call(discardInfectionCard);
+      }
       yield put(quarSpecPreventInfection(quarSpec, cityId, color, actualCubesToUse));
     } else {
       yield call(useCubes, cityId, color, count);
       yield put(infectCity(cityId, color, count));
+      if (isDiscarding) {
+        yield call(discardInfectionCard);
+      }
       if (cubesInCity + count > 3) {
         yield call(yieldOutbreak, cityId, color);
       }
@@ -100,9 +114,8 @@ export function* yieldEpidemic() {
   if (status !== 'eradicated') {
     yield put(epidemicInfectInit(infectionCity));
     yield take(types.CONTINUE);
-    yield put(epidemicInfect(infectionCity));
-    yield call(infectOrOutbreak, infectionCity.id, color, 3);
     yield put(discardBottomInfectionCard());
+    yield call(infectOrOutbreak, infectionCity.id, color, 3);
   }
   const resPopOwner = yield select(sel.getResPopOwner);
   if (resPopOwner) {
@@ -121,11 +134,10 @@ export function* infections() {
     const color = yield select(sel.getCityColor, city);
     const status = yield select(sel.getDiseaseStatus, color);
     yield put(drawInfectionCard(city));
-    yield take(types.ANIMATION_DRAW_INFECTION_CARD_COMPLETE);
-    yield put(discardTopInfectionCard());
-
     if (status !== 'eradicated') {
-      yield call(infectOrOutbreak, city, color, 1);
+      yield call(infectOrOutbreak, city, color, 1, true);
+    } else {
+      yield call(discardInfectionCard);
     }
   }
 }
