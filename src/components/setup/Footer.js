@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
+import { OutboundLink } from 'react-ga';
 
 
 const Footer = () =>
@@ -8,23 +9,26 @@ const Footer = () =>
       <small>Made by Alex Zherdev in 2016.</small>
     </div>
     <div>
-      <a
-        href="https://github.com/alexzherdev/pandemic"
+      <OutboundLink
+        eventLabel="outboundGithub"
+        to="https://github.com/alexzherdev/pandemic"
         className="github"
-        target="blank">
+        target="_blank">
         <img src={require('../../assets/images/github.png')} />
-      </a>
-      <a
-        href="https://twitter.com/endymion_r"
+      </OutboundLink>
+      <OutboundLink
+        eventLabel="outboundTwitter"
+        to="https://twitter.com/endymion_r"
         className="twitter"
-        target="blank">
+        target="_blank">
         <img src={require('../../assets/images/twitter.png')} />
-      </a>
-      <a
-        href="https://www.linkedin.com/in/alex-zherdev"
-        target="blank">
+      </OutboundLink>
+      <OutboundLink
+        eventLabel="outboundLinkedin"
+        to="https://www.linkedin.com/in/alex-zherdev"
+        target="_blank">
         <img src={require('../../assets/images/linkedin.png')} />
-      </a>
+      </OutboundLink>
     </div>
     <div>
       <Link
