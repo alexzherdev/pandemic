@@ -1,8 +1,8 @@
 import { expect } from 'chai';
 import { put, select, call, take } from 'redux-saga/effects';
 
-import { epidemicIncrease, epidemicInfect, epidemicInfectInit, epidemicIntensifyInit, discardBottomInfectionCard,
-  discardTopInfectionCard, resPopSuggest, drawInfectionCard } from '../actions/cardActions';
+import { epidemicIncrease, epidemicInfectInit, epidemicIntensifyInit, discardBottomInfectionCard,
+  resPopSuggest, drawInfectionCard } from '../actions/cardActions';
 import { infectCities, initOutbreak, queueOutbreak, completeOutbreak, infectCity,
   useDiseaseCubes, eradicateDisease, medicPreventInfection, quarSpecPreventInfection } from '../actions/diseaseActions';
 import { yieldEpidemic, infectOrOutbreak, infections, yieldOutbreak, useCubes,
@@ -41,11 +41,9 @@ describe('DiseaseSagas', function() {
       this.next = this.generator.next();
       expect(this.next.value).to.eql(take(types.CONTINUE));
       this.next = this.generator.next({ type: types.CONTINUE });
-      expect(this.next.value).to.eql(put(epidemicInfect({ id: '0' })));
+      expect(this.next.value).to.eql(put(discardBottomInfectionCard()));
       this.next = this.generator.next();
       expect(this.next.value).to.eql(call(infectOrOutbreak, '0', 'blue', 3));
-      this.next = this.generator.next();
-      expect(this.next.value).to.eql(put(discardBottomInfectionCard()));
       this.generator.next();
       this.next = this.generator.next(null);
       expect(this.next.value).to.eql(put(epidemicIntensifyInit()));
@@ -58,11 +56,9 @@ describe('DiseaseSagas', function() {
         this.next = this.generator.next();
         expect(this.next.value).to.eql(take(types.CONTINUE));
         this.next = this.generator.next({ type: types.CONTINUE });
-        expect(this.next.value).to.eql(put(epidemicInfect({ id: '0' })));
+        expect(this.next.value).to.eql(put(discardBottomInfectionCard()));
         this.next = this.generator.next();
         expect(this.next.value).to.eql(call(infectOrOutbreak, '0', 'blue', 3));
-        this.next = this.generator.next();
-        expect(this.next.value).to.eql(put(discardBottomInfectionCard()));
         this.next = this.generator.next();
         expect(this.next.value).to.eql(select(sel.getResPopOwner));
         this.next = this.generator.next('0');
@@ -96,14 +92,12 @@ describe('DiseaseSagas', function() {
       this.next = this.generator.next(2);
       for (let i = 0; i < 2; i++) {
         expect(this.next.value).to.eql(select(sel.peekAtInfectionDeck));
-        this.generator.next();
-        this.generator.next();
+        this.generator.next('0');
+        this.generator.next('1');
+        this.next = this.generator.next('active');
+        expect(this.next.value).to.eql(put(drawInfectionCard('0')));
         this.next = this.generator.next();
-        expect(this.next.value).to.eql(put(drawInfectionCard()));
-        this.next = this.generator.next();
-        expect(this.next.value).to.eql(take(types.ANIMATION_DRAW_INFECTION_CARD_COMPLETE));
-        this.generator.next();
-        this.generator.next();
+        expect(this.next.value).to.eql(call(infectOrOutbreak, '0', '1', 1, true));
         this.next = this.generator.next();
       }
       expect(this.next.done).to.be.true;
@@ -117,9 +111,7 @@ describe('DiseaseSagas', function() {
       this.next = this.generator.next('eradicated');
       expect(this.next.value).to.eql(put(drawInfectionCard('0')));
       this.next = this.generator.next();
-      expect(this.next.value).to.eql(take(types.ANIMATION_DRAW_INFECTION_CARD_COMPLETE));
-      this.next = this.generator.next();
-      expect(this.next.value).to.eql(put(discardTopInfectionCard()));
+      expect(this.next.value).not.to.eql(call(infectOrOutbreak, '0', '0', 1, true));
       this.next = this.generator.next();
       expect(this.next.done).to.be.true;
     });
