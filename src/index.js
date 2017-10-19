@@ -28,7 +28,7 @@ function logPageView() {
   ReactGA.pageview(window.location.pathname);
 }
 
-ReactGA.initialize('UA-82047208-1');
+ReactGA.initialize('UA-82047208-2');
 
 render(
   <Provider store={store}>
