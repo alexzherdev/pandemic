@@ -46,7 +46,7 @@ class StateReporter extends React.Component {
           id="reporter-trigger"
           trigger={['hover', 'focus']}
           placement="top"
-          defaultOverlayShown={true}
+          defaultOverlayShown={false}
           overlay={
             <Popover
               className="reporter-popover"
