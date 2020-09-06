@@ -14,7 +14,7 @@ const QuickGame = ({ onNumberOfPlayersPicked, onBackClicked }) => {
         Choose the number of players:
       </h4>
       <div className="number-container">
-        {[1, 2, 3, 4, 5].map((n) =>
+        {[2, 3, 4, 5].map((n) =>
           <Button
             key={n}
             bsSize="large"
