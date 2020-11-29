@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { Button, DropdownButton, MenuItem } from 'react-bootstrap';
-import { difference, find, map, partial, partialRight, sample } from 'lodash';
+import { difference, find, map, partial, partialRight, sample, sampleSize } from 'lodash';
 import classnames from 'classnames';
 
 import CustomGamePlayer from '../components/setup/CustomGamePlayer';
@@ -32,10 +32,14 @@ export default class CustomGame extends React.Component {
     this.onPlayButtonClicked = this.onPlayButtonClicked.bind(this);
 
     const storedState = localStorage.getItem(STORAGE_KEY);
+    const randomNames = sampleSize(NAMES, 2);
     this.state = storedState ? JSON.parse(storedState) : {
       difficulty: 5,
       players: [{
-        name: sample(NAMES),
+        name: randomNames[0],
+        role: null // random
+      }, {
+        name: randomNames[1],
         role: null // random
       }]
     };
@@ -108,7 +112,7 @@ export default class CustomGame extends React.Component {
               name={pl.name}
               role={pl.role}
               roles={this.getAvailableRoles()}
-              removeEnabled={this.state.players.length > 1}
+              removeEnabled={this.state.players.length > 2}
               onNameChanged={partialRight(this.onPlayerNameChanged, i)}
               onRoleSelected={partialRight(this.onPlayerRoleSelected, i)}
               onRemoveClicked={partial(this.onRemovePlayerClicked, i)} />
